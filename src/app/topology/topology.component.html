@@ -1,0 +1,23 @@
+<div class="topology-container">
+
+  <div class="spine-container">
+    <ng-container *ngFor="let spine of spines">
+      <div id="{{spine}}" title="{{spine}}" class="spine-switch">
+        <img src="../../assets/svg/spine.svg" />
+      </div>
+    </ng-container>
+  </div>​
+
+  <ng-container *ngFor="let group of groupLeaves(6)">
+    <div class="leaf-container">
+      <ng-container *ngFor="let leaf of group">
+        <div id="{{leaf}}" title="{{leaf}}" class="leaf-switch">
+          <img src="../../assets/svg/leaf.svg" />
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+
+</div>
+
+<svg class="switch-svg" id="svg1"></svg>

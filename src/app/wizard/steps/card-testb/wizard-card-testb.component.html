@@ -1,0 +1,101 @@
+<div class="test-card-wrapper">
+  <div class="row" style="margin: 10px 0px 0px 0px;">
+
+    <div class="col-md-12">
+      <div class="div" style="border: 1px solid #dfdfdf; background-color: white; padding: 10px; height: 100%; padding-bottom: 10px;">
+        TEST
+      </div>
+    </div>
+
+    <div class="col-md-12" style="margin-top: 10px;">
+      <div class="card">
+        <div class="card__header">
+          <h4 class="card__title">Card Title</h4>
+        </div>
+        <div class="card__body">
+
+            <div class="ntp-wrapper">
+              <div class="ntp-controls">
+                <div class="ntp-controls-item">
+                  <button class="btn btn--icon btn--small btn--success"><span class="icon-plus"></span></button>
+                </div>
+                <div class="ntp-controls-item">
+                  <button class="btn btn--icon btn--small btn--primary"><span class="icon-pencil"></span></button>
+                </div>
+                <div class="ntp-controls-item">
+                    <button class="btn btn--icon btn--small btn--negative"><span class="icon-remove"></span></button>
+                  </div>
+              </div>
+            
+              <div class="responsive-table">
+                <table class="table table--fixed table--selectable">
+                  <thead>
+                    <tr>
+                      <th class="sortable" (click)="sortByName()">Hostname/IP <span class="sort-indicator icon-chevron-down"></span></th>
+                      <th>Preferred</th>
+                      <th>Management EPG</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr (click)="toggleActive(ntp)" *ngFor="let ntp of fakeNTPs" [ngClass]="{'active': ntp.active }">
+                      <td>{{ ntp.name }}</td>
+                      <td>
+                        <span class="icon-check icon-small" *ngIf="ntp.pref"></span>
+                        <span class="icon-close icon-small" *ngIf="!ntp.pref"></span>
+                      </td>
+                      <td>{{ ntp.epg }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+              
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12" style="margin-top: 10px;">
+      <div class="card">
+        <div class="card__header">
+          <h4 class="card__title">Card Title</h4>
+          <div class="card__subtitle">Card Subtitle</div>
+        </div>
+        <div class="card__body">
+          <div class="responsive-table">
+            <table class="table table--selectable">
+              <thead>
+                <tr>
+                  <th class="sortable">Header 1 <span class="sort-indicator icon-chevron-down"></span></th>
+                  <th>Header 2</th>
+                  <th>Header 3</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Row 1, Column 1 <a href="javascript:;">link</a></td>
+                  <td>Row 1, Column 2 <a href="javascript:;">link</a></td>
+                  <td>Row 1, Column 3 <a href="javascript:;">link</a></td>
+                </tr>
+                <tr>
+                  <td>ACTIVE</td>
+                  <td>Row 2, Column 2</td>
+                  <td>Row 2, Column 3</td>
+                </tr>
+                <tr>
+                  <td>Row 3, Column 1</td>
+                  <td>Row 3, Column 2</td>
+                  <td>Row 3, Column 3</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card__footer">
+          <a href="javascript:;">Link</a>
+          <a href="javascript:;" class="half-margin-left">Another Link</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

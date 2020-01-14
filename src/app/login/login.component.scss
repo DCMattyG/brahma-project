@@ -1,0 +1,67 @@
+  .login-center {
+  display: inline-block;
+  position: fixed;
+  margin: auto;
+  width: 400px;
+  height: 300px;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+.bg-img {
+  background: url("../../assets/datacenter.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+input {
+  border-radius: 4px;
+  border-style: solid;
+  border-color: lightgrey;
+  border-width: 1px;
+  height: 35px;
+  text-align: center;
+}
+
+input:focus {
+  outline:none;
+}
+
+.alert-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+  width: 100%;
+  font-size: 12px;
+  color: red;
+  user-select: none;
+}
+
+.loading-wrapper {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+}
+
+// input[type=text] {
+//   border-radius: 4px;
+//   border-style: solid;
+//   border-width: 1px;
+//   height: 25px;
+//   text-align: center;
+// }
+
+// input[type=password] {
+//   border-radius: 4px;
+//   border-style: solid;
+//   border-width: 1px;
+//   height: 25px;
+//   text-align: center;
+// }

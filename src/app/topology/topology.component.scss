@@ -1,0 +1,39 @@
+.switch-svg{
+  position: absolute;
+  top: 54px;
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 54px);
+}
+
+.topology-container {
+  margin-top: 150px;
+}
+
+.spine-container {
+  margin-bottom: 100px;
+  display: flex;
+  justify-content: center;
+}
+
+.leaf-container {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+.spine-switch {
+  width: 50px;
+  height: 75px;
+  margin-left: 50px;
+  margin-right: 50px;
+  z-index: 999;
+}
+
+.leaf-switch {
+  width: 100px;
+  height: 20px;
+  margin-left: 25px;
+  margin-right: 25px;
+  z-index: 999;
+}

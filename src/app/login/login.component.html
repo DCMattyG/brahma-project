@@ -1,0 +1,63 @@
+<div class="bg-img" style="height: 100vh; width: 100%;">
+  <ng-container *ngIf="loading">
+    <div class="loading-wrapper">
+      <div class="loading-spinner flex-center" aria-label="Loading, please wait...">
+        <div class="wrapper">
+          <div class="wheel"></div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <div class="container" style="height: 100%;">
+    <div class="row" style="height: 100%; align-items: center;">
+      <div class="col-md-3"></div>
+      <div class="col-md-6">
+        <div class="card card--raised" style="display: flex; padding: unset; border: none; min-height: 350px;">
+          <div style="width: 50%; background-color: steelblue;">
+            <div class="d-flex flex-column align-content-center" style="display: flex; height: 100%; width: 100%; padding: 5px;">
+              <div class="flex-fill"></div>
+              <div class="align-self-center">
+                <h3 style="color: white;">BRAHMA</h3>
+              </div>
+              <div class="align-self-center" style="margin-top: 25px; margin-bottom: 50px;">
+                <h6 style="color: white;">Version 0.1</h6>
+              </div>
+              <div class="align-self-center">
+                <img src="../../assets/cisco_logo_white.png" width="50">
+              </div>
+              <div class="flex-fill"></div>
+            </div>
+          </div>
+          <div style="width: 50%">
+            <div class="d-flex flex-column align-content-center" style="display: flex; height: 100%; width: 100%; padding: 5px;">
+              <div class="flex-fill" style="display: flex;">
+                <div id="login-error" class="alert-box" [innerHTML]="error">&nbsp;</div>
+              </div>
+              <div class="align-self-center" style="width: 90%">
+                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                  <div class="form-group" style="padding-bottom: 20px; text-align: left; margin: auto;">
+                    <span style="font-size: 13px; padding-bottom: 5px;">Email Address</span>
+                    <input type="text" formControlName="email" class="form-control"/>
+                  </div>
+                  <div class="form-group" style="padding-bottom: 20px; text-align: left; margin: auto;">
+                    <span style="font-size: 13px; padding-bottom: 5px;">Config Token</span>
+                    <input type="password" formControlName="token" class="form-control"/>
+                  </div>
+                  <div class="form-group" style="align-items: center; padding-top: 10px;">
+                    <button type="submit" [disabled]="!loginForm.valid" class="btn btn--small btn--primary">Login</button>
+                  </div>
+                </form>
+              </div>
+              <div class="flex-fill"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3"></div>
+    </div>
+  </div>
+
+
+
+</div>

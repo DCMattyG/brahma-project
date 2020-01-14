@@ -1,0 +1,118 @@
+<ng-container *ngIf="!(authService.isAuthenticated() | async)">
+  <app-login></app-login>
+</ng-container>
+
+<ng-container *ngIf="(authService.isAuthenticated() | async)">
+  <div class="content-fluid">
+    
+    <nav class="sidebar sidebar--mini sidebar--indigo">
+      <div class="sidebar__header" style="border-bottom: none">
+        <div class="sidebar__header-title">Mini</div>
+      </div>
+      <ul>
+        <li class="sidebar__item">
+          <a routerLink="/topology">
+            <span class="icon-insights"></span>
+            <span>Topology</span>
+          </a>
+        </li>
+        <li class="sidebar__item">
+          <a routerLink="/wizard">
+            <span class="icon-too-fast"></span>
+            <span>Wizard</span>
+          </a>
+        </li>
+        <li class="sidebar__item">
+          <a routerLink="/global">
+            <span class="icon-language"></span>
+            <span>Global</span>
+          </a>
+        </li>
+        <li class="sidebar__item">
+          <a routerLink="/switches">
+            <span class="icon-devices"></span>
+            <span>Switches</span>
+          </a>
+        </li>
+        <li class="sidebar__drawer" (click)="toggleVlan()" [ngClass]="{'sidebar__drawer--opened': vlanOpen}">
+          <a>
+            <span class="icon-layers"></span>
+            <span>Vlans</span>
+          </a>
+          <ul>
+            <li class="sidebar__item"><a routerLink="/vlan/manage">Manage</a></li>
+            <li class="sidebar__item"><a routerLink="/vlan/usage">Usage</a></li>
+          </ul>
+        </li>
+        <!-- <li class="sidebar__item">
+          <a>
+            <span class="icon-layers"></span>
+            <span>Vlans</span>
+          </a>
+        </li> -->
+        <li class="sidebar__item">
+          <a>
+            <span class="icon-help"></span>
+            <span>Help</span>
+          </a>
+        </li>
+        <li class="sidebar__item">
+          <a routerLink="/test">
+            <span class="icon-terminalalt"></span>
+            <span>Test</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <main>
+
+      <header class="header header--compressed" style="width: 100%;">
+        <div class="header-bar container">
+          <a href="javascript:;" class="header-bar__logo">
+            <span class="icon-cisco"></span>
+          </a>
+          <div class="header-bar__main">
+            <div class="header-heading">
+              <h1 class="page-title">Brahma</h1>
+            </div>
+          </div>
+          <div class="header-toolbar">
+            <a href="javascript:;" style="margin-top: 12px; margin-right: 14px;">
+              <span class="badge-wrapper">
+                <span class="icon-alert icon-medium"></span>
+                <span class="badge badge--medium badge--bordered-white">{{ numAlerts }}</span>
+              </span>
+            </a>
+            <a href="javascript:;" class="btn btn--small btn--icon">
+              <span class="icon-tools"></span>
+            </a>
+            <a (click)="logout()" style="margin-top: 4px; margin-left: 10px; color: red;">
+              <span class="icon-sign-out icon-medium"></span>
+            </a>
+          </div>
+        </div>
+      </header>
+
+      <div class="content" style="height: calc(100% - 55px)">
+        <router-outlet></router-outlet>
+      </div>
+
+      <!-- <footer class="footer footer--basic footer--compressed">
+        <div class="footer__links">
+          <ul class="list">
+            <li><a href="http://www.cisco.com/cisco/web/siteassets/contacts/index.html" target="_blank">Contacts</a></li>
+            <li><a href="https://secure.opinionlab.com/ccc01/o.asp?id=jBjOhqOJ" target="_blank">Feedback</a></li>
+            <li><a href="https://www.cisco.com/c/en/us/about/help.html" target="_blank">Help</a></li>
+            <li><a href="http://www.cisco.com/c/en/us/about/sitemap.html" target="_blank">Site Map</a></li>
+            <li><a href="https://www.cisco.com/c/en/us/about/legal/terms-conditions.html" target="_blank">Terms & Conditions</a></li>
+            <li><a href="https://www.cisco.com/c/en/us/about/legal/privacy-full.html" target="_blank">Privacy Statement</a></li>
+            <li><a href="https://www.cisco.com/c/en/us/about/legal/privacy-full.html#cookies" target="_blank">Cookie Policy</a></li>
+            <li><a href="https://www.cisco.com/c/en/us/about/legal/trademarks.html" target="_blank">Trademarks</a></li>
+          </ul>
+        </div>
+      </footer> -->
+
+    </main>
+  </div>
+</ng-container>

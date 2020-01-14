@@ -1,0 +1,16 @@
+.global-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+input[type=text] {
+  background-color: unset !important;
+  border-top: none !important;
+  border-right: none !important;
+  border-left: none !important;
+  text-align: center !important;
+  width: 100px !important;
+}

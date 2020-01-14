@@ -1,0 +1,49 @@
+.wizard-content {
+  height: calc(100vh - 55px);
+  display: flex;
+  flex-flow: column;
+}
+
+.wizard-header {
+  display: flex;
+  justify-content:
+  space-between;
+  align-items: center;
+  height: 50px;
+}
+
+.wizard-header-blank {
+  margin-left: 15px;
+  user-select: none;
+  width: 18.5px;
+  height: 21px;
+}
+
+.wizard-header-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.wizard-header-info {
+  margin-right: 15px;
+}
+
+.wizard-main {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+.wizard-progress {
+  margin: 0 auto;
+  margin-top: 10px;
+  width: 90%; 
+}
+
+.wizard-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}

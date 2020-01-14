@@ -1,0 +1,28 @@
+.responsive-table {
+  // height: calc(100vh - 100px);
+  height: 100%;
+}
+
+.vlan-controls {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 45px;
+  background-color: #dfdfdf;
+}
+
+.vlan-controls-item {
+  margin-left: 10px;
+}
+
+thead th {
+  top: 0;
+  position: sticky;
+  background-color: white;
+}
+
+.vlan-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}

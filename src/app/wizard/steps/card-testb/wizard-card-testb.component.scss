@@ -1,0 +1,38 @@
+.test-card-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  // justify-content: center;
+  justify-content: flex-start;
+}
+
+.responsive-table {
+  // height: calc(100vh - 100px);
+  // height: 100%;
+  height: 170px;
+}
+
+.ntp-controls {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 45px;
+  background-color: #dfdfdf;
+}
+
+.ntp-controls-item {
+  margin-left: 10px;
+}
+
+thead th {
+  top: 0;
+  position: sticky;
+  background-color: white;
+  z-index: 999;
+}
+
+.ntp-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}

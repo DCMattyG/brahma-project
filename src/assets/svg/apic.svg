@@ -1,0 +1,14 @@
+<svg version="1.1" baseProfile="full" width="50" height="50" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .small {
+      font: bold 10px;
+      font-family: "CiscoSans", "Arial", sans-serif;
+      fill: white;
+    }
+  </style>
+
+  <polygon points="0,25 25,0 50,25 25,50" style="fill:SteelBlue;" />
+  <text x="50%" y="58%" text-anchor="middle" class="small">APIC</text>
+
+  Sorry, your browser does not support inline SVG.
+</svg>

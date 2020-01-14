@@ -1,0 +1,87 @@
+.switch-container {
+  overflow: visible;
+  text-align: center;
+}
+
+.switch-outline {
+  overflow: visible;
+  display: inline-block;
+  border-radius: 5px;
+  border: 2px solid darkgray;
+  padding: 7px; 
+  min-width: 20px;
+}
+
+.port-rj45 {
+  overflow: visible;
+  margin: 3px;
+  float: left;
+  height: 15px;
+  width: 15px;
+  background-color: cornflowerblue;
+  clip-path: polygon(0% 0%, 0 75%, 25% 75%, 25% 100%, 75% 100%, 75% 75%, 100% 75%, 100% 0%);
+}
+
+.port-sfp {
+  margin: 3px;
+  float: left;
+  height: 15px;
+  width: 15px;
+  background-color: cornflowerblue;
+}
+
+.port-qsfp {
+  margin: 3px;
+  float: left;
+  height: 15px;
+  width: 30px;
+  background-color: cornflowerblue;
+}
+
+.svg-rj45 {
+  overflow: visible;
+  margin: 3px;
+  float: left;
+  height: 15px;
+  width: 15px;
+}
+
+.svg-sfp {
+  overflow: visible;
+  margin: 3px;
+  float: left;
+  height: 15px;
+  width: 15px;
+}
+
+.svg-sfp-blank {
+  overflow: visible;
+  margin: 3px;
+  float: left;
+  height: 15px;
+  width: 15px;
+}
+
+.svg-usb {
+  overflow: visible;
+  margin: 3px;
+  float: left;
+  height: 15px;
+  width: 15px;
+}
+
+.svg-qsfp {
+  overflow: visible;
+  margin: 3px;
+  float: left;
+  height: 15px;
+  width: 30px;
+}
+
+.svg-qsfp-blank {
+  overflow: visible;
+  margin: 3px;
+  float: left;
+  height: 15px;
+  width: 30px;
+}

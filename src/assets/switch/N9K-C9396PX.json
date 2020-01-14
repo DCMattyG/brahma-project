@@ -1,0 +1,436 @@
+{
+  "config": {
+    "slot1": {
+      "row1": [
+        {
+          "name": null,
+          "type": "sfp-blank",
+          "dir": "up"
+        },
+        {
+          "name": null,
+          "type": "sfp-blank",
+          "dir": "up"
+        },
+        {
+          "name": null,
+          "type": "qsfp-blank",
+          "dir": "up"
+        },
+        {
+          "name": null,
+          "type": "qsfp-blank",
+          "dir": "up"
+        },
+        {
+          "name": null,
+          "type": "qsfp-blank",
+          "dir": "up"
+        },
+        {
+          "name": null,
+          "type": "qsfp-blank",
+          "dir": "up"
+        },
+        {
+          "name": null,
+          "type": "qsfp-blank",
+          "dir": "up"
+        },
+        {
+          "name": null,
+          "type": "qsfp-blank",
+          "dir": "up"
+        },
+        {
+          "name": null,
+          "type": "qsfp-blank",
+          "dir": "up"
+        },
+        {
+          "name": null,
+          "type": "qsfp-blank",
+          "dir": "up"
+        },
+        {
+          "name": "e1/49",
+          "type": "qsfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/51",
+          "type": "qsfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/53",
+          "type": "qsfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/55",
+          "type": "qsfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/57",
+          "type": "qsfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/59",
+          "type": "qsfp",
+          "dir": "up"
+        }
+      ],
+      "row2": [
+        {
+          "name": null,
+          "type": "sfp-blank",
+          "dir": "up"
+        },
+        {
+          "name": null,
+          "type": "sfp-blank",
+          "dir": "up"
+        },
+        {
+          "name": null,
+          "type": "qsfp-blank",
+          "dir": "down"
+        },
+        {
+          "name": null,
+          "type": "qsfp-blank",
+          "dir": "down"
+        },
+        {
+          "name": null,
+          "type": "qsfp-blank",
+          "dir": "down"
+        },
+        {
+          "name": null,
+          "type": "qsfp-blank",
+          "dir": "down"
+        },
+        {
+          "name": null,
+          "type": "qsfp-blank",
+          "dir": "down"
+        },
+        {
+          "name": null,
+          "type": "qsfp-blank",
+          "dir": "down"
+        },
+        {
+          "name": null,
+          "type": "qsfp-blank",
+          "dir": "down"
+        },
+        {
+          "name": null,
+          "type": "qsfp-blank",
+          "dir": "down"
+        },
+        {
+          "name": "e1/50",
+          "type": "qsfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/52",
+          "type": "qsfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/54",
+          "type": "qsfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/56",
+          "type": "qsfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/58",
+          "type": "qsfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/60",
+          "type": "qsfp",
+          "dir": "down"
+        }
+      ]
+    },
+    "slot2": {
+      "row1": [
+        {
+          "name": "console",
+          "type": "rj45",
+          "dir": "up"
+        },
+        {
+          "name": null,
+          "type": "sfp-blank",
+          "dir": "up"
+        },
+        {
+          "name": "e1/1",
+          "type": "sfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/3",
+          "type": "sfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/5",
+          "type": "sfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/7",
+          "type": "sfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/9",
+          "type": "sfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/11",
+          "type": "sfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/13",
+          "type": "sfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/15",
+          "type": "sfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/17",
+          "type": "sfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/19",
+          "type": "sfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/21",
+          "type": "sfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/23",
+          "type": "sfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/25",
+          "type": "sfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/27",
+          "type": "sfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/29",
+          "type": "sfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/31",
+          "type": "sfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/33",
+          "type": "sfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/35",
+          "type": "sfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/37",
+          "type": "sfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/39",
+          "type": "sfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/41",
+          "type": "sfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/43",
+          "type": "sfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/45",
+          "type": "sfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/47",
+          "type": "sfp",
+          "dir": "up"
+        }
+      ],
+      "row2": [
+        {
+          "name": "usb0/1",
+          "type": "usb",
+          "dir": "down"
+        },
+        {
+          "name": "mgmt0",
+          "type": "rj45",
+          "dir": "down"
+        },
+        {
+          "name": "e1/2",
+          "type": "sfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/4",
+          "type": "sfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/6",
+          "type": "sfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/8",
+          "type": "sfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/10",
+          "type": "sfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/12",
+          "type": "sfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/14",
+          "type": "sfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/16",
+          "type": "sfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/18",
+          "type": "sfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/20",
+          "type": "sfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/22",
+          "type": "sfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/24",
+          "type": "sfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/26",
+          "type": "sfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/28",
+          "type": "sfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/30",
+          "type": "sfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/32",
+          "type": "sfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/34",
+          "type": "sfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/36",
+          "type": "sfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/38",
+          "type": "sfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/40",
+          "type": "sfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/42",
+          "type": "sfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/44",
+          "type": "sfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/46",
+          "type": "sfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/48",
+          "type": "sfp",
+          "dir": "down"
+        }
+      ]
+    }
+  }
+}

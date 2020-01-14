@@ -1,0 +1,280 @@
+{
+  "config": {
+    "slot1": {
+      "row1": [
+        {
+          "name": "e1/1",
+          "type": "rj45",
+          "dir": "up"
+        },
+        {
+          "name": "e1/3",
+          "type": "rj45",
+          "dir": "up"
+        },
+        {
+          "name": "e1/5",
+          "type": "rj45",
+          "dir": "up"
+        },
+        {
+          "name": "e1/7",
+          "type": "rj45",
+          "dir": "up"
+        },
+        {
+          "name": "e1/9",
+          "type": "rj45",
+          "dir": "up"
+        },
+        {
+          "name": "e1/11",
+          "type": "rj45",
+          "dir": "up"
+        },
+        {
+          "name": "e1/13",
+          "type": "rj45",
+          "dir": "up"
+        },
+        {
+          "name": "e1/15",
+          "type": "rj45",
+          "dir": "up"
+        },
+        {
+          "name": "e1/17",
+          "type": "rj45",
+          "dir": "up"
+        },
+        {
+          "name": "e1/19",
+          "type": "rj45",
+          "dir": "up"
+        },
+        {
+          "name": "e1/21",
+          "type": "rj45",
+          "dir": "up"
+        },
+        {
+          "name": "e1/23",
+          "type": "rj45",
+          "dir": "up"
+        },
+        {
+          "name": "e1/25",
+          "type": "rj45",
+          "dir": "up"
+        },
+        {
+          "name": "e1/27",
+          "type": "rj45",
+          "dir": "up"
+        },
+        {
+          "name": "e1/29",
+          "type": "rj45",
+          "dir": "up"
+        },
+        {
+          "name": "e1/31",
+          "type": "rj45",
+          "dir": "up"
+        },
+        {
+          "name": "e1/33",
+          "type": "rj45",
+          "dir": "up"
+        },
+        {
+          "name": "e1/35",
+          "type": "rj45",
+          "dir": "up"
+        },
+        {
+          "name": "e1/37",
+          "type": "rj45",
+          "dir": "up"
+        },
+        {
+          "name": "e1/39",
+          "type": "rj45",
+          "dir": "up"
+        },
+        {
+          "name": "e1/41",
+          "type": "rj45",
+          "dir": "up"
+        },
+        {
+          "name": "e1/43",
+          "type": "rj45",
+          "dir": "up"
+        },
+        {
+          "name": "e1/45",
+          "type": "rj45",
+          "dir": "up"
+        },
+        {
+          "name": "e1/47",
+          "type": "rj45",
+          "dir": "up"
+        },
+        {
+          "name": "e1/49",
+          "type": "qsfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/51",
+          "type": "qsfp",
+          "dir": "up"
+        },
+        {
+          "name": "e1/53",
+          "type": "qsfp",
+          "dir": "up"
+        }
+      ],
+      "row2": [
+        {
+          "name": "e1/2",
+          "type": "rj45",
+          "dir": "down"
+        },
+        {
+          "name": "e1/4",
+          "type": "rj45",
+          "dir": "down"
+        },
+        {
+          "name": "e1/6",
+          "type": "rj45",
+          "dir": "down"
+        },
+        {
+          "name": "e1/8",
+          "type": "rj45",
+          "dir": "down"
+        },
+        {
+          "name": "e1/10",
+          "type": "rj45",
+          "dir": "down"
+        },
+        {
+          "name": "e1/12",
+          "type": "rj45",
+          "dir": "down"
+        },
+        {
+          "name": "e1/14",
+          "type": "rj45",
+          "dir": "down"
+        },
+        {
+          "name": "e1/16",
+          "type": "rj45",
+          "dir": "down"
+        },
+        {
+          "name": "e1/18",
+          "type": "rj45",
+          "dir": "down"
+        },
+        {
+          "name": "e1/20",
+          "type": "rj45",
+          "dir": "down"
+        },
+        {
+          "name": "e1/22",
+          "type": "rj45",
+          "dir": "down"
+        },
+        {
+          "name": "e1/24",
+          "type": "rj45",
+          "dir": "down"
+        },
+        {
+          "name": "e1/26",
+          "type": "rj45",
+          "dir": "down"
+        },
+        {
+          "name": "e1/28",
+          "type": "rj45",
+          "dir": "down"
+        },
+        {
+          "name": "e1/30",
+          "type": "rj45",
+          "dir": "down"
+        },
+        {
+          "name": "e1/32",
+          "type": "rj45",
+          "dir": "down"
+        },
+        {
+          "name": "e1/34",
+          "type": "rj45",
+          "dir": "down"
+        },
+        {
+          "name": "e1/36",
+          "type": "rj45",
+          "dir": "down"
+        },
+        {
+          "name": "e1/38",
+          "type": "rj45",
+          "dir": "down"
+        },
+        {
+          "name": "e1/40",
+          "type": "rj45",
+          "dir": "down"
+        },
+        {
+          "name": "e1/42",
+          "type": "rj45",
+          "dir": "down"
+        },
+        {
+          "name": "e1/44",
+          "type": "rj45",
+          "dir": "down"
+        },
+        {
+          "name": "e1/46",
+          "type": "rj45",
+          "dir": "down"
+        },
+        {
+          "name": "e1/48",
+          "type": "rj45",
+          "dir": "down"
+        },
+        {
+          "name": "e1/50",
+          "type": "qsfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/52",
+          "type": "qsfp",
+          "dir": "down"
+        },
+        {
+          "name": "e1/54",
+          "type": "qsfp",
+          "dir": "down"
+        }
+      ]
+    }
+  }
+}
