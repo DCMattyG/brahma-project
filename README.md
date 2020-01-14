@@ -1,27 +1,72 @@
-# Brahma
+# brahma
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.4.
+Cisco ACI deployment simplification service
 
-## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Business/Technical Challenge
 
-## Code scaffolding
+**TODO:** 1-3 paragraphs of the business/technical Challenge
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Proposed Solution
 
-## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+**TODO:** 1-3 paragraphs of the solution in written format
 
-## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Cisco Products Technologies/ Services
 
-## Running end-to-end tests
+**TODO:** List out major technologies included in the solution (ACI, DNAC, third party, etc) e.g
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Our solution will levegerage the following Cisco technologies
 
-## Further help
+* [Application Centric Infrastructure (ACI)](http://cisco.com/go/aci)
+* [DNA Center (DNA-C)](http://cisco.com/go/dna)
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+## Team Members
+
+
+**TODO:** ASIC projects must consist of a minimum of 2 SE’s
+representing a minimum of 2 segments. List names here
+
+* team member1 <email> - Segment Name
+* team member2 <email> - Segment Name
+
+
+## Solution Components
+
+
+<!-- This does not need to be completed during the initial submission phase  
+
+Provide a brief overview of the components involved with this project. e.g Python /  -->
+
+
+## Usage
+
+<!-- This does not need to be completed during the initial submission phase  
+
+Provide a brief overview of how to use the solution  -->
+
+
+
+## Installation
+
+sudo docker run --name brahma-mongo -d -p 27017:27017 -v /tmp/data:/data/db mongo
+npm start
+
+
+## Documentation
+
+Pointer to reference documentation for this project.
+
+
+## License
+
+Provided under Cisco Sample Code License, for details see [LICENSE](./LICENSE.md)
+
+## Code of Conduct
+
+Our code of conduct is available [here](./CODE_OF_CONDUCT.md)
+
+## Contributing
+
+See our contributing guidelines [here](./CONTRIBUTING.md)
