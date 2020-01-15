@@ -3,6 +3,7 @@ services:
   brahma:
     container_name: brahma-app
     restart: always
+    image: brahma
     build:
       context: .
       dockerfile: Dockerfile
