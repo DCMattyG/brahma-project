@@ -1,4 +1,4 @@
-version: "3"
+version: "3.7"
 services:
   brahma:
     container_name: brahma-app
@@ -8,6 +8,9 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - mongo
+    environment:
+      - MONGO_ADDR=brahma-mongo
+      - MONGO_PORT=27017
     ports:
       - "3000:3000"
   mongo:
@@ -17,8 +20,8 @@ services:
       - mongo_data:/db/mongo_data
       - mongo_config:/data/configdb
 
-  volumes:
-    mongo_data:
-      external: true
-    mongo_config:
-      external: true
+volumes:
+  mongo_data:
+    external: true
+  mongo_config:
+    external: true
