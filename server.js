@@ -12,6 +12,10 @@ var mongoose = require('mongoose');
 
 var app = express();
 
+const MONGO_ADDR = process.env.MONGO_URL || 'mongodb://localhost';
+const MONGO_PORT = process.env.MONGO_PORT || 27017;
+const MONGO_URL = MONGO_ADDR + ':' + MONGO_PORT;
+
 // CORS Settings
 var originsWhitelist = [
   '*'
@@ -31,7 +35,7 @@ var mongoSettings = {
 }
 
 // Connect to MongoDB Database
-mongoose.connect('mongodb://localhost:27017', mongoSettings);
+mongoose.connect(MONGO_URL, mongoSettings);
 
 // Express Middleware
 app.use(logger('dev'));

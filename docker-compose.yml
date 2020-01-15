@@ -1,0 +1,24 @@
+version: "3"
+services:
+  brahma:
+    container_name: brahma-app
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mongo
+    ports:
+      - "3000:3000"
+  mongo:
+    container_name: brahma-mongo
+    image: mongo
+    volumes:
+      - mongo_data:/db/mongo_data
+      - mongo_config:/data/configdb
+
+  volumes:
+    mongo_data:
+      external: true
+    mongo_config:
+      external: true

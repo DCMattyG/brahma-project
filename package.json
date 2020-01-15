@@ -5,6 +5,7 @@
     "ng": "ng",
     "prestart": "ng build --prod",
     "start": "node ./bin/www",
+    "dev": "node ./bin/www",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
