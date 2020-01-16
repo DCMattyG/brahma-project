@@ -89,7 +89,7 @@ if (is_ip):
 
   try:
     s.connect((apic_addr,443)) 
-  except Exception, e:
+  except Exception as e:
     print("APIC IP Address unreachable!")
     sys.exit()
 

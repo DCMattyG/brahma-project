@@ -4,8 +4,7 @@
   "scripts": {
     "ng": "ng",
     "prestart": "ng build --prod",
-    "start": "node ./bin/www",
-    "dev": "node ./bin/www",
+    "start": "node ./server/bin/www",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -25,13 +24,7 @@
     "jquery": "^3.4.1",
     "rxjs": "~6.3.3",
     "tslib": "^1.9.0",
-    "zone.js": "~0.8.26",
-    "cookie-parser": "~1.4.4",
-    "cors": "^2.8.5",
-    "debug": "~2.6.9",
-    "express": "~4.16.1",
-    "mongoose": "^5.8.0",
-    "morgan": "~1.9.1"
+    "zone.js": "~0.8.26"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.13.0",
