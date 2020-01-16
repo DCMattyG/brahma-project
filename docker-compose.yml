@@ -19,7 +19,7 @@ services:
     container_name: brahma-mongo
     image: mongo
     volumes:
-      - mongo_data:/db/mongo_data
+      - mongo_data:/data/db
       - mongo_config:/data/configdb
 
 volumes:
