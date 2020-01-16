@@ -5,7 +5,6 @@ var Fabric = require('../models/fabric');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.setHeader('Content-Type', 'application/json');
   res.json({ message: 'api works' });
 });
 
@@ -20,7 +19,6 @@ router.route('/fabric')
       if (err)
         res.send(err);
 
-      res.setHeader('Content-Type', 'application/json');
       res.json({ token: fabric.token });
     });
 });
@@ -32,7 +30,6 @@ router.route('/fabric/:fabric_token')
     if (err || fabric == null)
       res.status(404).send(err);
     else
-      res.setHeader('Content-Type', 'application/json');
       res.json(fabric);
   });
 });
