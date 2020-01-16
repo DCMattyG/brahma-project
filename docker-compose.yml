@@ -12,8 +12,9 @@ services:
     environment:
       - MONGO_ADDR=brahma-mongo
       - MONGO_PORT=27017
+      - PORT=80
     ports:
-      - "3000:3000"
+      - "80:80"
   mongo:
     container_name: brahma-mongo
     image: mongo
