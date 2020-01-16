@@ -31,7 +31,7 @@ elif [ "$1" == "--compose" ]; then
   ng build --prod
   echo ""
   echo "Building Docker Container..."
-  docker-compose up
+  docker-compose up &
 else
   echo ""
   echo "Usage: brahma-server [--dev] | [--prod] | [--build]"

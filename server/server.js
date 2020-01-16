@@ -16,6 +16,8 @@ const MONGO_ADDR = process.env.MONGO_URL || 'localhost';
 const MONGO_PORT = process.env.MONGO_PORT || 27017;
 const MONGO_URL = 'mongodb://' + MONGO_ADDR + ':' + MONGO_PORT;
 
+console.log("MONGO --> " + MONGO_URL);
+
 // CORS Settings
 var originsWhitelist = [
   '*'
