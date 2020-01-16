@@ -16,7 +16,7 @@ WORKDIR /brahma/server
 COPY /server/package.json /brahma/server/package.json
 COPY /server/package-lock.json /brahma/server/package-lock.json
 RUN npm install
-RUN npm install -g @angular/cli@7.3.9
+# RUN npm install -g @angular/cli@7.3.9
 
 # add app
 COPY . /brahma
