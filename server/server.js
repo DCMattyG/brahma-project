@@ -12,7 +12,7 @@ var mongoose = require('mongoose');
 
 var app = express();
 
-const MONGO_ADDR = process.env.MONGO_URL || 'localhost';
+const MONGO_ADDR = process.env.MONGO_ADDR || 'localhost';
 const MONGO_PORT = process.env.MONGO_PORT || 27017;
 const MONGO_URL = 'mongodb://' + MONGO_ADDR + ':' + MONGO_PORT;
 
