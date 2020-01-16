@@ -6,8 +6,10 @@ from cobra.mit.access import MoDirectory
 from cobra.mit.session import LoginSession
 from cobra.mit.request import ClassQuery
 
+import os
 import re
 import sys
+import six
 import json
 import urllib3
 import socket
@@ -16,8 +18,18 @@ import argparse
 import shortuuid
 import getpass
 
-BRAHMA_URL = 'http://localhost:3000'
+BRAHMA_FQDN = os.getenv('BRAHMA_URL', 'brahma.cisco.com')
+BRAHMA_PORT = os.getenv('BRAHMA_PORT', None)
+
+BRAHMA_URL = 'http://' + BRAHMA_FQDN
+
+if(BRAHMA_PORT != None):
+  BRAHMA_URL += ':' + BRAHMA_PORT
+
 SERVER_URL = BRAHMA_URL + '/api/fabric'
+
+print("BRAHMA ADDRESS: " + BRAHMA_URL)
+
 IP_ADDR = "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$"
 HOST_FQDN = "^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$"
 
@@ -78,7 +90,7 @@ args = arg_parser.parse_args()
 
 print('')
 
-apic_addr = raw_input("APIC IP Address/FQDN: ")
+apic_addr = six.moves.input("APIC IP Address/FQDN: ")
 
 is_ip = re.match(IP_ADDR, apic_addr)
 is_host = re.match(HOST_FQDN, apic_addr)
@@ -104,10 +116,10 @@ if not is_ip and not is_host:
   print("Not a valid IP Address or FQDN!")
   sys.exit()
 
-apic_user = raw_input("APIC Username: ")
+apic_user = six.moves.input("APIC Username: ")
 apic_pass = getpass.getpass(prompt='APIC Password: ', stream=None) 
 
-apic_url = "http://" + apic_addr
+apic_url = "https://" + apic_addr
 
 session = LoginSession(apic_url, apic_user, apic_pass)
 moDir = MoDirectory(session)

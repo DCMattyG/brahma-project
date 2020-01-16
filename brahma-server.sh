@@ -7,7 +7,7 @@ if [ "$1" == "--dev" ]; then
   trap 'kill $BGPID; exit' INT
   echo ""
   echo "Building Angular DIST in WATCH Mode (Background)..."
-  ng build --watch &
+  ng serve &
   BGPID=$!
   echo ""
   echo "Starting Express Server (Foreground)..."
