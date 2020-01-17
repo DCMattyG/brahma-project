@@ -5,6 +5,7 @@ echo ""
 if [ "$1" == "--dev" ]; then
   echo "Starting Brahma in DEV Mode..."
   trap 'kill $BGPID; exit' INT
+  trap 'docker stop brahma-mongo; exit' INT
   echo ""
   echo "Setting up Brahma ENV Variables..."
   export BRAHMA_URL=localhost
