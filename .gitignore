@@ -114,3 +114,7 @@ typings/
 # Python Build Files
 *.pyc
 *.egg-info/
+
+# VSCode Edit Config
+.editorconfig
+/.vscode
