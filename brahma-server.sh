@@ -6,6 +6,13 @@ if [ "$1" == "--dev" ]; then
   echo "Starting Brahma in DEV Mode..."
   trap 'kill $BGPID; exit' INT
   echo ""
+  echo "Setting up Brahma ENV Variables..."
+  export BRAHMA_URL=localhost
+  export BRAHMA_PORT=3000
+  echo ""
+  echo "Creating MongoDB Container..."
+  docker run --name brahma-mongo -d -p 27017:27017 -v /tmp/data:/data/db --rm mongo
+  echo ""
   echo "Building Angular DIST in WATCH Mode (Background)..."
   ng serve &
   BGPID=$!

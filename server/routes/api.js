@@ -3,18 +3,17 @@ var router = express.Router();
 
 var Fabric = require('../models/fabric');
 
-/* GET users listing. */
+/* GET fabric listing. */
 router.get('/', function(req, res, next) {
   res.json({ message: 'api works' });
 });
 
 router.route('/fabric')
-// create a bear (accessed at POST http://localhost:8080/api/bears)
+// create a fabric (accessed at POST http://localhost:8080/api/fabric)
 .post(function(req, res) {
-    var fabric = new Fabric(req.body);      // create a new instance of the Bear model
-    // bear.name = req.body.name;  // set the bears name (comes from the request)
+    var fabric = new Fabric(req.body);      // create a new instance of the Fabric model
 
-    // save the bear and check for errors
+    // save the fabric and check for errors
     fabric.save(function(err) {
       if (err)
         res.send(err);
@@ -24,7 +23,7 @@ router.route('/fabric')
 });
 
 router.route('/fabric/:fabric_token')
-// get the bear with that id (accessed at GET http://localhost:8080/api/bears/:bear_id)
+// get the fabric with the given token (accessed at GET http://localhost:8080/api/fabric/:fabric_token)
 .get(function(req, res) {
   Fabric.findOne({token: req.params.fabric_token}, function(err, fabric) {
     if (err || fabric == null)
