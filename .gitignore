@@ -113,4 +113,4 @@ typings/
 
 # Python Build Files
 *.pyc
-*.egg-info
+*.egg-info/
