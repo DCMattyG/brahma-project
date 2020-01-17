@@ -110,3 +110,7 @@ typings/
 
 # next.js build output
 .next
+
+# Python Build Files
+*.pyc
+*.egg-info
