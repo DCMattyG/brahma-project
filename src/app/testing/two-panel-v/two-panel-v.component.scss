@@ -1,0 +1,35 @@
+.h-100 {
+  height: 100%;
+}
+
+.component-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%
+}
+
+.half-panel {
+  display: flex;
+  width: 50%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.dual-panel {
+  display: flex;
+  flex-direction: row;
+}
+
+.panel-right {
+  padding-left: 10px;
+}
+
+.panel-left {
+  padding-right: 10px;
+}
+
+.panel {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
