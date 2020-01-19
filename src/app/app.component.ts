@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
 
   title = 'brahma';
   vlanOpen = false;
+  testOpen = false;
   numAlerts = 3;
 
   ngOnInit() {
@@ -26,6 +27,10 @@ export class AppComponent implements OnInit {
 
   toggleVlan() {
     this.vlanOpen = this.vlanOpen == true ? false : true;
+  }
+
+  toggleTest() {
+    this.testOpen = this.testOpen == true ? false : true;
   }
 
   showProfile() {

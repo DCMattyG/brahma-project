@@ -10,6 +10,10 @@
   height: 30%;
 }
 
+.h-35 {
+  height: 35%;
+}
+
 .h-40 {
   height: 40%;
 }
@@ -49,11 +53,31 @@
   height: 100%
 }
 
+.dual-panel {
+  display: flex;
+  flex-direction: row;
+}
+
 .full-panel {
   display: flex;
   width: 100%;
   padding-top: 10px;
   padding-bottom: 10px;
+}
+
+.half-panel {
+  display: flex;
+  width: 50%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.panel-right {
+  padding-left: 10px;
+}
+
+.panel-left {
+  padding-right: 10px;
 }
 
 .panel {
@@ -146,4 +170,35 @@ thead th {
   display: flex;
   justify-content: center;
   padding: 10px;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+input[type=text] {
+  border-top: unset !important;
+  border-right: unset !important;
+  border-left: unset !important;
+  text-align: center;
+}
+
+input[type=text]:hover {
+  box-shadow: unset !important;
+}
+
+input[type=text]:focus {
+  box-shadow: unset !important;
+}
+
+#select-epg {
+  text-align: center;
+  border-top: none !important;
+  border-right: none !important;
+  border-left: none !important;
+}
+
+label {
+  color: #017CAD;
+  text-align: center !important;
 }

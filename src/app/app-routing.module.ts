@@ -12,6 +12,8 @@ import { WizardWrapperComponent } from './wizard-new/wizard-wrapper.component';
 import { WizardCardTestAComponent } from './wizard/steps/card-testa/wizard-card-testa.component';
 import { WizardCardTestBComponent } from './wizard/steps/card-testb/wizard-card-testb.component';
 import { WizardPanelTestAComponent } from './wizard/steps/panel-testa/wizard-panel-testa.component';
+import { WizardPanelTestBComponent } from './wizard/steps/panel-testb/wizard-panel-testb.component';
+import { WizardPanelTestCComponent } from './wizard/steps/panel-testc/wizard-panel-testc.component';
 
 const routes: Routes = [
   {
@@ -62,8 +64,20 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'test',
+    path: 'testa',
     component: WizardPanelTestAComponent,
+    pathMatch: 'full',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'testb',
+    component: WizardPanelTestBComponent,
+    pathMatch: 'full',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'testc',
+    component: WizardPanelTestCComponent,
     pathMatch: 'full',
     canActivate: [AuthGuard]
   },

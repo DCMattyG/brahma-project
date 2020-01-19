@@ -23,6 +23,10 @@ if [ "$1" == "--dev" ]; then
 elif [ "$1" == "--prod" ]; then
   echo "Starting Brahma in PROD Mode..."
   echo ""
+  echo "Removing Brahma ENV Variables..."
+  unset BRAHMA_URL
+  unset BRAHMA_PORT
+  echo ""
   echo "Building Angular DIST..."
   ng build --prod
   echo ""

@@ -1,0 +1,154 @@
+<div class="panel-container">
+  <div class="panel-wrapper">
+    <div class="full-panel h-10">
+      <div class="panel panel--raised-small">
+
+        <div class="header-wrapper">
+          <div class="wizard-header-blank">
+            &nbsp;
+          </div>
+          <div class="wizard-header-title">
+            {{ currentStep.title }}
+          </div>
+          <div class="wizard-header-info">
+            <span class="icon-info-outline icon-small" style="color: #017CAD" (click)="toggleModal()"></span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="full-panel h-30">
+      <div class="panel panel--raised-small">
+      </div>
+    </div>
+
+    <div class="dual-panel h-40">
+      <div class="half-panel panel-left h-100">
+        <div class="panel panel--raised-small">
+
+          <div class="ntp-wrapper">
+            <div class="ntp-controls">
+              <div class="ntp-controls-title">
+                <span>SNMP Users</span>
+              </div>
+              <div class="ntp-controls-item">
+                <!-- <button class="btn btn--icon btn--small btn--success"><span class="icon-plus"></span></button> -->
+                <a href="javascript:;"><span class="icon-add icon-small"></span></a>
+              </div>
+              <div class="ntp-controls-item">
+                <!-- <button class="btn btn--icon btn--small btn--primary"><span class="icon-pencil"></span></button> -->
+                <a href="javascript:;"><span class="icon-pencil icon-small"></span></a>
+              </div>
+              <div class="ntp-controls-item">
+                  <!-- <button class="btn btn--icon btn--small btn--negative"><span class="icon-remove"></span></button> -->
+                  <a href="javascript:;"><span class="icon-remove icon-small"></span></a>
+                </div>
+            </div>
+          
+            <div class="table-wrapper">
+              <div class="responsive-table">
+                <table class="table table--fixed table--selectable">
+                  <thead>
+                    <tr>
+                      <th class="sortable" (click)="sortByUser()">Name <span class="sort-indicator icon-chevron-down"></span></th>
+                      <th class="sortable" (click)="sortByVersion()">Version <span class="sort-indicator icon-chevron-down"></span></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr (click)="toggleActive(snmpUser)" *ngFor="let snmpUser of fakeSNMPs.users" [ngClass]="{'active': snmpUser.active }">
+                      <td>{{ snmpUser.name }}</td>
+                      <td>{{ snmpUser.version }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="half-panel panel-right h-100">
+        <div class="panel panel--raised-small">
+
+          <div class="ntp-wrapper">
+            <div class="ntp-controls">
+              <div class="ntp-controls-title">
+                <span>Subnets</span>
+              </div>
+              <div class="ntp-controls-item">
+                <!-- <button class="btn btn--icon btn--small btn--success"><span class="icon-plus"></span></button> -->
+                <a href="javascript:;"><span class="icon-add icon-small"></span></a>
+              </div>
+              <div class="ntp-controls-item">
+                <!-- <button class="btn btn--icon btn--small btn--primary"><span class="icon-pencil"></span></button> -->
+                <a href="javascript:;"><span class="icon-pencil icon-small"></span></a>
+              </div>
+              <div class="ntp-controls-item">
+                  <!-- <button class="btn btn--icon btn--small btn--negative"><span class="icon-remove"></span></button> -->
+                  <a href="javascript:;"><span class="icon-remove icon-small"></span></a>
+                </div>
+            </div>
+          
+            <div class="table-wrapper">
+              <div class="responsive-table">
+                <table class="table table--fixed table--selectable">
+                  <thead>
+                    <tr>
+                      <th class="sortable" (click)="sortByIP()">Subnet <span class="sort-indicator icon-chevron-down"></span></th>
+                      <th>Mask</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr (click)="toggleActive(subnet)" *ngFor="let subnet of fakeSubnets" [ngClass]="{'active': subnet.active }">
+                      <td>{{ subnet.ip }}</td>
+                      <td>{{ subnet.mask }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="full-panel h-20">
+      <div class="panel panel--raised-small">
+
+        <div class="nav-wrapper">
+          <div class="wizard-progress">
+            <div class="progressbar" dataGuage dataGuagePercentage="{{ percentComplete }}" style="margin: 0;">
+              <div class="progressbar__fill" style="background-color: #64bbe3;;"></div>
+              <div class="progressbar__label"></div>
+            </div>
+          </div>
+          <div class="wizard-nav">
+            <button class="btn btn--icon btn--primary" (click)="prevStep()" [ngClass]="{ 'disabled': (percentComplete <= 0) }"><span class="icon-chevron-left"></span></button>
+            <button class="btn btn--icon btn--success" (click)="submitChild();"><span class="icon-check"></span></button>
+            <button class="btn btn--icon btn--primary" (click)="nextStep()" [ngClass]="{ 'disabled': (percentComplete >= 100) }"><span class="icon-chevron-right"></span></button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal modal--small" [ngClass]="{'hide': !modalOpen }">
+  <div class="modal__dialog">
+    <div class="modal__content" style="transform: translateY(60%); border: #dfdfdf 1px solid;">
+      <a class="modal__close" (click)="toggleModal()"><span class="icon-close icon-medium"></span></a>
+      <div class="modal__header">
+        <h1 class="modal__title">NTP Configuration</h1>
+      </div>
+      <div class="modal__body">
+        <p class="subtitle">Important details about the settings in this wizard step.</p>
+      </div>
+      <div class="modal__footer">
+        <button class="btn" (click)="toggleModal()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -49,11 +49,31 @@
   height: 100%
 }
 
+.dual-panel {
+  display: flex;
+  flex-direction: row;
+}
+
 .full-panel {
   display: flex;
   width: 100%;
   padding-top: 10px;
   padding-bottom: 10px;
+}
+
+.half-panel {
+  display: flex;
+  width: 50%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.panel-right {
+  padding-left: 10px;
+}
+
+.panel-left {
+  padding-right: 10px;
 }
 
 .panel {

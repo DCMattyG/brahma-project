@@ -22,6 +22,8 @@ import { GlobalConfigComponent } from './global/global-config.component';
 import { WizardWrapperComponent } from './wizard-new/wizard-wrapper.component';
 import { DataGuageDirective } from './app-guage.directive';
 import { WizardPanelTestAComponent } from './wizard/steps/panel-testa/wizard-panel-testa.component';
+import { WizardPanelTestBComponent } from './wizard/steps/panel-testb/wizard-panel-testb.component';
+import { WizardPanelTestCComponent } from './wizard/steps/panel-testc/wizard-panel-testc.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +42,8 @@ import { WizardPanelTestAComponent } from './wizard/steps/panel-testa/wizard-pan
     WizardCardTestAComponent,
     WizardCardTestBComponent,
     WizardPanelTestAComponent,
+    WizardPanelTestBComponent,
+    WizardPanelTestCComponent,
     GlobalConfigComponent,
     WizardWrapperComponent,
     DataGuageDirective

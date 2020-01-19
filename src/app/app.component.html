@@ -56,11 +56,16 @@
             <span>Help</span>
           </a>
         </li>
-        <li class="sidebar__item">
-          <a routerLink="/test">
+        <li class="sidebar__drawer" (click)="toggleTest()" [ngClass]="{'sidebar__drawer--opened': testOpen}">
+          <a>
             <span class="icon-terminalalt"></span>
             <span>Test</span>
           </a>
+          <ul>
+            <li class="sidebar__item"><a routerLink="/testa">Test A</a></li>
+            <li class="sidebar__item"><a routerLink="/testb">Test B</a></li>
+            <li class="sidebar__item"><a routerLink="/testc">Test C</a></li>
+          </ul>
         </li>
       </ul>
     </nav>
