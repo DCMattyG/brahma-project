@@ -26,5 +26,68 @@ state = {
     {'name': '200G_Static', 'speed': '200G', 'autoNeg': 'off'},
     {'name': '400G_Auto', 'speed': '400G', 'autoNeg': 'on'},
     {'name': '400G_Static', 'speed': '400G', 'autoNeg': 'off'}
-  ],       
+  ],
+  'mcp_policies': [
+    {'name': 'MCP_Enabled', 'adminSt': 'enabled'},
+    {'name': 'MCP_Disabled', 'adminSt': 'disabled'},
+  ],
+  'snmp_policies': [
+    {
+      'name': 'default', 
+      'adminSt': 'enabled', 
+      'contact': 'Close Encounter',
+      'loc': 'Third Kind',
+    },
+  ],
+  'dns_policies': [
+    {
+      'name': 'default',
+      'epgDn': 'uni/tn-mgmt/mgmtp-default/oob-default',
+      'dnsProv': [
+        {
+          'addr': '1.1.1.1',
+          'preferred': 'yes'
+        },
+        {
+          'addr': '8.8.8.8',
+          'preferred': 'no'
+        }
+      ],
+      'dnsDomain': [
+        {
+          'name': 'cisco.com',
+          'isDefault': 'yes'
+        }
+      ]
+    }
+  ],
+  'ntp_policies': [
+    {
+      'name': 'default',
+      'adminSt': 'enabled',
+      'authSt': 'enabled',
+      'serverState': 'disabled',
+      'masterMode': 'disabled',
+      'datetimeNtpProv': [
+        {
+          'name': '1.1.1.1',
+          'minPoll': '4',
+          'maxPoll': '6',
+          'preferred': 'yes',
+          'key': '12345',
+          'keyType': 'sha1',
+          'trusted': 'yes'
+        },
+        {
+          'name': '2.2.2.2',
+          'minPoll': '4',
+          'maxPoll': '6',
+          'preferred': 'no',
+          'key': '12345',
+          'keyType': 'md5',
+          'trusted': 'no'
+        },
+      ]
+    }
+  ]
 }

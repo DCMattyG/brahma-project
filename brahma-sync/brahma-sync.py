@@ -16,7 +16,9 @@ import cobra.mit.request as aciRequest
 import cobra.model.infra as aciInfra
 import cobra.model.pol as aciPol
 from cobra.model import cdp
+from cobra.model import mcp
 from cobra.model import lldp
+from cobra.model import snmp
 
 # Connection information
 import config
@@ -25,6 +27,8 @@ import sample
 cdp_attributes = ['name', 'adminSt']
 lldp_attributes = ['name', 'adminRxSt', 'adminTxSt']
 link_level_attributes = ['name', 'autoNeg', 'speed']
+mcp_attributes = ['name', 'adminSt']
+snmp_attributes = ['name', 'adminSt', 'contact', 'loc']
 
 def reconcile(current, desired, attributes):
   """
@@ -57,6 +61,17 @@ def create_cdp_policy(mo, policy):
   cdp.IfPol(mo, name=policy['name'], adminSt=policy['adminSt'])
   return mo
 
+def create_mcp_policy(mo, policy):
+  # Validate input
+  required_attributes(mcp_attributes, list(policy.keys()))
+
+  # Create new object if needed
+  if mo is None:
+    mo = aciInfra.Infra(aciPol.Uni(''))
+
+  mcp.IfPol(mo, name=policy['name'], adminSt=policy['adminSt'])
+  return mo
+
 def create_lldp_policy(mo, policy):
   # Validate input
   required_attributes(lldp_attributes, list(policy.keys()))
@@ -81,6 +96,21 @@ def create_link_level_policy(mo, policy):
   aciFabric.HIfPol(
     mo, name=policy['name'], autoNeg=policy['autoNeg'], speed=policy['speed'],
     fecMode=policy['fecMode'], linkDebounce=policy['linkDebounce']
+  )
+
+  return mo
+
+def create_snmp_policy(mo, policy):
+  # Validate input
+  required_attributes(snmp_attributes, list(policy.keys()))
+
+  # Create new object if needed
+  if mo is None:
+    mo = aciFabric.Inst(aciPol.Uni(''))
+
+  snmp.Pol(
+    mo, name=policy['name'], adminSt=policy['adminSt'],
+    contact=policy['contact'], loc=policy['loc']
   )
 
   return mo
@@ -176,4 +206,31 @@ if __name__ == '__main__':
     cfgRequest.addMo(mo_changes)
     apic1.commit(cfgRequest)
 
-  
+  # MCP Policies
+  mo_changes = apply_policy(
+    apic=apic1, policies=sample.state['mcp_policies'],
+    baseDN='uni/infra/mcpIfP-{0}', className='mcpIfPol',
+    attrs=mcp_attributes, create=create_mcp_policy
+  )
+
+  if mo_changes is not None:
+    print(toXMLStr(mo_changes))
+
+    cfgRequest = aciRequest.ConfigRequest()
+    cfgRequest.addMo(mo_changes)
+    apic1.commit(cfgRequest)
+
+  # SNMP Policies
+  mo_changes = apply_policy(
+    apic=apic1, policies=sample.state['snmp_policies'],
+    baseDN='uni/fabric/snmppol-{0}', className='snmpPol',
+    attrs=snmp_attributes, create=create_snmp_policy
+  )
+
+  if mo_changes is not None:
+    print(toXMLStr(mo_changes))
+
+    cfgRequest = aciRequest.ConfigRequest()
+    cfgRequest.addMo(mo_changes)
+    apic1.commit(cfgRequest)
+
