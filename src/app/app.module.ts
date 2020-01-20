@@ -19,7 +19,6 @@ import { WizardNTPConfigComponent } from './config/components/ntp-config/wizard-
 import { WizardCardTestAComponent } from './testing/card-testa/wizard-card-testa.component';
 import { WizardCardTestBComponent } from './testing/card-testb/wizard-card-testb.component';
 import { GlobalConfigComponent } from './config/components/global/global-config.component';
-import { WizardWrapperComponent } from './wizard-new/wizard-wrapper.component';
 import { DataGuageDirective } from './app-guage.directive';
 import { WizardPanelTestAComponent } from './testing/panel-testa/wizard-panel-testa.component';
 import { WizardPanelTestBComponent } from './testing/panel-testb/wizard-panel-testb.component';
@@ -51,7 +50,6 @@ import { TwoPanelVComponent } from './testing/two-panel-v/two-panel-v.component'
     WizardPanelTestBComponent,
     WizardPanelTestCComponent,
     GlobalConfigComponent,
-    WizardWrapperComponent,
     DataGuageDirective,
     TemplateComponent,
     OnePanelComponent,

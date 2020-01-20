@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { FourPanelComponent } from 'src/app/testing/four-panel/four-panel.component';
 
 @Component({
   selector: 'app-wizard',
@@ -8,31 +8,15 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 })
 export class WizardComponent implements OnInit {
 
-  wizardForm: FormGroup;
-  wizardStep = 1;
+  constructor() { }
 
-  constructor(private formBuilder: FormBuilder) {
-    this.wizardForm = this.formBuilder.group({
-      oobMgmt: new FormControl(""),
-      ibMgmt: new FormControl(""),
-      ntp: new FormControl(""),
-      dns: new FormControl("")
-    });
-  }
-
-  nextStep(event) {
-    this.wizardStep++;
-    event.target.blur();
-  }
-
-  prevStep(event) {
-    this.wizardStep--;
-    event.target.blur();
-  }
-
-  onSubmit() {
-    console.log(this.wizardForm.value);
-  }
+  component = {
+    name: 'comptWrap',
+    title: "Component Wrapper",
+    help: "Important details about the settings in this wizard step.",
+    component: FourPanelComponent,
+    required: false
+  };
 
   ngOnInit() {
 

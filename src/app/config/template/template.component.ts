@@ -51,7 +51,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.isWizard = true;
+    // this.isWizard = true;
 
     if(this.isWizard) {
       this.wizRun.percentComplete.subscribe(value => {
@@ -60,13 +60,13 @@ export class TemplateComponent implements OnInit, OnDestroy {
   
       this.targetComponent = this.wizRun.getStep();
     } else {
-      this.targetComponent = {
-        name: 'comptWrap',
-        title: "Component Wrapper",
-        help: "Important details about the settings in this wizard step.",
-        component: FourPanelComponent,
-        required: false
-      };
+      // this.targetComponent = {
+      //   name: 'comptWrap',
+      //   title: "Component Wrapper",
+      //   help: "Important details about the settings in this wizard step.",
+      //   component: FourPanelComponent,
+      //   required: false
+      // };
     }
 
     this.refreshComponent();

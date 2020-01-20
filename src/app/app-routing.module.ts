@@ -8,7 +8,6 @@ import { VlanManageComponent } from './config/components/vlans/vlan-manage/vlan-
 import { VlanUsageComponent } from './config/components/vlans/vlan-usage/vlan-usage.component';
 import { WizardComponent } from './config/wizard/wizard.component';
 import { GlobalConfigComponent } from './config/components/global/global-config.component';
-import { WizardWrapperComponent } from './wizard-new/wizard-wrapper.component';
 import { WizardCardTestAComponent } from './testing/card-testa/wizard-card-testa.component';
 import { WizardCardTestBComponent } from './testing/card-testb/wizard-card-testb.component';
 import { WizardPanelTestAComponent } from './testing/panel-testa/wizard-panel-testa.component';
@@ -60,7 +59,7 @@ const routes: Routes = [
   },
   {
     path: 'wizard',
-    component: WizardWrapperComponent,
+    component: WizardComponent,
     pathMatch: 'full',
     canActivate: [AuthGuard]
   },
