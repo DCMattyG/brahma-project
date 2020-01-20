@@ -1,6 +1,18 @@
 #!/usr/bin/env python
 
 state = {
+  'bgp_policies': [
+    {
+      'name': 'default',
+      'bgpAsP': {
+        'asn': '65001'
+      },
+      'bgpRRP': {
+        'podId': '1',
+        'bgpRRNodePEp': ['Spine1', 'Spine2']
+      },
+    },
+  ],
   'cdp_policies': [
     {'name': 'CDP_Enabled', 'adminSt': 'enabled'},
     {'name': 'CDP_Disabled', 'adminSt': 'disabled'},

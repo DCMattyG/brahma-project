@@ -15,6 +15,7 @@ import cobra.model.fabric as aciFabric
 import cobra.mit.request as aciRequest
 import cobra.model.infra as aciInfra
 import cobra.model.pol as aciPol
+import cobra.model.bgp as aciBgp
 from cobra.model import cdp
 from cobra.model import mcp
 from cobra.model import lldp
@@ -29,6 +30,13 @@ lldp_attributes = ['name', 'adminRxSt', 'adminTxSt']
 link_level_attributes = ['name', 'autoNeg', 'speed']
 mcp_attributes = ['name', 'adminSt']
 snmp_attributes = ['name', 'adminSt', 'contact', 'loc']
+bgp_attributes = {
+  'bgpInstPol': {
+    'name': None,
+    'bgpAsP': ['asn'],
+    'bgpRRP': ['podId', 'bgpRRNodePEp']
+  },
+}
 
 def reconcile(current, desired, attributes):
   """
@@ -114,6 +122,149 @@ def create_snmp_policy(mo, policy):
   )
 
   return mo
+
+
+def validate(attributes, policy):
+  """
+  validate() is designed to ensure I get the data required from
+  SaaS in order to correctly configure a policy locally.
+
+  Wrote this 50-60% of the way through... this method should be
+  the generic version of 'required_attributes'.  Does require
+  rethinking the existing (cdp, lldp, link_level, mcp, and snmp)
+  attributes and the create methods. "Road map" :)
+  """
+
+  keys = list(policy.keys())
+  for parent, children in attributes.items():
+    # Bottom of tree
+    if children is None:
+      if parent not in keys:
+        raise Exception('Missing required {0}'.format(parent))
+      continue
+
+    # parent is class name.  If children is list, we are at bottom
+    if isinstance(children, list):
+      sub_keys = list(policy[parent].keys())
+      for c in children:
+        if c not in sub_keys:
+          print(parent, children, c, sub_keys)
+          raise Exception('Missing required {0}'.format(c))
+      continue
+
+    # There's further structure down the tree.  Recursively descend
+    validate(children, policy[parent])
+
+def create_bgp_policy(mo, policy, nodes):
+  """
+  If nodes is passed, it's a dictionary of "name": "id" info for the
+  fabric nodes (non-controller)
+  """
+  # Create new object if needed
+  if mo is None:
+    mo = aciFabric.Inst(aciPol.Uni(''))
+
+  # Create top level BGP policy
+  bgpInstPol = aciBgp.InstPol(mo, name=policy['name'])
+
+  # Add ASN daughter
+  aciBgp.AsP(bgpInstPol, asn=policy['bgpAsP']['asn'])
+
+  # Add BGP (Internal) RR Fabric Policy
+  aciRRP = aciBgp.RRP(bgpInstPol)
+
+  # Add BGP (Internal) RR node
+  podId = policy['bgpRRP']['podId']
+  for rr in policy['bgpRRP']['bgpRRNodePEp']:
+    nodeId = nodes[rr]
+    aciBgp.RRNodePEp(aciRRP, id=nodeId, podId=podId)
+
+  return mo
+
+def reconcile_bgp_policy(apic, mo, policy, mo_changes):
+  """
+  Assume explicit knowledge of policy.  If we get here, we know that
+  the top level bgpInstPol name attribute is equivalent (DNs matched).
+  The rest is looking at the children.
+  """
+
+  # Validate input (top level policy)
+  validate(bgp_attributes['bgpInstPol'], policy)
+
+  # Get Fabric Nodes
+  fabricNodes = apic.lookupByClass('fabricNode')
+  nodes = dict([n.name, n.id] for n in fabricNodes)
+
+  # Is the ASN correct
+  bgpAsP = apic.lookupByClass('bgpAsP')
+  parentDNs = [str(b._parentDn()) for b in bgpAsP]
+  asnIdx = parentDNs.index(str(mo.dn))
+
+  if bgpAsP[asnIdx].asn != policy['bgpAsP']['asn']:
+    mo_changes = create_bgp_policy(mo_changes, policy, nodes)
+    return mo_changes
+
+  # Are the route reflector nodes correct
+  bgpRRP = apic.lookupByClass('bgpRRP')
+  parentDNs = [str(b._parentDn()) for b in bgpRRP]
+  rrpIdx = parentDNs.index(str(mo.dn))
+  bgpRRPdn = str(bgpRRP[rrpIdx].dn)
+
+  # Get RR nodes (gives me podId and id)
+  rrEp = apic.lookupByClass('bgpRRNodePEp')
+  rrNodes = [(b.id, b.podId) for b in rrEp if str(b._parentDn()) == bgpRRPdn]
+
+  if len(rrNodes) == 0:
+    mo_changes = create_bgp_policy(mo_changes, policy, nodes)
+    return mo_changes
+
+  # Fetch desired podId
+  podId = policy['bgpRRP']['podId']
+
+  # Loop through the RR node requirements
+  for endPt in policy['bgpRRP']['bgpRRNodePEp']:
+    if endPt not in nodes:
+      raise Exception('Node not found {0}'.format(endPt))
+    id = nodes[endPt]
+    if (id, podId) not in rrNodes:
+      print('missing node', (id,podId))
+      mo_changes = create_bgp_policy(mo_changes, policy, nodes)
+      return mo_changes
+
+  return None
+
+def apply_bgp_policy(apic=None, policies=None):
+  """
+  policies are the defined state from the SaaS service
+  """
+
+  baseDN = 'uni/fabric/bgpInstP-{0}'
+  className = 'bgpInstPol'
+
+  mo_changes = None
+
+  # Fetch existing policies from APIC
+  existing = apic.lookupByClass(className)
+  eDN = [ str(e.dn) for e in existing ]
+
+  # Loop over each policies to be defined
+  for p in policies:
+    pDN = baseDN.format(p['name'])
+
+    # New policy
+    if pDN not in eDN:
+      mo_changes = create_bgp_policy(mo_changes, p)
+      continue
+
+    # Existing Policy
+    i = eDN.index(pDN)
+
+    # Merging reconciliation with created changed mo 
+    changes = reconcile_bgp_policy(apic, existing[i], p, mo_changes)
+    if changes:
+      mo_changes = changes
+
+  return mo_changes
 
 def apply_policy(
   apic=None, policies=None, baseDN=None, 
@@ -220,6 +371,14 @@ if __name__ == '__main__':
     print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
 
+  # BGP RR Policies (custom method for nested)
+  mo_changes = apply_bgp_policy(
+    apic=apic1, policies=sample.state['bgp_policies']
+  )
+
+  if mo_changes is not None:
+    print(toXMLStr(mo_changes))
+    cfgRequest.addMo(mo_changes)
+
   if cfgRequest.configMos:
     apic1.commit(cfgRequest)
-
