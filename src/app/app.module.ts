@@ -24,7 +24,7 @@ import { DataGuageDirective } from './app-guage.directive';
 import { WizardPanelTestAComponent } from './wizard/steps/panel-testa/wizard-panel-testa.component';
 import { WizardPanelTestBComponent } from './wizard/steps/panel-testb/wizard-panel-testb.component';
 import { WizardPanelTestCComponent } from './wizard/steps/panel-testc/wizard-panel-testc.component';
-import { ComponentWrapperComponent } from './component-wrapper/component-wrapper.component';
+import { ComponentTemplateComponent } from './component-template/component-template.component';
 import { OnePanelComponent } from './testing/one-panel/one-panel.component';
 import { ThreePanelComponent } from './testing/three-panel/three-panel.component';
 import { FourPanelComponent } from './testing/four-panel/four-panel.component';
@@ -53,7 +53,7 @@ import { TwoPanelVComponent } from './testing/two-panel-v/two-panel-v.component'
     GlobalConfigComponent,
     WizardWrapperComponent,
     DataGuageDirective,
-    ComponentWrapperComponent,
+    ComponentTemplateComponent,
     OnePanelComponent,
     ThreePanelComponent,
     FourPanelComponent,

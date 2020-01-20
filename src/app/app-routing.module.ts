@@ -14,7 +14,7 @@ import { WizardCardTestBComponent } from './wizard/steps/card-testb/wizard-card-
 import { WizardPanelTestAComponent } from './wizard/steps/panel-testa/wizard-panel-testa.component';
 import { WizardPanelTestBComponent } from './wizard/steps/panel-testb/wizard-panel-testb.component';
 import { WizardPanelTestCComponent } from './wizard/steps/panel-testc/wizard-panel-testc.component';
-import { ComponentWrapperComponent } from './component-wrapper/component-wrapper.component';
+import { ComponentTemplateComponent } from './component-template/component-template.component';
 
 const routes: Routes = [
   {
@@ -83,8 +83,8 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'cwrapper',
-    component: ComponentWrapperComponent,
+    path: 'ctemplate',
+    component: ComponentTemplateComponent,
     pathMatch: 'full',
     canActivate: [AuthGuard]
   },

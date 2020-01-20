@@ -39,14 +39,18 @@ elif [ "$1" == "--build" ]; then
   echo "Building Docker Container..."
   docker build -t brahma .
 elif [ "$1" == "--compose" ]; then
-  echo "Building Angular DIST..."
-  ng build --prod
-  echo ""
-  echo "Building Docker Container..."
-  docker-compose up &
+  if [ "$2" == "--up" ]; then
+    echo "Building Angular DIST..."
+    ng build --prod
+    echo ""
+    echo "Starting Brahma Services..."
+    docker-compose up --build &
+  elif [ "$2" == "--down" ]; then
+    echo "Stopping Brahma Services..."
+    docker-compose down &
 else
   echo ""
-  echo "Usage: brahma-server [--dev] | [--prod] | [--build]"
+  echo "Usage: brahma-server [--dev] | [--prod] | [--build] | [--compose [--up|--down]]"
   echo ""
   echo "Brahma Server Script"
   echo ""

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewContainerRef, OnDestroy, ComponentFactoryResolver } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef, OnDestroy, ComponentFactoryResolver, Input, ComponentFactory } from '@angular/core';
 import { OnePanelComponent } from '../testing/one-panel/one-panel.component';
 import { ThreePanelComponent } from '../testing/three-panel/three-panel.component';
 import { FourPanelComponent } from '../testing/four-panel/four-panel.component';
@@ -6,12 +6,13 @@ import { TwoPanelHComponent } from '../testing/two-panel-h/two-panel-h.component
 import { TwoPanelVComponent } from '../testing/two-panel-v/two-panel-v.component';
 
 @Component({
-  selector: 'app-component-wrapper',
-  templateUrl: './component-wrapper.component.html',
-  styleUrls: ['./component-wrapper.component.scss']
+  selector: 'app-component-template',
+  templateUrl: './component-template.component.html',
+  styleUrls: ['./component-template.component.scss']
 })
-export class ComponentWrapperComponent implements OnInit, OnDestroy {
+export class ComponentTemplateComponent implements OnInit, OnDestroy {
   @ViewChild("dynamicContainer", { read: ViewContainerRef }) container;
+  @Input() targetComponent;
 
   componentRef;
 
