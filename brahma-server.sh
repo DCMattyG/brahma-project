@@ -47,7 +47,9 @@ elif [ "$1" == "--compose" ]; then
     docker-compose up --build &
   elif [ "$2" == "--down" ]; then
     echo "Stopping Brahma Services..."
-    docker-compose down &
+    docker-compose down
+  else
+    echo "Missing arguments, please specify --up or --down."
   fi
 else
   echo ""
