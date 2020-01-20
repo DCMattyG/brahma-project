@@ -155,6 +155,7 @@ if __name__ == '__main__':
 
   # Create connection to APIC
   apic1 = aciLogin(config.apic)
+  cfgRequest = aciRequest.ConfigRequest()
 
   # CDP
   mo_changes = apply_policy(
@@ -165,10 +166,7 @@ if __name__ == '__main__':
 
   if mo_changes is not None:
     print(toXMLStr(mo_changes))
-
-    cfgRequest = aciRequest.ConfigRequest()
     cfgRequest.addMo(mo_changes)
-    apic1.commit(cfgRequest)
 
   # LLDP
   mo_changes = apply_policy(
@@ -179,10 +177,7 @@ if __name__ == '__main__':
 
   if mo_changes is not None:
     print(toXMLStr(mo_changes))
-
-    cfgRequest = aciRequest.ConfigRequest()
     cfgRequest.addMo(mo_changes)
-    apic1.commit(cfgRequest)
 
   # Link Level Policies
 
@@ -201,10 +196,7 @@ if __name__ == '__main__':
 
   if mo_changes is not None:
     print(toXMLStr(mo_changes))
-
-    cfgRequest = aciRequest.ConfigRequest()
     cfgRequest.addMo(mo_changes)
-    apic1.commit(cfgRequest)
 
   # MCP Policies
   mo_changes = apply_policy(
@@ -215,10 +207,7 @@ if __name__ == '__main__':
 
   if mo_changes is not None:
     print(toXMLStr(mo_changes))
-
-    cfgRequest = aciRequest.ConfigRequest()
     cfgRequest.addMo(mo_changes)
-    apic1.commit(cfgRequest)
 
   # SNMP Policies
   mo_changes = apply_policy(
@@ -229,8 +218,8 @@ if __name__ == '__main__':
 
   if mo_changes is not None:
     print(toXMLStr(mo_changes))
-
-    cfgRequest = aciRequest.ConfigRequest()
     cfgRequest.addMo(mo_changes)
+
+  if cfgRequest.configMos:
     apic1.commit(cfgRequest)
 
