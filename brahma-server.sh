@@ -49,7 +49,7 @@ elif [ "$1" == "-compose" ] || [ "$1" == "-c" ]; then
     echo "Stopping Brahma Services..."
     docker-compose down
   else
-    echo "Missing arguments, please specify --up or --down."
+    echo "Missing arguments, please specify -up or -down."
     echo ""
   fi
 else
