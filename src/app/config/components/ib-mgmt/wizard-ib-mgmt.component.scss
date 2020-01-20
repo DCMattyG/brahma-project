@@ -1,0 +1,65 @@
+// ONE PANEL //
+
+.h-100 {
+  height: 100%;
+}
+
+.component-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.full-panel {
+  display: flex;
+  width: 100%;
+  padding: 10px;
+}
+
+.panel {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+///////////////
+
+.ib-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.ib-form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.ib-input {
+  background-color: transparent;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom-color: #9e9ea2;
+}
+
+.ib-table {
+  width: auto;
+  margin: auto;
+}
+
+input {
+  text-align: center;
+}
+
+input:focus {
+  outline: none;
+}

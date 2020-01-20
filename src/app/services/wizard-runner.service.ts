@@ -1,11 +1,11 @@
 import { Injectable, ComponentFactoryResolver } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { WizardOOBMgmtComponent } from '../wizard/steps/oob-mgmt/wizard-oob-mgmt.component';
-import { WizardIBMgmtComponent } from '../wizard/steps/ib-mgmt/wizard-ib-mgmt.component';
-import { VlanManageComponent } from '../vlans/vlan-manage/vlan-manage.component';
-import { WizardNTPConfigComponent } from '../wizard/steps/ntp-config/wizard-ntp-config.component';
-import { GlobalConfigComponent } from '../global/global-config.component';
+import { WizardOOBMgmtComponent } from '../config/components/oob-mgmt/wizard-oob-mgmt.component';
+import { WizardIBMgmtComponent } from '../config/components/ib-mgmt/wizard-ib-mgmt.component';
+import { VlanManageComponent } from '../config/components/vlans/vlan-manage/vlan-manage.component';
+import { WizardNTPConfigComponent } from '../config/components/ntp-config/wizard-ntp-config.component';
+import { GlobalConfigComponent } from '../config/components/global/global-config.component';
 
 @Injectable({
   providedIn: 'root'
@@ -18,31 +18,36 @@ export class WizardRunnerService {
     {
       name: "globalCfg",
       title: "Global Configuration",
-      factory: this.resolver.resolveComponentFactory(GlobalConfigComponent),
+      help: "Important details about the settings in the Global Config wizard step.",
+      component: GlobalConfigComponent,
       required: true
     },
     {
       name: "oobMgmt",
       title: "Out-of-Band Management",
-      factory: this.resolver.resolveComponentFactory(WizardOOBMgmtComponent),
+      help: "Important details about the settings in the Out-of-Band Management wizard step.",
+      component: WizardOOBMgmtComponent,
       required: false
     },
     {
       name: "ibMgmt",
       title: "In-Band Management",
-      factory: this.resolver.resolveComponentFactory(WizardIBMgmtComponent),
+      help: "Important details about the settings in the In-Band Management wizard step.",
+      component: WizardIBMgmtComponent,
       required: false
     },
     {
       name: "ntp",
       title: "NTP Configuration",
-      factory: this.resolver.resolveComponentFactory(WizardNTPConfigComponent),
+      help: "Important details about the settings in the NTP wizard step.",
+      component: WizardNTPConfigComponent,
       required: false
     },
     {
       name: "vlan",
       title: "VLAN Management",
-      factory: this.resolver.resolveComponentFactory(VlanManageComponent),
+      help: "Important details about the settings in VLAN Management wizard step.",
+      component: VlanManageComponent,
       required: false
     }
   ];
@@ -102,8 +107,8 @@ export class WizardRunnerService {
     this.percentComplete.next(Math.round(percentComplete));
   }
 
-  getFactory(step) {
-    return this.wizSteps[step].factory;
+  getComponent(step) {
+    return this.wizSteps[step].component;
   }
   
   getNumSteps() {

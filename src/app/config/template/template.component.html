@@ -1,14 +1,15 @@
 <div class="component-container">
   <div class="component-wrapper">
+
     <div class="full-panel h-10">
       <div class="panel panel--raised-small">
-
+        
         <div class="header-wrapper">
           <div class="component-header-blank">
             &nbsp;
           </div>
           <div class="component-header-title">
-            {{ currentStep.title }}
+            {{ targetComponent.title }}
           </div>
           <div class="component-header-info">
             <span class="icon-info-outline icon-small" style="color: #017CAD" (click)="toggleModal()"></span>
@@ -27,12 +28,26 @@
     <div class="full-panel h-20">
       <div class="panel panel--raised-small">
 
-        <div class="nav-wrapper">
+        <div class="nav-wrapper" *ngIf="!isWizard">
           <div class="component-progress">
             <div class="divider divider--thicker"></div>
           </div>
           <div class="component-nav">
             <button class="btn btn--success">Save</button>
+          </div>
+        </div>
+
+        <div class="nav-wrapper" *ngIf="isWizard">
+          <div class="component-progress">
+            <div class="progressbar" dataGuage dataGuagePercentage="{{ percentComplete }}" style="margin: 0;">
+              <div class="progressbar__fill" style="background-color: #64bbe3;;"></div>
+              <div class="progressbar__label"></div>
+            </div>
+          </div>
+          <div class="component-nav">
+            <button class="btn btn--icon btn--primary" (click)="prevStep()" [ngClass]="{ 'disabled': (percentComplete <= 0) }"><span class="icon-chevron-left"></span></button>
+            <button class="btn btn--icon btn--success" (click)="submitChild();"><span class="icon-check"></span></button>
+            <button class="btn btn--icon btn--primary" (click)="nextStep()" [ngClass]="{ 'disabled': (percentComplete >= 100) }"><span class="icon-chevron-right"></span></button>
           </div>
         </div>
 
@@ -46,10 +61,10 @@
     <div class="modal__content" style="transform: translateY(60%); border: #dfdfdf 1px solid;">
       <a class="modal__close" (click)="toggleModal()"><span class="icon-close icon-medium"></span></a>
       <div class="modal__header">
-        <h1 class="modal__title">{{ currentStep.title }}</h1>
+        <h1 class="modal__title">{{ targetComponent.title }}</h1>
       </div>
       <div class="modal__body">
-        <p class="subtitle">{{ currentStep.help }}</p>
+        <p class="subtitle">{{ targetComponent.help }}</p>
       </div>
       <div class="modal__footer">
         <button class="btn" (click)="toggleModal()">Ok</button>

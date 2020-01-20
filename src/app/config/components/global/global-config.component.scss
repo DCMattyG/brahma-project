@@ -1,0 +1,60 @@
+// ONE PANEL //
+
+.h-100 {
+  height: 100%;
+}
+
+.component-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.full-panel {
+  display: flex;
+  width: 100%;
+  padding: 10px;
+}
+
+.panel {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+///////////////
+
+.global-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.global-form {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+input[type=text] {
+  background-color: unset !important;
+  border-top: none !important;
+  border-right: none !important;
+  border-left: none !important;
+  text-align: center !important;
+  width: 100px !important;
+}
+
+input[type=text]:hover {
+  box-shadow: unset !important;
+}
+
+input[type=text]:focus {
+  box-shadow: unset !important;
+}

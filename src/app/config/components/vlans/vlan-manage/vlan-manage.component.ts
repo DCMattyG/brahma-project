@@ -176,5 +176,4 @@ export class VlanManageComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }

@@ -4,17 +4,17 @@ import { AuthGuard } from './auth/auth.guard';
 import { LoginComponent } from './login/login.component';
 import { TopologyComponent } from './topology/topology.component';
 import { SwitchesComponent } from './switches/switches.component';
-import { VlanManageComponent } from './vlans/vlan-manage/vlan-manage.component';
-import { VlanUsageComponent } from './vlans/vlan-usage/vlan-usage.component';
-import { WizardComponent } from './wizard/wizard.component';
-import { GlobalConfigComponent } from './global/global-config.component';
+import { VlanManageComponent } from './config/components/vlans/vlan-manage/vlan-manage.component';
+import { VlanUsageComponent } from './config/components/vlans/vlan-usage/vlan-usage.component';
+import { WizardComponent } from './config/wizard/wizard.component';
+import { GlobalConfigComponent } from './config/components/global/global-config.component';
 import { WizardWrapperComponent } from './wizard-new/wizard-wrapper.component';
-import { WizardCardTestAComponent } from './wizard/steps/card-testa/wizard-card-testa.component';
-import { WizardCardTestBComponent } from './wizard/steps/card-testb/wizard-card-testb.component';
-import { WizardPanelTestAComponent } from './wizard/steps/panel-testa/wizard-panel-testa.component';
-import { WizardPanelTestBComponent } from './wizard/steps/panel-testb/wizard-panel-testb.component';
-import { WizardPanelTestCComponent } from './wizard/steps/panel-testc/wizard-panel-testc.component';
-import { ComponentTemplateComponent } from './component-template/component-template.component';
+import { WizardCardTestAComponent } from './testing/card-testa/wizard-card-testa.component';
+import { WizardCardTestBComponent } from './testing/card-testb/wizard-card-testb.component';
+import { WizardPanelTestAComponent } from './testing/panel-testa/wizard-panel-testa.component';
+import { WizardPanelTestBComponent } from './testing/panel-testb/wizard-panel-testb.component';
+import { WizardPanelTestCComponent } from './testing/panel-testc/wizard-panel-testc.component';
+import { TemplateComponent } from './config/template/template.component';
 
 const routes: Routes = [
   {
@@ -83,8 +83,8 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'ctemplate',
-    component: ComponentTemplateComponent,
+    path: 'template',
+    component: TemplateComponent,
     pathMatch: 'full',
     canActivate: [AuthGuard]
   },

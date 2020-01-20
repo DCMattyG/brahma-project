@@ -50,6 +50,7 @@ elif [ "$1" == "--compose" ]; then
     docker-compose down
   else
     echo "Missing arguments, please specify --up or --down."
+    echo ""
   fi
 else
   echo ""

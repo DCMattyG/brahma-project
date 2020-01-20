@@ -15,7 +15,8 @@
 // Main Component Objects
 .component-container {
   height: calc(100vh - 55px);
-  padding: 10px 20px;
+  // padding: 10px 20px;
+  padding: 10px;
 }
 
 .component-wrapper {
@@ -64,8 +65,9 @@
 .full-panel {
   display: flex;
   width: 100%;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  // padding-top: 10px;
+  // padding-bottom: 10px;
+  padding: 10px;
 }
 
 .half-panel {

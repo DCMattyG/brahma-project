@@ -9,22 +9,22 @@ import { HttpClientModule } from '@angular/common/http';
 import { DataBalloonDirective } from './app-tooltip.directive';
 import { TopologyComponent } from './topology/topology.component';
 import { SwitchesComponent } from './switches/switches.component';
-import { VlanManageComponent } from './vlans/vlan-manage/vlan-manage.component';
-import { VlanUsageComponent } from './vlans/vlan-usage/vlan-usage.component';
-import { WizardComponent } from './wizard/wizard.component';
-import { WizardOOBMgmtComponent } from './wizard/steps/oob-mgmt/wizard-oob-mgmt.component';
-import { WizardIBMgmtComponent } from './wizard/steps/ib-mgmt/wizard-ib-mgmt.component';
-import { WizardDNSConfigComponent } from './wizard/steps/dns-config/wizard-dns-config.component';
-import { WizardNTPConfigComponent } from './wizard/steps/ntp-config/wizard-ntp-config.component';
-import { WizardCardTestAComponent } from './wizard/steps/card-testa/wizard-card-testa.component';
-import { WizardCardTestBComponent } from './wizard/steps/card-testb/wizard-card-testb.component';
-import { GlobalConfigComponent } from './global/global-config.component';
+import { VlanManageComponent } from './config/components/vlans/vlan-manage/vlan-manage.component';
+import { VlanUsageComponent } from './config/components/vlans/vlan-usage/vlan-usage.component';
+import { WizardComponent } from './config/wizard/wizard.component';
+import { WizardOOBMgmtComponent } from './config/components/oob-mgmt/wizard-oob-mgmt.component';
+import { WizardIBMgmtComponent } from './config/components/ib-mgmt/wizard-ib-mgmt.component';
+import { WizardDNSConfigComponent } from './config/components/dns-config/wizard-dns-config.component';
+import { WizardNTPConfigComponent } from './config/components/ntp-config/wizard-ntp-config.component';
+import { WizardCardTestAComponent } from './testing/card-testa/wizard-card-testa.component';
+import { WizardCardTestBComponent } from './testing/card-testb/wizard-card-testb.component';
+import { GlobalConfigComponent } from './config/components/global/global-config.component';
 import { WizardWrapperComponent } from './wizard-new/wizard-wrapper.component';
 import { DataGuageDirective } from './app-guage.directive';
-import { WizardPanelTestAComponent } from './wizard/steps/panel-testa/wizard-panel-testa.component';
-import { WizardPanelTestBComponent } from './wizard/steps/panel-testb/wizard-panel-testb.component';
-import { WizardPanelTestCComponent } from './wizard/steps/panel-testc/wizard-panel-testc.component';
-import { ComponentTemplateComponent } from './component-template/component-template.component';
+import { WizardPanelTestAComponent } from './testing/panel-testa/wizard-panel-testa.component';
+import { WizardPanelTestBComponent } from './testing/panel-testb/wizard-panel-testb.component';
+import { WizardPanelTestCComponent } from './testing/panel-testc/wizard-panel-testc.component';
+import { TemplateComponent } from './config/template/template.component';
 import { OnePanelComponent } from './testing/one-panel/one-panel.component';
 import { ThreePanelComponent } from './testing/three-panel/three-panel.component';
 import { FourPanelComponent } from './testing/four-panel/four-panel.component';
@@ -53,7 +53,7 @@ import { TwoPanelVComponent } from './testing/two-panel-v/two-panel-v.component'
     GlobalConfigComponent,
     WizardWrapperComponent,
     DataGuageDirective,
-    ComponentTemplateComponent,
+    TemplateComponent,
     OnePanelComponent,
     ThreePanelComponent,
     FourPanelComponent,
