@@ -2,7 +2,7 @@
 
 echo ""
 
-if [ "$1" == "--dev" ]; then
+if [ "$1" == "-dev" ] || [ "$1" == "-d" ]; then
   echo "Starting Brahma in DEV Mode..."
   trap 'kill $BGPID; exit' INT
   trap 'docker stop brahma-mongo; exit' INT
@@ -20,7 +20,7 @@ if [ "$1" == "--dev" ]; then
   echo ""
   echo "Starting Express Server (Foreground)..."
   node ./server/bin/www
-elif [ "$1" == "--prod" ]; then
+elif [ "$1" == "-prod" ] || [ "$1" == "-p" ]; then
   echo "Starting Brahma in PROD Mode..."
   echo ""
   echo "Removing Brahma ENV Variables..."
@@ -32,20 +32,20 @@ elif [ "$1" == "--prod" ]; then
   echo ""
   echo "Starting Express Server..."
   node ./server/bin/www
-elif [ "$1" == "--build" ]; then
+elif [ "$1" == "-build" ] || [ "$1" == "-b" ]; then
   echo "Building Angular DIST..."
   ng build --prod
   echo ""
   echo "Building Docker Container..."
   docker build -t brahma .
-elif [ "$1" == "--compose" ]; then
-  if [ "$2" == "--up" ]; then
+elif [ "$1" == "-compose" ] || [ "$1" == "-c" ]; then
+  if [ "$2" == "-up" ] || [ "$2" == "-u" ]; then
     echo "Building Angular DIST..."
     ng build --prod
     echo ""
     echo "Starting Brahma Services..."
     docker-compose up --build &
-  elif [ "$2" == "--down" ]; then
+  elif [ "$2" == "-down" ] || [ "$2" == "-d" ]; then
     echo "Stopping Brahma Services..."
     docker-compose down
   else
@@ -54,15 +54,15 @@ elif [ "$1" == "--compose" ]; then
   fi
 else
   echo ""
-  echo "Usage: brahma-server [--dev] | [--prod] | [--build] | [--compose [--up|--down]]"
+  echo "Usage: brahma-server [-d] | [-p] | [-b] | [-c [-u|-d]]"
   echo ""
   echo "Brahma Server Script"
   echo ""
   echo "Optional Arguments:"
-  echo "--dev       Run Server in Development Mode"
-  echo "--prod      Run Server in Production Mode"
-  echo "--build     Build Docker Container for Brahma Service"
-  echo "--compose   Bring Full Brahma Service Online w/ docker-compose"
+  echo "-d -dev       Run Server in Development Mode"
+  echo "-p -prod      Run Server in Production Mode"
+  echo "-b -build     Build Docker Container for Brahma Service"
+  echo "-c -compose   Bring Full Brahma Service Up/Down via docker-compose"
   echo ""
   exit 0
 fi
