@@ -48,6 +48,7 @@ elif [ "$1" == "--compose" ]; then
   elif [ "$2" == "--down" ]; then
     echo "Stopping Brahma Services..."
     docker-compose down &
+  fi
 else
   echo ""
   echo "Usage: brahma-server [--dev] | [--prod] | [--build] | [--compose [--up|--down]]"
