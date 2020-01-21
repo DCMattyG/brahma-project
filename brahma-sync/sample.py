@@ -16,6 +16,13 @@ state = {
   'coop_group_policies': [
     {'name': 'default', 'type': 'strict'},
   ],
+  'rogue_endpoint_policies': [
+    {
+      'name': 'default', 'adminSt': 'enabled',
+      'holdIntvl': '1800',
+      'rogueEpDetectIntvl': '60', 'rogueEpDetectMult': '4'
+    }
+  ],
   'cdp_policies': [
     {'name': 'CDP_Enabled', 'adminSt': 'enabled'},
     {'name': 'CDP_Disabled', 'adminSt': 'disabled'},

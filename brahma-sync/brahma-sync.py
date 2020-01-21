@@ -17,6 +17,7 @@ import cobra.model.infra as aciInfra
 import cobra.model.pol as aciPol
 import cobra.model.bgp as aciBgp
 import cobra.model.coop as aciCoop
+import cobra.model.ep as aciEp
 from cobra.model import cdp
 from cobra.model import mcp
 from cobra.model import lldp
@@ -32,6 +33,9 @@ link_level_attributes = ['name', 'autoNeg', 'speed']
 mcp_attributes = ['name', 'adminSt']
 snmp_attributes = ['name', 'adminSt', 'contact', 'loc']
 coop_attributes = ['name', 'type']
+rogue_endpoint_attributes = [
+  'name', 'adminSt', 'holdIntvl', 'rogueEpDetectIntvl', 'rogueEpDetectMult'
+]
 bgp_attributes = {
   'bgpInstPol': {
     'name': None,
@@ -119,6 +123,23 @@ def create_coop_policy(mo, policy):
     mo = aciFabric.Inst(aciPol.Uni(''))
 
   aciCoop.Pol(mo, name=policy['name'], type=policy['type'])
+
+  return mo
+
+def create_rogue_policy(mo, policy):
+  # Validate input
+  required_attributes(rogue_endpoint_attributes, list(policy.keys()))
+
+  # Create new object if needed
+  if mo is None:
+    mo = aciInfra.Infra(aciPol.Uni(''))
+
+  aciEp.ControlP(
+    mo, name=policy['name'], adminSt=policy['adminSt'],
+    holdIntvl=policy['holdIntvl'],
+    rogueEpDetectIntvl=policy['rogueEpDetectIntvl'],
+    rogueEpDetectMult=policy['rogueEpDetectMult']
+  )
 
   return mo
 
@@ -379,6 +400,17 @@ if __name__ == '__main__':
     apic=apic1, policies=sample.state['coop_group_policies'],
     baseDN='uni/fabric/pol-{0}', className='coopPol',
     attrs=coop_attributes, create=create_coop_policy
+  )
+
+  if mo_changes is not None:
+    print(toXMLStr(mo_changes))
+    cfgRequest.addMo(mo_changes)
+
+  # Rogue Endpoint Policies
+  mo_changes = apply_policy(
+    apic=apic1, policies=sample.state['rogue_endpoint_policies'],
+    baseDN='uni/infra/epCtrlP-{0}', className='epControlP',
+    attrs=rogue_endpoint_attributes, create=create_rogue_policy
   )
 
   if mo_changes is not None:
