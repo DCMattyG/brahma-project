@@ -298,13 +298,13 @@ def reconcile_bgp_policy(apic, mo, policy, mo_changes):
 
   return None
 
-def apply_bgp_policy(apic=None, policies=None):
+def apply_nested_policy(
+  apic=None, policies=None, baseDN=None,
+  className=None, create=None, reconcile=None
+  ):
   """
   policies are the defined state from the SaaS service
   """
-
-  baseDN = 'uni/fabric/bgpInstP-{0}'
-  className = 'bgpInstPol'
 
   mo_changes = None
 
@@ -318,14 +318,14 @@ def apply_bgp_policy(apic=None, policies=None):
 
     # New policy
     if pDN not in eDN:
-      mo_changes = create_bgp_policy(mo_changes, p)
+      mo_changes = create(mo_changes, p)
       continue
 
     # Existing Policy
     i = eDN.index(pDN)
 
     # Merging reconciliation with created changed mo 
-    changes = reconcile_bgp_policy(apic, existing[i], p, mo_changes)
+    changes = reconcile(apic, existing[i], p, mo_changes)
     if changes:
       mo_changes = changes
 
@@ -485,8 +485,10 @@ if __name__ == '__main__':
     cfgRequest.addMo(mo_changes)
 
   # BGP RR Policies (custom method for nested)
-  mo_changes = apply_bgp_policy(
-    apic=apic1, policies=sample.state['bgp_policies']
+  mo_changes = apply_nested_policy(
+    apic=apic1, policies=sample.state['bgp_policies'],
+    baseDN='uni/fabric/bgpInstP-{0}', className='bgpInstPol',
+    create=create_bgp_policy, reconcile=reconcile_bgp_policy
   )
 
   if mo_changes is not None:
