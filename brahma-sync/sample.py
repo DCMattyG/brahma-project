@@ -13,6 +13,28 @@ state = {
       },
     },
   ],
+  'dns_policies': [
+    {
+      'name': 'default',
+      'epgDn': 'uni/tn-mgmt/mgmtp-default/oob-default',
+      'dnsProv': [
+        {
+          'addr': '1.1.1.1',
+          'preferred': 'yes'
+        },
+        {
+          'addr': '8.8.8.8',
+          'preferred': 'no'
+        }
+      ],
+      'dnsDomain': [
+        {
+          'name': 'cisco.com',
+          'isDefault': 'yes'
+        }
+      ]
+    }
+  ],
   'coop_group_policies': [
     {'name': 'default', 'type': 'strict'},
   ],
@@ -70,28 +92,6 @@ state = {
       'contact': 'Close Encounter',
       'loc': 'Third Kind',
     },
-  ],
-  'dns_policies': [
-    {
-      'name': 'default',
-      'epgDn': 'uni/tn-mgmt/mgmtp-default/oob-default',
-      'dnsProv': [
-        {
-          'addr': '1.1.1.1',
-          'preferred': 'yes'
-        },
-        {
-          'addr': '8.8.8.8',
-          'preferred': 'no'
-        }
-      ],
-      'dnsDomain': [
-        {
-          'name': 'cisco.com',
-          'isDefault': 'yes'
-        }
-      ]
-    }
   ],
   'ntp_policies': [
     {

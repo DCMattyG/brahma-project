@@ -18,6 +18,7 @@ import cobra.model.pol as aciPol
 import cobra.model.bgp as aciBgp
 import cobra.model.coop as aciCoop
 import cobra.model.ep as aciEp
+import cobra.model.dns as aciDNS
 from cobra.model import cdp
 from cobra.model import mcp
 from cobra.model import lldp
@@ -43,6 +44,14 @@ bgp_attributes = {
     'name': None,
     'bgpAsP': ['asn'],
     'bgpRRP': ['podId', 'bgpRRNodePEp']
+  },
+}
+dns_attributes = {
+  'dnsProfile': {
+    'name': None,
+    'epgDn': None,
+    'dnsProv': ['addr', 'preferred'],
+    'dnsDomain': ['name', 'isDefault']
   },
 }
 
@@ -210,7 +219,11 @@ def validate(attributes, policy):
 
     # parent is class name.  If children is list, we are at bottom
     if isinstance(children, list):
-      sub_keys = list(policy[parent].keys())
+      if isinstance(policy[parent], list):
+        sub_keys = list(policy[parent][0].keys())
+      else:
+        sub_keys = list(policy[parent].keys())
+
       for c in children:
         if c not in sub_keys:
           print(parent, children, c, sub_keys)
@@ -219,6 +232,68 @@ def validate(attributes, policy):
 
     # There's further structure down the tree.  Recursively descend
     validate(children, policy[parent])
+
+def create_dns_policy(mo, policy):
+  if mo is None:
+    mo = aciFabric.Inst(aciPol.Uni(''))
+
+  dnsProfile = aciDNS.Profile(mo, name=policy['name'])
+  aciDNS.RsProfileToEpg(
+    dnsProfile, tDn='uni/tn-mgmt/mgmtp-default/oob-default'
+  )
+
+  for provider in policy['dnsProv']:
+    aciDNS.Prov(
+      dnsProfile, addr=provider['addr'], preferred=provider['preferred']
+    )
+
+  for domain in policy['dnsDomain']:
+    aciDNS.Domain(
+      dnsProfile, name=domain['name'], isDefault=domain['isDefault']
+    )
+
+  return mo
+
+def reconcile_dns_policy(apic, mo, policy, mo_changes):
+  # Validate input
+  validate(dns_attributes['dnsProfile'], policy)
+
+  # Name already validate as part of DN match, record Dn
+  moDn = str(mo.dn)
+
+  # Find all DNS providers with the moDn as parent
+  providers = apic.lookupByClass('dnsProv')
+  my_providers = dict(
+    [p.addr, p.preferred] for p in providers if str(p._parentDn()) == moDn
+  )
+
+  # Validate the providers are correct
+  for p in policy['dnsProv']:
+    if p['addr'] not in my_providers:
+      mo_changes = create_dns_policy(mo_changes, policy)
+      return mo_changes
+
+    if my_providers[p['addr']] != p['preferred']:
+      mo_changes = create_dns_policy(mo_changes, policy)
+      return mo_changes
+
+  # Find all DNS domains with the moDn as parent
+  domains = apic.lookupByClass('dnsDomain')
+  my_domains = dict(
+    [d.name, d.isDefault] for d in domains if str(d._parentDn()) == moDn
+  )
+
+  # Validate the domains are correct
+  for d in policy['dnsDomain']:
+    if d['name'] not in my_domains:
+      mo_changes = create_dns_policy(mo_changes, policy)
+      return mo_changes
+
+    if my_domains[d['name']] != d['isDefault']:
+      mo_changes = create_dns_policy(mo_changes, policy)
+      return mo_changes
+
+  return None
 
 def create_bgp_policy(mo, policy, nodes):
   """
@@ -489,6 +564,17 @@ if __name__ == '__main__':
     apic=apic1, policies=sample.state['bgp_policies'],
     baseDN='uni/fabric/bgpInstP-{0}', className='bgpInstPol',
     create=create_bgp_policy, reconcile=reconcile_bgp_policy
+  )
+
+  if mo_changes is not None:
+    print(toXMLStr(mo_changes))
+    cfgRequest.addMo(mo_changes)
+
+  # DNS Policies
+  mo_changes = apply_nested_policy(
+    apic=apic1, policies=sample.state['dns_policies'],
+    baseDN='uni/fabric/dnsp-{0}', className='dnsProfile',
+    create=create_dns_policy, reconcile=reconcile_dns_policy
   )
 
   if mo_changes is not None:
