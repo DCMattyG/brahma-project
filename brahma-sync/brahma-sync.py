@@ -36,6 +36,7 @@ coop_attributes = ['name', 'type']
 rogue_endpoint_attributes = [
   'name', 'adminSt', 'holdIntvl', 'rogueEpDetectIntvl', 'rogueEpDetectMult'
 ]
+ip_aging_attributes = ['name', 'adminSt']
 bgp_attributes = {
   'bgpInstPol': {
     'name': None,
@@ -140,6 +141,18 @@ def create_rogue_policy(mo, policy):
     rogueEpDetectIntvl=policy['rogueEpDetectIntvl'],
     rogueEpDetectMult=policy['rogueEpDetectMult']
   )
+
+  return mo
+
+def create_aging_policy(mo, policy):
+  # Validate input
+  required_attributes(ip_aging_attributes, list(policy.keys()))
+
+  # Create new object if needed
+  if mo is None:
+    mo = aciInfra.Infra(aciPol.Uni(''))
+
+  aciEp.IpAgingP(mo, name=policy['name'], adminSt=policy['adminSt'])
 
   return mo
 
@@ -411,6 +424,17 @@ if __name__ == '__main__':
     apic=apic1, policies=sample.state['rogue_endpoint_policies'],
     baseDN='uni/infra/epCtrlP-{0}', className='epControlP',
     attrs=rogue_endpoint_attributes, create=create_rogue_policy
+  )
+
+  if mo_changes is not None:
+    print(toXMLStr(mo_changes))
+    cfgRequest.addMo(mo_changes)
+
+  # IP Aging Policies
+  mo_changes = apply_policy(
+    apic=apic1, policies=sample.state['ip_aging_policies'],
+    baseDN='uni/infra/ipAgingP-{0}', className='epIpAgingP',
+    attrs=ip_aging_attributes, create=create_aging_policy
   )
 
   if mo_changes is not None:

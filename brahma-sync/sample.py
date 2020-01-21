@@ -23,6 +23,9 @@ state = {
       'rogueEpDetectIntvl': '60', 'rogueEpDetectMult': '4'
     }
   ],
+  'ip_aging_policies': [
+    {'name': 'default', 'adminSt': 'enabled'}
+  ],
   'cdp_policies': [
     {'name': 'CDP_Enabled', 'adminSt': 'enabled'},
     {'name': 'CDP_Disabled', 'adminSt': 'disabled'},
