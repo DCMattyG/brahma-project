@@ -26,6 +26,13 @@ state = {
   'ip_aging_policies': [
     {'name': 'default', 'adminSt': 'enabled'}
   ],
+  'fabric_wide_policies': [
+    {
+      'name': 'default',
+      'domainValidation': 'yes',
+      'enforceSubnetCheck': 'yes',
+    }
+  ],
   'cdp_policies': [
     {'name': 'CDP_Enabled', 'adminSt': 'enabled'},
     {'name': 'CDP_Disabled', 'adminSt': 'disabled'},

@@ -37,6 +37,7 @@ rogue_endpoint_attributes = [
   'name', 'adminSt', 'holdIntvl', 'rogueEpDetectIntvl', 'rogueEpDetectMult'
 ]
 ip_aging_attributes = ['name', 'adminSt']
+fabric_wide_attributes = ['name', 'domainValidation', 'enforceSubnetCheck']
 bgp_attributes = {
   'bgpInstPol': {
     'name': None,
@@ -153,6 +154,22 @@ def create_aging_policy(mo, policy):
     mo = aciInfra.Infra(aciPol.Uni(''))
 
   aciEp.IpAgingP(mo, name=policy['name'], adminSt=policy['adminSt'])
+
+  return mo
+
+def create_wide_policy(mo, policy):
+  # Validate input
+  required_attributes(fabric_wide_attributes, list(policy.keys()))
+
+  # Create new object if needed
+  if mo is None:
+    mo = aciInfra.Infra(aciPol.Uni(''))
+
+  aciInfra.SetPol(
+    mo, name=policy['name'],
+    domainValidation=policy['domainValidation'],
+    enforceSubnetCheck=policy['enforceSubnetCheck']
+  )
 
   return mo
 
@@ -316,7 +333,8 @@ def apply_bgp_policy(apic=None, policies=None):
 
 def apply_policy(
   apic=None, policies=None, baseDN=None, 
-  className=None, attrs=None, create=None
+  className=None, attrs=None, create=None,
+  exactDN=None
   ):
   """
   Policies are entries that need to exist in APIC.
@@ -330,7 +348,10 @@ def apply_policy(
 
   # Loop over each policies to be defined
   for p in policies:
-    pDN = baseDN.format(p['name'])
+    if exactDN:
+      pDN = exactDN
+    else:
+      pDN = baseDN.format(p['name'])
 
     # New policy
     if pDN not in eDN:
@@ -435,6 +456,17 @@ if __name__ == '__main__':
     apic=apic1, policies=sample.state['ip_aging_policies'],
     baseDN='uni/infra/ipAgingP-{0}', className='epIpAgingP',
     attrs=ip_aging_attributes, create=create_aging_policy
+  )
+
+  if mo_changes is not None:
+    print(toXMLStr(mo_changes))
+    cfgRequest.addMo(mo_changes)
+
+  # Fabric Wide System Settings
+  mo_changes = apply_policy(
+    apic=apic1, policies=sample.state['fabric_wide_policies'],
+    exactDN='uni/infra/settings', className='infraSetPol',
+    attrs=fabric_wide_attributes, create=create_wide_policy
   )
 
   if mo_changes is not None:
