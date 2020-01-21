@@ -11,7 +11,7 @@ export class GlobalConfigComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,) {
     this.globalForm = this.formBuilder.group({
-      bgp_asn: new FormControl(''),
+      bgp_asn: new FormControl('65001'),
       subnet_check: new FormControl(true),
       domain_validation: new FormControl(true),
       isis_redist: new FormControl(true),

@@ -20,6 +20,32 @@
 
     <div class="full-panel h-30">
       <div class="panel panel--raised-small">
+
+        <div class="switch-wrapper">
+          <ng-container *ngFor="let switch of fabricBuilder.getLeavesDetail(); let firstSwitch = first; let lastSwitch = last; let i = index">
+            <div class="switch-container">
+              {{ switch.name }} ({{ switch.serial }})
+              <br>
+              <div class="switch-outline">
+                <ng-container *ngFor="let slot of getSlots(switch.config); let lastSlot = last; let j = index">
+                  <ng-container *ngFor="let row of getRows(switch.config, slot); let firstRow = first; let lastRow = last; let k = index">
+                    <div class="switch-row">
+                      <ng-container *ngFor="let interface of getRow(switch.config, slot, row)">
+                        <div class="svg-{{ interface.type }}" dataBalloon dataBalloonProperty="{{interface.name}}" dataBalloonPos="{{interface.dir}}">
+                          <img src="../../assets/svg/{{ interface.type }}.svg" />
+                        </div>
+                      </ng-container>
+                    </div>
+                  </ng-container>
+                  <div class="slot-divider" *ngIf="!firstSlot && !lastSlot">
+                    <hr>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+
       </div>
     </div>
 

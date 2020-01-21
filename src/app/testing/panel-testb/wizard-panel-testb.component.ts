@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { FabricBuilderService } from 'src/app/services/fabric-builder.service';
 
 @Component({
   selector: 'app-wizard-panel-testb',
@@ -7,13 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WizardPanelTestBComponent implements OnInit {
 
-  constructor() { }
+  constructor(public http: HttpClient,
+    public fabricBuilder: FabricBuilderService) { }
 
   percentComplete = 50;
   modalOpen = false;
 
   currentStep = {
-    title: "SNMP Configuration"
+    title: "VPC Configuration"
   };
 
   fakeSNMPs = {
@@ -226,7 +229,22 @@ export class WizardPanelTestBComponent implements OnInit {
     console.log("Submit Child...")
   }
 
-  ngOnInit() {
+  getSlots(switchData) {
+    return Object.keys(switchData);
+  }
   
+  getRows(switchData, switchSlot) {
+    var switchRows = switchData[switchSlot]
+    return Object.keys(switchRows);
+  }
+  
+  getRow(switchData, switchSlot, switchRow) {
+    var slotData = switchData[switchSlot];
+    var rowData = slotData[switchRow];
+    return rowData;
+  }
+
+  ngOnInit() {
+    console.log(this.fabricBuilder.getLeavesDetail());
   }
 }

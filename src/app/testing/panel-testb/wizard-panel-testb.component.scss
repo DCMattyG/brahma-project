@@ -167,3 +167,95 @@ thead th {
   justify-content: center;
   padding: 10px;
 }
+
+// SWITCH RENDERING //
+
+.switch-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.switch-container {
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  text-align: center;
+  padding: 0px 10px;
+}
+
+.switch-outline {
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  border: 2px solid darkgray;
+  padding: 5px; 
+  min-width: 20px;
+}
+
+.switch-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.slot-divider {
+  width: 100%
+}
+
+.slot-divider > hr {
+  margin: 5px 0px !important;
+}
+
+.svg-rj45 {
+  overflow: visible;
+  margin: 2px;
+  float: left;
+  height: 12px;
+  width: 12px;
+}
+
+.svg-sfp {
+  overflow: visible;
+  margin: 2px;
+  float: left;
+  height: 12px;
+  width: 12px;
+}
+
+.svg-sfp-blank {
+  overflow: visible;
+  margin: 2px;
+  float: left;
+  height: 12px;
+  width: 12px;
+}
+
+.svg-usb {
+  overflow: visible;
+  margin: 2px;
+  float: left;
+  height: 12px;
+  width: 12px;
+}
+
+.svg-qsfp {
+  overflow: visible;
+  margin: 2px;
+  float: left;
+  height: 12px;
+  width: 24px;
+}
+
+.svg-qsfp-blank {
+  overflow: visible;
+  margin: 2px;
+  float: left;
+  height: 12px;
+  width: 24px;
+}
+
+//////////////////////
