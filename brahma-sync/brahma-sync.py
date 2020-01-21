@@ -16,6 +16,7 @@ import cobra.mit.request as aciRequest
 import cobra.model.infra as aciInfra
 import cobra.model.pol as aciPol
 import cobra.model.bgp as aciBgp
+import cobra.model.coop as aciCoop
 from cobra.model import cdp
 from cobra.model import mcp
 from cobra.model import lldp
@@ -30,6 +31,7 @@ lldp_attributes = ['name', 'adminRxSt', 'adminTxSt']
 link_level_attributes = ['name', 'autoNeg', 'speed']
 mcp_attributes = ['name', 'adminSt']
 snmp_attributes = ['name', 'adminSt', 'contact', 'loc']
+coop_attributes = ['name', 'type']
 bgp_attributes = {
   'bgpInstPol': {
     'name': None,
@@ -105,6 +107,18 @@ def create_link_level_policy(mo, policy):
     mo, name=policy['name'], autoNeg=policy['autoNeg'], speed=policy['speed'],
     fecMode=policy['fecMode'], linkDebounce=policy['linkDebounce']
   )
+
+  return mo
+
+def create_coop_policy(mo, policy):
+  # Validate input
+  required_attributes(coop_attributes, list(policy.keys()))
+
+  # Create new object if needed
+  if mo is None:
+    mo = aciFabric.Inst(aciPol.Uni(''))
+
+  aciCoop.Pol(mo, name=policy['name'], type=policy['type'])
 
   return mo
 
@@ -354,6 +368,17 @@ if __name__ == '__main__':
     apic=apic1, policies=sample.state['mcp_policies'],
     baseDN='uni/infra/mcpIfP-{0}', className='mcpIfPol',
     attrs=mcp_attributes, create=create_mcp_policy
+  )
+
+  if mo_changes is not None:
+    print(toXMLStr(mo_changes))
+    cfgRequest.addMo(mo_changes)
+
+  # COOP Policies
+  mo_changes = apply_policy(
+    apic=apic1, policies=sample.state['coop_group_policies'],
+    baseDN='uni/fabric/pol-{0}', className='coopPol',
+    attrs=coop_attributes, create=create_coop_policy
   )
 
   if mo_changes is not None:

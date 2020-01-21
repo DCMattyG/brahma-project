@@ -13,6 +13,9 @@ state = {
       },
     },
   ],
+  'coop_group_policies': [
+    {'name': 'default', 'type': 'strict'},
+  ],
   'cdp_policies': [
     {'name': 'CDP_Enabled', 'adminSt': 'enabled'},
     {'name': 'CDP_Disabled', 'adminSt': 'disabled'},
