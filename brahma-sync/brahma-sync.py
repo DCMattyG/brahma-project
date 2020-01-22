@@ -19,6 +19,7 @@ import cobra.model.bgp as aciBgp
 import cobra.model.coop as aciCoop
 import cobra.model.ep as aciEp
 import cobra.model.dns as aciDNS
+import cobra.model.datetime as aciNtp
 from cobra.model import cdp
 from cobra.model import mcp
 from cobra.model import lldp
@@ -53,6 +54,18 @@ dns_attributes = {
     'dnsProv': ['addr', 'preferred'],
     'dnsDomain': ['name', 'isDefault']
   },
+}
+ntp_provider_attributes = ['name', 'minPoll', 'maxPoll', 'preferred']
+ntp_auth_key_attributes = ['key', 'keyType', 'trusted']
+ntp_attributes = {
+  'datetimePol': {
+    'name': None,
+    'adminSt': None,
+    'authSt': None,
+    'serverState': None,
+    'masterMode': None,
+    'datetimeNtpProv': ntp_provider_attributes + ntp_auth_key_attributes
+  }
 }
 
 def reconcile(current, desired, attributes):
@@ -384,6 +397,118 @@ def reconcile_bgp_policy(apic, mo, policy, mo_changes):
 
   return None
 
+def create_ntp_policy(mo, policy):
+  if mo is None:
+    mo = aciFabric.Inst(aciPol.Uni(''))
+
+  datetimePol = aciNtp.Pol(
+    mo, name=policy['name'], adminSt=policy['adminSt'],
+    authSt=policy['authSt'], serverState=policy['serverState'],
+    masterMode=policy['masterMode']
+  )
+
+  for id, prov in enumerate(policy['datetimeNtpProv']):
+    aciNtp.NtpAuthKey(
+      datetimePol, id=str(id+1),
+      key=prov['key'], keyType=prov['keyType'], trusted=prov['trusted']
+    )
+
+    prov = aciNtp.NtpProv(
+      datetimePol, name=prov['name'], preferred=prov['preferred'],
+      minPoll=prov['minPoll'], maxPoll=prov['maxPoll'], keyId=str(id+1)
+    )
+
+    aciNtp.RsNtpProvToNtpAuthKey(prov, tnDatetimeNtpAuthKeyId=str(id+1))
+    aciNtp.RsNtpProvToEpg(prov, tDn='uni/tn-mgmt/mgmtp-default/oob-default')
+
+  return mo
+
+def reconcile_ntp_policy(apic, mo, policy, mo_changes):
+  # Validate input
+  validate(ntp_attributes['datetimePol'], policy)
+
+  # Check parent policy attributes
+  attrs = [k for k, v in ntp_attributes['datetimePol'].items() if v is None]
+  if not reconcile(mo, policy, attrs):
+    mo_changes = create_ntp_policy(mo_changes, policy)
+    return mo_changes
+
+  # "parentDn" of the children
+  polDn = str(mo.dn)
+
+  # Fetch keys first, since we need their key ids to check the providers
+  datetimeNtpAuthKey = apic.lookupByClass('datetimeNtpAuthKey')
+  authKeys = dict(
+    [k.key, k] for k in datetimeNtpAuthKey if str(k._parentDn()) == polDn
+  )
+
+  # There are no keys, create policy
+  if not authKeys:
+    mo_changes = create_ntp_policy(mo_changes, policy)
+    return mo_changes
+
+  # Check auth key attributes
+  keyIdMap = {}
+  ntpProvAndKeys = policy['datetimeNtpProv']
+  for desired in ntpProvAndKeys:
+    if desired['key'] not in authKeys:
+      mo_changes = create_ntp_policy(mo_changes, policy)
+      return mo_changes
+
+    current = authKeys[desired['key']]
+    if not reconcile(current, desired, ntp_auth_key_attributes):
+      mo_changes = create_ntp_policy(mo_changes, policy)
+      return mo_changes
+
+    # The current MO and the desired match, so let's record key id
+    keyIdMap[desired['key']] = current.id
+
+  # Auth Keys in Sync, Validate Providers
+
+  # Fetch providers, ensure matching parentDN
+  datetimeNtpProv = apic.lookupByClass('datetimeNtpProv')
+  ntpProv = dict(
+    [p.name, p] for p in datetimeNtpProv if str(p._parentDn()) == polDn
+  )
+
+  # There are no providers, create policy
+  if not ntpProv:
+    mo_changes = create_ntp_policy(mo_changes, policy)
+    return mo_changes
+
+  # Loop over providers and check attributes
+  for desired in policy['datetimeNtpProv']:
+
+    # If the desired provider doesn't exist, create policy
+    if desired['name'] not in ntpProv:
+      mo_changes = create_ntp_policy(mo_changes, policy)
+      return mo_changes
+
+    # If it exists but doesn't match settings, create policy
+    current = ntpProv[desired['name']]
+    if not reconcile(current, desired, ntp_provider_attributes):
+      mo_changes = create_ntp_policy(mo_changes, policy)
+      return mo_changes
+
+    # Fetch all mapped keys to providers
+    currDn = str(current.dn)
+    keyMap = apic.lookupByClass('datetimeRsNtpProvToNtpAuthKey')
+    currKeys = [
+      k.tnDatetimeNtpAuthKeyId for k in keyMap if str(k._parentDn()) == currDn
+    ]
+
+    # If current provider has no mapped keys, create policy
+    if not currKeys:
+      mo_changes = create_ntp_policy(mo_changes, policy)
+      return mo_changes
+
+    desiredKeyId = keyIdMap[desired['key']]
+    if desiredKeyId not in currKeys:
+      mo_changes = create_ntp_policy(mo_changes, policy)
+      return mo_changes
+
+  return None
+
 def apply_nested_policy(
   apic=None, policies=None, baseDN=None,
   className=None, create=None, reconcile=None
@@ -570,6 +695,8 @@ if __name__ == '__main__':
     print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
 
+  ### Hierarchy of objects
+
   # BGP RR Policies (custom method for nested)
   mo_changes = apply_nested_policy(
     apic=apic1, policies=sample.state['bgp_policies'],
@@ -586,6 +713,17 @@ if __name__ == '__main__':
     apic=apic1, policies=sample.state['dns_policies'],
     baseDN='uni/fabric/dnsp-{0}', className='dnsProfile',
     create=create_dns_policy, reconcile=reconcile_dns_policy
+  )
+
+  if mo_changes is not None:
+    print(toXMLStr(mo_changes))
+    cfgRequest.addMo(mo_changes)
+
+  # NTP Policies
+  mo_changes = apply_nested_policy(
+    apic=apic1, policies=sample.state['ntp_policies'],
+    baseDN='uni/fabric/time-{0}', className='datetimePol',
+    create=create_ntp_policy, reconcile=reconcile_ntp_policy
   )
 
   if mo_changes is not None:

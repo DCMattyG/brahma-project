@@ -106,7 +106,7 @@ state = {
           'minPoll': '4',
           'maxPoll': '6',
           'preferred': 'yes',
-          'key': '12345',
+          'key': '23456',
           'keyType': 'sha1',
           'trusted': 'yes'
         },
