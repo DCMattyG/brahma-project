@@ -335,11 +335,18 @@ def reconcile_bgp_policy(apic, mo, policy, mo_changes):
   fabricNodes = apic.lookupByClass('fabricNode')
   nodes = dict([n.name, n.id] for n in fabricNodes)
 
+  # DN for the MO
+  moDn = str(mo.dn)
+
   # Is the ASN correct
   bgpAsP = apic.lookupByClass('bgpAsP')
   parentDNs = [str(b._parentDn()) for b in bgpAsP]
-  asnIdx = parentDNs.index(str(mo.dn))
+ 
+  if moDn not in parentDNs:
+    mo_changes = create_bgp_policy(mo_changes, policy, nodes)
+    return mo_changes
 
+  asnIdx = parentDNs.index(str(mo.dn))
   if bgpAsP[asnIdx].asn != policy['bgpAsP']['asn']:
     mo_changes = create_bgp_policy(mo_changes, policy, nodes)
     return mo_changes
@@ -347,6 +354,10 @@ def reconcile_bgp_policy(apic, mo, policy, mo_changes):
   # Are the route reflector nodes correct
   bgpRRP = apic.lookupByClass('bgpRRP')
   parentDNs = [str(b._parentDn()) for b in bgpRRP]
+  if moDn not in parentDNs:
+    mo_changes = create_bgp_policy(mo_changes, policy, nodes)
+    return mo_changes
+
   rrpIdx = parentDNs.index(str(mo.dn))
   bgpRRPdn = str(bgpRRP[rrpIdx].dn)
 
