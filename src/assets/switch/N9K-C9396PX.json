@@ -3,56 +3,6 @@
     "slot1": {
       "row1": [
         {
-          "name": null,
-          "type": "sfp-blank",
-          "dir": "up"
-        },
-        {
-          "name": null,
-          "type": "sfp-blank",
-          "dir": "up"
-        },
-        {
-          "name": null,
-          "type": "qsfp-blank",
-          "dir": "up"
-        },
-        {
-          "name": null,
-          "type": "qsfp-blank",
-          "dir": "up"
-        },
-        {
-          "name": null,
-          "type": "qsfp-blank",
-          "dir": "up"
-        },
-        {
-          "name": null,
-          "type": "qsfp-blank",
-          "dir": "up"
-        },
-        {
-          "name": null,
-          "type": "qsfp-blank",
-          "dir": "up"
-        },
-        {
-          "name": null,
-          "type": "qsfp-blank",
-          "dir": "up"
-        },
-        {
-          "name": null,
-          "type": "qsfp-blank",
-          "dir": "up"
-        },
-        {
-          "name": null,
-          "type": "qsfp-blank",
-          "dir": "up"
-        },
-        {
           "name": "e1/49",
           "type": "qsfp",
           "dir": "up"
@@ -84,56 +34,6 @@
         }
       ],
       "row2": [
-        {
-          "name": null,
-          "type": "sfp-blank",
-          "dir": "up"
-        },
-        {
-          "name": null,
-          "type": "sfp-blank",
-          "dir": "up"
-        },
-        {
-          "name": null,
-          "type": "qsfp-blank",
-          "dir": "down"
-        },
-        {
-          "name": null,
-          "type": "qsfp-blank",
-          "dir": "down"
-        },
-        {
-          "name": null,
-          "type": "qsfp-blank",
-          "dir": "down"
-        },
-        {
-          "name": null,
-          "type": "qsfp-blank",
-          "dir": "down"
-        },
-        {
-          "name": null,
-          "type": "qsfp-blank",
-          "dir": "down"
-        },
-        {
-          "name": null,
-          "type": "qsfp-blank",
-          "dir": "down"
-        },
-        {
-          "name": null,
-          "type": "qsfp-blank",
-          "dir": "down"
-        },
-        {
-          "name": null,
-          "type": "qsfp-blank",
-          "dir": "down"
-        },
         {
           "name": "e1/50",
           "type": "qsfp",

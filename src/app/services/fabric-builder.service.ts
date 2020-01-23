@@ -28,7 +28,7 @@ export class FabricBuilderService {
     leafFilter.forEach(sw => {
       this.loadSwitchDetails(sw.model)
       .subscribe(data => {
-        sw.config = data.config;
+        sw.model = data.config;
       });
     });
   }
@@ -57,5 +57,26 @@ export class FabricBuilderService {
     });
 
     return leafSwitches;
+  }
+
+  getSlots(switchID) {
+    var targetSwitch = this.switchData.find(node => node.id == switchID);
+
+    return Object.keys(targetSwitch['model']);
+  }
+
+  getRows(switchID, switchSlot) {
+    var targetSwitch = this.switchData.find(node => node.id == switchID);
+    var switchRows = targetSwitch.model[switchSlot];
+
+    return Object.keys(switchRows);
+  }
+
+  getRow(switchID, switchSlot, switchRow) {
+    var targetSwitch = this.switchData.find(node => node.id == switchID);
+    var slotData = targetSwitch.model[switchSlot];
+    var rowData = slotData[switchRow];
+    
+    return rowData;
   }
 }

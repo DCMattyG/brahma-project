@@ -10,148 +10,19 @@ import { FabricBuilderService } from 'src/app/services/fabric-builder.service';
 export class WizardPanelTestBComponent implements OnInit {
 
   constructor(public http: HttpClient,
-    public fabricBuilder: FabricBuilderService) { }
+    public fb: FabricBuilderService) { }
 
-  percentComplete = 50;
   modalOpen = false;
+  totalActive = 0;
+  activeSwitch = {};
 
   currentStep = {
     title: "VPC Configuration"
   };
 
-  fakeSNMPs = {
-    users: [
-      {
-        name: "snmpV3User1",
-        version: 3,
-        active: false
-      },
-      {
-        name: "snmpV3User3",
-        version: 3,
-        active: false
-      },
-      {
-        name: "snmpV3User2",
-        version: 3,
-        active: false
-      },
-      {
-        name: "snmpV2User1",
-        version: 2,
-        active: false
-      },
-      {
-        name: "snmpV2User3",
-        version: 2,
-        active: false
-      },
-      {
-        name: "snmpV2User2",
-        version: 2,
-        active: false
-      }
-    ]
-  };
+  fakeLeaves = this.fb.getLeavesDetail();
 
-  fakeSubnets = [
-    {
-      ip: "192.168.0.0",
-      mask: 24,
-      active: false
-    },
-    {
-      ip: "10.10.0.0",
-      mask: 16,
-      active: false
-    },
-    {
-      ip: "172.24.0.0",
-      mask: 24,
-      active: false
-    }
-  ];
-
-  fakeNTPs = [
-    {
-      "name": "ntp03.esl.cisco.com",
-      "pref": true,
-      "epg": "oob",
-      "active": false
-    },
-    {
-      "name": "ntp01.esl.cisco.com",
-      "pref": false,
-      "epg": "oob",
-      "active": false
-    },
-    {
-      "name": "ntp02.esl.cisco.com",
-      "pref": false,
-      "epg": "oob",
-      "active": false
-    },
-    {
-      "name": "ntp11.esl.cisco.com",
-      "pref": false,
-      "epg": "oob",
-      "active": false
-    },
-    {
-      "name": "ntp04.esl.cisco.com",
-      "pref": false,
-      "epg": "oob",
-      "active": false
-    },
-    {
-      "name": "ntp10.esl.cisco.com",
-      "pref": true,
-      "epg": "oob",
-      "active": false
-    },
-    {
-      "name": "ntp09.esl.cisco.com",
-      "pref": false,
-      "epg": "oob",
-      "active": false
-    },
-    {
-      "name": "ntp13.esl.cisco.com",
-      "pref": false,
-      "epg": "oob",
-      "active": false
-    },
-    {
-      "name": "ntp08.esl.cisco.com",
-      "pref": false,
-      "epg": "oob",
-      "active": false
-    },
-    {
-      "name": "ntp07.esl.cisco.com",
-      "pref": false,
-      "epg": "oob",
-      "active": false
-    },
-    {
-      "name": "ntp05.esl.cisco.com",
-      "pref": false,
-      "epg": "oob",
-      "active": false
-    },
-    {
-      "name": "ntp06.esl.cisco.com",
-      "pref": false,
-      "epg": "oob",
-      "active": false
-    },
-    {
-      "name": "ntp12.esl.cisco.com",
-      "pref": false,
-      "epg": "oob",
-      "active": false
-    }
-  ];
+  fakeVPCs = [];
 
   compareName(a, b) {
     const nameA = a.name.toUpperCase();
@@ -162,6 +33,21 @@ export class WizardPanelTestBComponent implements OnInit {
     if (nameA > nameB) {
       comparison = 1;
     } else if (nameA < nameB) {
+      comparison = -1;
+    }
+
+    return comparison;
+  }
+
+  compareID(a, b) {
+    const idA = a.id;
+    const idB = b.id;
+  
+    let comparison = 0;
+
+    if (idA > idB) {
+      comparison = 1;
+    } else if (idA < idB) {
       comparison = -1;
     }
 
@@ -193,24 +79,13 @@ export class WizardPanelTestBComponent implements OnInit {
     return (num1 - num2);
   }
 
-  toggleActive(ntp) {
-    ntp.active = ntp.active == true ? false : true;
+  toggleActive(element) {
+    element.active = element.active == true ? false : true;
   }
 
   sortByName() {
-    this.fakeNTPs.sort(this.compareName);
-  }
-
-  sortByUser() {
-    this.fakeSNMPs.users.sort(this.compareName);
-  }
-
-  sortByVersion() {
-    this.fakeSNMPs.users.sort(this.compareVersion);
-  }
-
-  sortByIP() {
-    this.fakeSubnets.sort(this.compareIP);
+    // console.log("Sort by name...");
+    this.fakeLeaves.sort(this.compareName);
   }
 
   toggleModal() {
@@ -229,22 +104,45 @@ export class WizardPanelTestBComponent implements OnInit {
     console.log("Submit Child...")
   }
 
-  getSlots(switchData) {
-    return Object.keys(switchData);
+  createVPC() {
+    var vpcLeaves = this.fakeLeaves.filter(leaf => leaf.active == true)
+    var leafCount = vpcLeaves.length;
+    var newVPC = {};
+
+    console.log("COUNT: " + leafCount);
+    console.log(vpcLeaves);
+
+    if(leafCount == 2) {
+      newVPC['a'] = vpcLeaves[0];
+      newVPC['b'] = vpcLeaves[1];
+      newVPC['id'] = vpcLeaves[0].id;
+
+      var indexA = this.fakeLeaves.indexOf(vpcLeaves[0]);
+      var indexB = this.fakeLeaves.indexOf(vpcLeaves[1]);
+
+      this.fakeLeaves.splice(indexB, 1);
+      this.fakeLeaves.splice(indexA, 1);
+
+      this.fakeVPCs.push(newVPC);
+    }
   }
-  
-  getRows(switchData, switchSlot) {
-    var switchRows = switchData[switchSlot]
-    return Object.keys(switchRows);
-  }
-  
-  getRow(switchData, switchSlot, switchRow) {
-    var slotData = switchData[switchSlot];
-    var rowData = slotData[switchRow];
-    return rowData;
+
+  deleteVPC() {
+    var activeVPC = this.fakeVPCs.filter(vpc => vpc.active == true);
+    var activeCount = activeVPC.length;
+
+    if(activeCount == 1) {
+      var activeIndex = this.fakeVPCs.indexOf(activeVPC);
+
+      this.fakeVPCs.splice(activeIndex, 1);
+
+      this.fakeLeaves.push(activeVPC[0].a);
+      this.fakeLeaves.push(activeVPC[0].b);
+    }
   }
 
   ngOnInit() {
-    console.log(this.fabricBuilder.getLeavesDetail());
+    console.log(this.fb.getLeavesDetail());
+    this.fakeLeaves.sort(this.compareID);
   }
 }
