@@ -656,9 +656,7 @@ def reconcile_snmp_group_policy(apic, mo, policy, mo_changes):
 
 def create_leaf_intf_profile(apic):
   """
-  This method is a bit different.  We are simply going
-  to blanket create access port profiles for all ports on
-  all leafs
+  "Core out of the box" setup method. No user input required.
   """
 
   # Create new object if needed
@@ -688,6 +686,36 @@ def create_leaf_intf_profile(apic):
         hPortS, name=blockName,
         fromCard=card, toCard=card, fromPort=port, toPort=port
       )
+
+  return mo
+
+def create_leaf_switch_profile(apic):
+  """
+  "Core out of the box" setup method. No user input required.
+  """
+
+  # Create new object if needed
+  mo = aciInfra.Infra(aciPol.Uni(''))
+
+  # Query APIC for leaf switches
+  fabricNodes = apic.lookupByClass('fabricNode')
+  leafs = dict([n.name, n] for n in fabricNodes if n.role == 'leaf')
+
+  for name, node in leafs.items():
+    infraNodeP = aciInfra.NodeP(mo, name=name)
+
+    # Bind node to interface profile
+    accPortDN = 'uni/infra/accportprof-{0}-IntProf'.format(name)
+    aciInfra.RsAccPortP(infraNodeP, tDn=accPortDN)
+
+    # Bind actual leaf to leaf switch policy
+    infraLeafS = aciInfra.LeafS(
+      infraNodeP, name=name, type='range'
+    )
+
+    aciInfra.NodeBlk(
+      infraLeafS, name=name, to_=node.id, from_=node.id
+    )
 
   return mo
 
@@ -940,15 +968,22 @@ if __name__ == '__main__':
     print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
 
+  if cfgRequest.configMos:
+    apic1.commit(cfgRequest)
+
   # Create Leaf Interface Profiles
   mo_changes = create_leaf_intf_profile(apic1)
   if mo_changes is not None:
     print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
+    apic1.commit(cfgRequest)
 
   # Create Leaf Switch Profile
+  mo_changes = create_leaf_switch_profile(apic1)
+  if mo_changes is not None:
+    print(toXMLStr(mo_changes))
+    cfgRequest.addMo(mo_changes)
+    apic1.commit(cfgRequest)
 
   # Overlay setup (tenant, vrf, bridge domain, subnet, epg, contracts)
 
-  if cfgRequest.configMos:
-    apic1.commit(cfgRequest)
