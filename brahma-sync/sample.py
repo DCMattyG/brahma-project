@@ -121,5 +121,37 @@ state = {
         },
       ]
     }
+  ],
+  'syslog_policies': [
+    {
+      'name': 'remoteSyslog',
+      'format': 'aci',
+      'includeMilliSeconds': 'no',
+      'syslogRemoteDest': [
+        {
+          'name': 'syslog_server1',
+          'host': '4.1.1.1',
+          'port': '514',
+          'adminState': 'enabled',
+          'format': 'aci',
+          'severity': 'warnings',
+          'forwardingFacility': 'local7'
+        }
+      ],
+      'syslogProf': {
+        'name': 'syslog',
+        'adminState': 'enabled',
+      },
+      'syslogFile': {
+        'adminState': 'enabled',
+        'format': 'aci',
+        'severity': 'information',
+      },
+      'syslogConsole': {
+        'adminState': 'enabled',
+        'format': 'aci',
+        'severity': 'alerts',
+      }
+    }
   ]
 }

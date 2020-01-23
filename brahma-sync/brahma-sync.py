@@ -20,10 +20,13 @@ import cobra.model.coop as aciCoop
 import cobra.model.ep as aciEp
 import cobra.model.dns as aciDNS
 import cobra.model.datetime as aciNtp
+import cobra.model.syslog as aciSyslog
+import cobra.model.file as aciFile
 from cobra.model import cdp
 from cobra.model import mcp
 from cobra.model import lldp
 from cobra.model import snmp
+
 
 # Connection information
 import config
@@ -65,6 +68,19 @@ ntp_attributes = {
     'serverState': None,
     'masterMode': None,
     'datetimeNtpProv': ntp_provider_attributes + ntp_auth_key_attributes
+  }
+}
+syslog_attributes = {
+  'syslogGroup': {
+    'name': None,
+    'format': None,
+    'includeMilliSeconds': None,
+    'syslogRemoteDest': [
+      'name', 'host', 'port', 'adminState', 'format', 'severity', 'forwardingFacility'
+    ],
+    'syslogProf': ['name', 'adminState'],
+    'syslogFile': ['adminState', 'format', 'severity'],
+    'syslogConsole': ['adminState', 'format', 'severity']
   }
 }
 
@@ -509,6 +525,53 @@ def reconcile_ntp_policy(apic, mo, policy, mo_changes):
 
   return None
 
+def create_syslog_policy(mo, policy):
+  if mo is None:
+    mo = aciFabric.Inst(aciPol.Uni(''))
+
+  slGrp = aciSyslog.Group(
+    mo, name=policy['name'], format=policy['format'],
+    includeMilliSeconds=policy['includeMilliSeconds']
+  )
+
+  p = policy['syslogProf']
+  aciSyslog.Prof(slGrp, name=p['name'], adminState=p['adminState'])
+
+  p = policy['syslogFile']
+  aciSyslog.File(
+    slGrp, adminState=p['adminState'], format=p['format'],
+    severity=p['severity']
+  )
+
+  p = policy['syslogConsole']
+  aciSyslog.Console(
+    slGrp, adminState=p['adminState'], format=p['format'],
+    severity=p['severity']
+  )
+
+  # Remote destinations
+  for d in policy['syslogRemoteDest']:
+    dest = aciSyslog.RemoteDest(
+      slGrp, name=d['name'], host=d['host'], port=d['port'],
+      adminState=d['adminState'], format=d['format'],
+      severity=d['severity'], forwardingFacility=d['forwardingFacility']
+    )
+
+    aciFile.RsARemoteHostToEpg(
+      dest, tDn='uni/tn-mgmt/mgmtp-default/oob-default'
+    )
+
+  return mo
+
+def reconcile_syslog_policy(apic, mo, policy, mo_changes):
+  """
+  Deferred
+  """
+  # Validate input (top level policy)
+  validate(syslog_attributes['syslogGroup'], policy)
+
+  return create_syslog_policy(mo_changes, policy)
+
 def apply_nested_policy(
   apic=None, policies=None, baseDN=None,
   className=None, create=None, reconcile=None
@@ -724,6 +787,17 @@ if __name__ == '__main__':
     apic=apic1, policies=sample.state['ntp_policies'],
     baseDN='uni/fabric/time-{0}', className='datetimePol',
     create=create_ntp_policy, reconcile=reconcile_ntp_policy
+  )
+
+  if mo_changes is not None:
+    print(toXMLStr(mo_changes))
+    cfgRequest.addMo(mo_changes)
+
+  # Syslog Policies
+  mo_changes = apply_nested_policy(
+    apic=apic1, policies=sample.state['syslog_policies'],
+    baseDN='uni/fabric/slgroup-{0}', className='syslogGroup',
+    create=create_syslog_policy, reconcile=reconcile_syslog_policy
   )
 
   if mo_changes is not None:
