@@ -91,6 +91,39 @@ state = {
       'adminSt': 'enabled', 
       'contact': 'Close Encounter',
       'loc': 'Third Kind',
+      'snmpUserP': [
+        {
+          'name': 'user1',
+          'privType': 'aes-128',
+          'authType': 'hmac-sha1-96',
+          'authKey': 'abcde12345'
+        },
+        {
+          'name': 'user2',
+          'privType': 'des',
+          'authType': 'hmac-md5-96',
+          'authKey': 'fghij67890'
+        }
+      ],
+      'snmpTrapFwdServerP': [
+        {
+        'addr': '2.3.4.5',
+        'port': '162'
+        }
+      ],
+      'snmpCommunityP': [
+        {
+          'name': 'communityKey1'
+        }
+      ],
+      'snmpClientGrpP': [
+        {
+          'name': 'snmpClientGrpProf',
+          'snmpClientP': [
+            {'name': 'snmpClntGrpProfName', 'addr': '1.2.3.4'}
+          ]
+        }
+      ]
     },
   ],
   'ntp_policies': [

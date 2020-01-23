@@ -36,7 +36,21 @@ cdp_attributes = ['name', 'adminSt']
 lldp_attributes = ['name', 'adminRxSt', 'adminTxSt']
 link_level_attributes = ['name', 'autoNeg', 'speed']
 mcp_attributes = ['name', 'adminSt']
-snmp_attributes = ['name', 'adminSt', 'contact', 'loc']
+snmp_attributes = {
+  'snmpPol': {
+    'name': None,
+    'adminSt': None,
+    'contact': None,
+    'loc': None,
+    'snmpUserP': ['name', 'privType', 'authType', 'authKey'],
+    'snmpTrapFwdServerP': ['addr', 'port'],
+    'snmpCommunityP': ['name'],
+    'snmpClientGrpP': {
+      'name': None,
+      'snmpClientP': ['name', 'addr']
+    }
+  }
+}
 coop_attributes = ['name', 'type']
 rogue_endpoint_attributes = [
   'name', 'adminSt', 'holdIntvl', 'rogueEpDetectIntvl', 'rogueEpDetectMult'
@@ -212,19 +226,50 @@ def create_wide_policy(mo, policy):
   return mo
 
 def create_snmp_policy(mo, policy):
-  # Validate input
-  required_attributes(snmp_attributes, list(policy.keys()))
-
   # Create new object if needed
   if mo is None:
     mo = aciFabric.Inst(aciPol.Uni(''))
 
-  snmp.Pol(
+  snmpPol = snmp.Pol(
     mo, name=policy['name'], adminSt=policy['adminSt'],
     contact=policy['contact'], loc=policy['loc']
   )
 
+  for user in policy['snmpUserP']:
+    snmp.UserP(
+      snmpPol, name=user['name'], authType=user['authType'],
+      privType=user['privType'], authKey=user['authKey']
+    )
+
+  for trap in policy['snmpTrapFwdServerP']:
+    snmp.TrapFwdServerP(
+      snmpPol, addr=trap['addr'], port=trap['port']
+    )
+
+  for comm in policy['snmpCommunityP']:
+    snmp.CommunityP(snmpPol, name=comm['name'])
+
+  for clientGrp in policy['snmpClientGrpP']:
+    clntGrp = snmp.ClientGrpP(snmpPol, name=clientGrp['name'])
+    snmp.RsEpg(clntGrp, tDn='uni/tn-mgmt/mgmtp-default/oob-default')
+
+    for client in clientGrp['snmpClientP']:
+      snmp.ClientP(
+        clntGrp, name=client['name'], addr=client['addr']
+      )
+
   return mo
+
+def reconcile_snmp_policy(apic, mo, policy, mo_changes):
+  """
+  Deferred detail sync comparison
+  """
+
+  # Validate input (top level policy)
+  validate(snmp_attributes['snmpPol'], policy)
+
+  return create_snmp_policy(mo_changes, policy)
+
 
 
 def validate(attributes, policy):
@@ -260,7 +305,11 @@ def validate(attributes, policy):
       continue
 
     # There's further structure down the tree.  Recursively descend
-    validate(children, policy[parent])
+    if isinstance(policy[parent], dict):
+      validate(children, policy[parent])
+    else:
+      for entry in policy[parent]:
+        validate(children, entry)
 
 def create_dns_policy(mo, policy):
   if mo is None:
@@ -747,18 +796,21 @@ if __name__ == '__main__':
     print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
 
+  ### Hierarchy of objects
+
   # SNMP Policies
-  mo_changes = apply_policy(
+  mo_changes = apply_nested_policy(
     apic=apic1, policies=sample.state['snmp_policies'],
     baseDN='uni/fabric/snmppol-{0}', className='snmpPol',
-    attrs=snmp_attributes, create=create_snmp_policy
+    create=create_snmp_policy, reconcile=reconcile_snmp_policy
   )
 
   if mo_changes is not None:
     print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
 
-  ### Hierarchy of objects
+  if cfgRequest.configMos:
+    apic1.commit(cfgRequest)
 
   # BGP RR Policies (custom method for nested)
   mo_changes = apply_nested_policy(
