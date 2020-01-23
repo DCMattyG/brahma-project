@@ -126,6 +126,45 @@ state = {
       ]
     },
   ],
+  'snmp_group_policies': [
+    {
+      'name': 'snmpMonDestGroup',
+      'snmpTrapDest': [
+        {
+          'host': '6.6.3.3',
+          'notifT': 'traps',
+          'port': '162',
+          'secName': 'v3-auth-priv',
+          'v3SecLvl': 'priv',
+          'ver': 'v3'
+        },
+        {
+          'host': '6.6.3.2',
+          'notifT': 'traps',
+          'port': '162',
+          'secName': 'v3-no-no',
+          'v3SecLvl': 'noauth',
+          'ver': 'v3'
+        },
+        {
+          'host': '6.6.3.1',
+          'notifT': 'traps',
+          'port': '162',
+          'secName': 'v3-auth-nopriv',
+          'v3SecLvl': 'auth',
+          'ver': 'v3'
+        },
+        {
+          'host': '6.6.6.6',
+          'notifT': 'traps',
+          'port': '162',
+          'secName': 'v2c-Community',
+          'v3SecLvl': 'noauth',
+          'ver': 'v2c'
+        },
+      ]
+    }
+  ],
   'ntp_policies': [
     {
       'name': 'default',

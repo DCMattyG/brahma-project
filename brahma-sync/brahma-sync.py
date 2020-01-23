@@ -51,6 +51,12 @@ snmp_attributes = {
     }
   }
 }
+snmp_group_attributes = {
+  'snmpGroup': {
+    'name': None,
+    'snmpTrapDest': ['host', 'notifT', 'port', 'secName', 'v3SecLvl', 'ver']
+  }
+}
 coop_attributes = ['name', 'type']
 rogue_endpoint_attributes = [
   'name', 'adminSt', 'holdIntvl', 'rogueEpDetectIntvl', 'rogueEpDetectMult'
@@ -621,6 +627,33 @@ def reconcile_syslog_policy(apic, mo, policy, mo_changes):
 
   return create_syslog_policy(mo_changes, policy)
 
+def create_snmp_group_policy(mo, policy):
+  # Create new object if needed
+  if mo is None:
+    mo = aciFabric.Inst(aciPol.Uni(''))
+
+  snmpGroup = snmp.Group(mo, name=policy['name'])
+
+  for dest in policy['snmpTrapDest']:
+    trapDest = snmp.TrapDest(
+      snmpGroup, host=dest['host'], port=dest['port'], notifT=dest['notifT'],
+      ver=dest['ver'], secName=dest['secName'], v3SecLvl=dest['v3SecLvl']
+    )
+    aciFile.RsARemoteHostToEpg(
+      trapDest, tDn='uni/tn-mgmt/mgmtp-default/oob-default'
+    )
+
+  return mo
+
+def reconcile_snmp_group_policy(apic, mo, policy, mo_changes):
+  """
+  Deferred
+  """
+  # Validate input (top level policy)
+  validate(snmp_group_attributes['snmpGroup'], policy)
+
+  return create_snmp_group_policy(mo_changes, policy)
+
 def apply_nested_policy(
   apic=None, policies=None, baseDN=None,
   className=None, create=None, reconcile=None
@@ -803,6 +836,20 @@ if __name__ == '__main__':
     apic=apic1, policies=sample.state['snmp_policies'],
     baseDN='uni/fabric/snmppol-{0}', className='snmpPol',
     create=create_snmp_policy, reconcile=reconcile_snmp_policy
+  )
+
+  if mo_changes is not None:
+    print(toXMLStr(mo_changes))
+    cfgRequest.addMo(mo_changes)
+
+  if cfgRequest.configMos:
+    apic1.commit(cfgRequest)
+
+  # SNMP Policies
+  mo_changes = apply_nested_policy(
+    apic=apic1, policies=sample.state['snmp_group_policies'],
+    baseDN='uni/fabric/snmpgroup-{0}', className='snmpGroup',
+    create=create_snmp_group_policy, reconcile=reconcile_snmp_group_policy
   )
 
   if mo_changes is not None:
