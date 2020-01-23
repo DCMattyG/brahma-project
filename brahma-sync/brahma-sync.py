@@ -654,6 +654,43 @@ def reconcile_snmp_group_policy(apic, mo, policy, mo_changes):
 
   return create_snmp_group_policy(mo_changes, policy)
 
+def create_leaf_intf_profile(apic):
+  """
+  This method is a bit different.  We are simply going
+  to blanket create access port profiles for all ports on
+  all leafs
+  """
+
+  # Create new object if needed
+  mo = aciInfra.Infra(aciPol.Uni(''))
+
+  # Query APIC for leaf switches
+  fabricNodes = apic.lookupByClass('fabricNode')
+  leafs = dict([n.name, n] for n in fabricNodes if n.role == 'leaf')
+
+  # Loop over each leaf
+  for name, node in leafs.items():
+    # Create Leaf Switch Interface Profile
+    accPortP = aciInfra.AccPortP(mo, name='{0}-IntProf'.format(name))
+    nodeDn = str(node.dn)
+
+    # Generate list of all interfaces (leaf type)
+    interfaces = apic.lookupByClass('l1PhysIf', parentDn=nodeDn)
+    intfName = [i.id for i in interfaces if i.portT == 'leaf']
+
+    for i, intf in enumerate(intfName):
+      card, port = intf[3:].split('/')
+      blockName = 'block{}'.format(i+1)
+      ifSelName = 'Eth{0}-{1}'.format(card, port)
+
+      hPortS = aciInfra.HPortS(accPortP, name=ifSelName, type='range')
+      aciInfra.PortBlk(
+        hPortS, name=blockName,
+        fromCard=card, toCard=card, fromPort=port, toPort=port
+      )
+
+  return mo
+
 def apply_nested_policy(
   apic=None, policies=None, baseDN=None,
   className=None, create=None, reconcile=None
@@ -902,6 +939,16 @@ if __name__ == '__main__':
   if mo_changes is not None:
     print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
+
+  # Create Leaf Interface Profiles
+  mo_changes = create_leaf_intf_profile(apic1)
+  if mo_changes is not None:
+    print(toXMLStr(mo_changes))
+    cfgRequest.addMo(mo_changes)
+
+  # Create Leaf Switch Profile
+
+  # Overlay setup (tenant, vrf, bridge domain, subnet, epg, contracts)
 
   if cfgRequest.configMos:
     apic1.commit(cfgRequest)
