@@ -719,8 +719,47 @@ def create_leaf_switch_profile(apic):
 
   return mo
 
+def create_vpc_protection_groups(apic, mo, policy):
+  mo = aciFabric.Inst(aciPol.Uni(''))
+
+  # Create the VPC Protection Policy
+  fabricProtPol = aciFabric.ProtPol(
+    mo, name=policy['name'], pairT=policy['pairT']
+  )
+
+  # Information passed are node names, we need node IDs
+  fabricNodes = apic.lookupByClass('fabricNode')
+  leafs = dict([n.name, n.id] for n in fabricNodes if n.role == 'leaf')
+
+  # Create the specific pairing
+  for vpc_id, members in policy['vpc_pairs'].items():
+    vpc_name = 'VPC-EPG-{0}'.format('-'.join(members))
+    vpcEpg = aciFabric.ExplicitGEp(
+      fabricProtPol, name=vpc_name, id=vpc_id
+    )
+
+    # Bind the domain policy to it
+    aciFabric.RsVpcInstPol(
+      vpcEpg, tnVpcInstPolName=policy['vpc_domain_policy']
+    )
+
+    # Add the node members to it
+    for node in members:
+      aciFabric.NodePEp(vpcEpg, id=leafs[node], podId=policy['podId'])
+
+  return mo
+
+def reconcile_vpc_protection_groups(apic, mo, policy, mo_changes):
+  """
+  Deferred
+  """
+  # Validate input (top level policy)
+  # validate(vpc_protection_attributes['fabricProtPol'], policy)
+
+  return create_vpc_protection_groups(apic, mo_changes, policy)
+
 def apply_nested_policy(
-  apic=None, policies=None, baseDN=None,
+  apic=None, policies=None, baseDN=None, exactDN=None,
   className=None, create=None, reconcile=None
   ):
   """
@@ -735,7 +774,10 @@ def apply_nested_policy(
 
   # Loop over each policies to be defined
   for p in policies:
-    pDN = baseDN.format(p['name'])
+    if exactDN:
+      pDN = exactDN
+    else:
+      pDN = baseDN.format(p['name'])
 
     # New policy
     if pDN not in eDN:
@@ -904,7 +946,6 @@ if __name__ == '__main__':
   )
 
   if mo_changes is not None:
-    print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
 
   if cfgRequest.configMos:
@@ -918,7 +959,6 @@ if __name__ == '__main__':
   )
 
   if mo_changes is not None:
-    print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
 
   if cfgRequest.configMos:
@@ -954,7 +994,6 @@ if __name__ == '__main__':
   )
 
   if mo_changes is not None:
-    print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
 
   # Syslog Policies
@@ -965,7 +1004,6 @@ if __name__ == '__main__':
   )
 
   if mo_changes is not None:
-    print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
 
   if cfgRequest.configMos:
@@ -974,12 +1012,23 @@ if __name__ == '__main__':
   # Create Leaf Interface Profiles
   mo_changes = create_leaf_intf_profile(apic1)
   if mo_changes is not None:
-    print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
     apic1.commit(cfgRequest)
 
   # Create Leaf Switch Profile
   mo_changes = create_leaf_switch_profile(apic1)
+  if mo_changes is not None:
+    cfgRequest.addMo(mo_changes)
+    apic1.commit(cfgRequest)
+
+  # VPC Explicit Protection Group
+  mo_changes = apply_nested_policy(
+    apic=apic1, policies=sample.state['vpc_protection_group'],
+    exactDN='uni/fabric/protpol', className='fabricProtPol',
+    create=create_vpc_protection_groups,
+    reconcile=reconcile_vpc_protection_groups
+  )
+
   if mo_changes is not None:
     print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)

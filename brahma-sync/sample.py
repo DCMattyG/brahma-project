@@ -225,5 +225,16 @@ state = {
         'severity': 'alerts',
       }
     }
+  ],
+  'vpc_protection_group': [
+    {
+      'name': 'default',
+      'pairT': 'explicit',
+      'podId': '1',
+      'vpc_domain_policy': 'default',
+      'vpc_pairs': {
+        '101': ['Leaf1', 'Leaf2']
+      }
+    }
   ]
 }
