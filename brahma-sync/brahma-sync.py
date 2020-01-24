@@ -834,15 +834,13 @@ def apply_policy(
   return mo_changes
 
 
-if __name__ == '__main__':
+def apply_desired_state(apic1, desired):
 
-  # Create connection to APIC
-  apic1 = aciLogin(config.apic)
   cfgRequest = aciRequest.ConfigRequest()
 
   # CDP
   mo_changes = apply_policy(
-    apic=apic1, policies=sample.state['cdp_policies'],
+    apic=apic1, policies=desired['cdp_policies'],
     baseDN='uni/infra/cdpIfP-{0}', className='cdpIfPol',
     attrs=cdp_attributes, create=create_cdp_policy
   )
@@ -853,7 +851,7 @@ if __name__ == '__main__':
 
   # LLDP
   mo_changes = apply_policy(
-    apic=apic1, policies=sample.state['lldp_policies'],
+    apic=apic1, policies=desired['lldp_policies'],
     baseDN='uni/infra/lldpIfP-{0}', className='lldpIfPol',
     attrs=lldp_attributes, create=create_lldp_policy
   )
@@ -865,14 +863,14 @@ if __name__ == '__main__':
   # Link Level Policies
 
   #  Need to add default values
-  for policy in sample.state['link_level_policies']:
+  for policy in desired['link_level_policies']:
     if 'fecMode' not in policy:
       policy['fecMode'] = 'inherit'
     if 'linkDebounce' not in policy:
       policy['linkDebounce'] = '100'
     
   mo_changes = apply_policy(
-    apic=apic1, policies=sample.state['link_level_policies'],
+    apic=apic1, policies=desired['link_level_policies'],
     baseDN=	'uni/infra/hintfpol-{0}', className='fabricHIfPol',
     attrs=link_level_attributes, create=create_link_level_policy
   )
@@ -883,7 +881,7 @@ if __name__ == '__main__':
 
   # MCP Policies
   mo_changes = apply_policy(
-    apic=apic1, policies=sample.state['mcp_policies'],
+    apic=apic1, policies=desired['mcp_policies'],
     baseDN='uni/infra/mcpIfP-{0}', className='mcpIfPol',
     attrs=mcp_attributes, create=create_mcp_policy
   )
@@ -894,7 +892,7 @@ if __name__ == '__main__':
 
   # COOP Policies
   mo_changes = apply_policy(
-    apic=apic1, policies=sample.state['coop_group_policies'],
+    apic=apic1, policies=desired['coop_group_policies'],
     baseDN='uni/fabric/pol-{0}', className='coopPol',
     attrs=coop_attributes, create=create_coop_policy
   )
@@ -905,7 +903,7 @@ if __name__ == '__main__':
 
   # Rogue Endpoint Policies
   mo_changes = apply_policy(
-    apic=apic1, policies=sample.state['rogue_endpoint_policies'],
+    apic=apic1, policies=desired['rogue_endpoint_policies'],
     baseDN='uni/infra/epCtrlP-{0}', className='epControlP',
     attrs=rogue_endpoint_attributes, create=create_rogue_policy
   )
@@ -916,7 +914,7 @@ if __name__ == '__main__':
 
   # IP Aging Policies
   mo_changes = apply_policy(
-    apic=apic1, policies=sample.state['ip_aging_policies'],
+    apic=apic1, policies=desired['ip_aging_policies'],
     baseDN='uni/infra/ipAgingP-{0}', className='epIpAgingP',
     attrs=ip_aging_attributes, create=create_aging_policy
   )
@@ -927,7 +925,7 @@ if __name__ == '__main__':
 
   # Fabric Wide System Settings
   mo_changes = apply_policy(
-    apic=apic1, policies=sample.state['fabric_wide_policies'],
+    apic=apic1, policies=desired['fabric_wide_policies'],
     exactDN='uni/infra/settings', className='infraSetPol',
     attrs=fabric_wide_attributes, create=create_wide_policy
   )
@@ -940,7 +938,7 @@ if __name__ == '__main__':
 
   # SNMP Policies
   mo_changes = apply_nested_policy(
-    apic=apic1, policies=sample.state['snmp_policies'],
+    apic=apic1, policies=desired['snmp_policies'],
     baseDN='uni/fabric/snmppol-{0}', className='snmpPol',
     create=create_snmp_policy, reconcile=reconcile_snmp_policy
   )
@@ -953,7 +951,7 @@ if __name__ == '__main__':
 
   # SNMP Policies
   mo_changes = apply_nested_policy(
-    apic=apic1, policies=sample.state['snmp_group_policies'],
+    apic=apic1, policies=desired['snmp_group_policies'],
     baseDN='uni/fabric/snmpgroup-{0}', className='snmpGroup',
     create=create_snmp_group_policy, reconcile=reconcile_snmp_group_policy
   )
@@ -966,7 +964,7 @@ if __name__ == '__main__':
 
   # BGP RR Policies (custom method for nested)
   mo_changes = apply_nested_policy(
-    apic=apic1, policies=sample.state['bgp_policies'],
+    apic=apic1, policies=desired['bgp_policies'],
     baseDN='uni/fabric/bgpInstP-{0}', className='bgpInstPol',
     create=create_bgp_policy, reconcile=reconcile_bgp_policy
   )
@@ -977,7 +975,7 @@ if __name__ == '__main__':
 
   # DNS Policies
   mo_changes = apply_nested_policy(
-    apic=apic1, policies=sample.state['dns_policies'],
+    apic=apic1, policies=desired['dns_policies'],
     baseDN='uni/fabric/dnsp-{0}', className='dnsProfile',
     create=create_dns_policy, reconcile=reconcile_dns_policy
   )
@@ -988,7 +986,7 @@ if __name__ == '__main__':
 
   # NTP Policies
   mo_changes = apply_nested_policy(
-    apic=apic1, policies=sample.state['ntp_policies'],
+    apic=apic1, policies=desired['ntp_policies'],
     baseDN='uni/fabric/time-{0}', className='datetimePol',
     create=create_ntp_policy, reconcile=reconcile_ntp_policy
   )
@@ -998,7 +996,7 @@ if __name__ == '__main__':
 
   # Syslog Policies
   mo_changes = apply_nested_policy(
-    apic=apic1, policies=sample.state['syslog_policies'],
+    apic=apic1, policies=desired['syslog_policies'],
     baseDN='uni/fabric/slgroup-{0}', className='syslogGroup',
     create=create_syslog_policy, reconcile=reconcile_syslog_policy
   )
@@ -1023,7 +1021,7 @@ if __name__ == '__main__':
 
   # VPC Explicit Protection Group
   mo_changes = apply_nested_policy(
-    apic=apic1, policies=sample.state['vpc_protection_group'],
+    apic=apic1, policies=desired['vpc_protection_group'],
     exactDN='uni/fabric/protpol', className='fabricProtPol',
     create=create_vpc_protection_groups,
     reconcile=reconcile_vpc_protection_groups
@@ -1035,4 +1033,10 @@ if __name__ == '__main__':
     apic1.commit(cfgRequest)
 
   # Overlay setup (tenant, vrf, bridge domain, subnet, epg, contracts)
+
+if __name__ == '__main__':
+
+  # Create connection to APIC
+  apic1 = aciLogin(config.apic)
+  apply_desired_state(apic1, sample.state)
 
