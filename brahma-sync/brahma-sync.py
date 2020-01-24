@@ -662,7 +662,7 @@ def create_vlan_pool_policies(policies):
 
   for policy in policies:
     fvnsVlanInstP = aciFvns.VlanInstP(
-      infraInfra, name="{}_vlans".format(policy['name']),
+      infraInfra, name=policy['name'],
       allocMode=policy['allocMode'])
 
     aciFvns.EncapBlk(
