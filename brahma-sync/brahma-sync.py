@@ -22,6 +22,7 @@ import cobra.model.dns as aciDNS
 import cobra.model.datetime as aciNtp
 import cobra.model.syslog as aciSyslog
 import cobra.model.file as aciFile
+import cobra.model.fv as aciFv
 from cobra.model import cdp
 from cobra.model import mcp
 from cobra.model import lldp
@@ -758,6 +759,26 @@ def reconcile_vpc_protection_groups(apic, mo, policy, mo_changes):
 
   return create_vpc_protection_groups(apic, mo_changes, policy)
 
+def create_overlay_policy(apic=None, policy=None):
+
+  mo = aciPol.Uni('')
+
+  for name, data in policy.items():
+    # Create tenant behind the scenes
+    tenantName = '{0}_Tenant'.format(name)
+    fvTenant = aciFv.Tenant(mo, name=tenantName)
+
+    # Create the required VRF as well
+    vrfName = '{0}_VRF'.format(name)
+    fvCtx = aciFv.Ctx(fvTenant, name=vrfName)
+
+    # Create BD
+    for vlan in data['vlans']:
+      vlanName = 'VLAN_{0}'.format(vlan['id'])
+      fvBD = aciFv.BD(fvTenant, name=vlanName)
+
+  return mo
+
 def apply_nested_policy(
   apic=None, policies=None, baseDN=None, exactDN=None,
   className=None, create=None, reconcile=None
@@ -1033,6 +1054,14 @@ def apply_desired_state(apic1, desired):
     apic1.commit(cfgRequest)
 
   # Overlay setup (tenant, vrf, bridge domain, subnet, epg, contracts)
+  mo_changes = create_overlay_policy(
+    apic=apic1, policy=desired['overlay']
+  )
+
+  if mo_changes is not None:
+    print(toXMLStr(mo_changes))
+    cfgRequest.addMo(mo_changes)
+    apic1.commit(cfgRequest)
 
 if __name__ == '__main__':
 
