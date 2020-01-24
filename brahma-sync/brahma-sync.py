@@ -912,7 +912,58 @@ def create_overlay_policy(apic=None, policy=None):
     # Create BD
     for vlan in data['vlans']:
       vlanName = 'VLAN_{0}'.format(vlan['id'])
-      fvBD = aciFv.BD(fvTenant, name=vlanName)
+
+      if vlan['optimized']:
+        fvBD = aciFv.BD(
+          fvTenant, name=vlanName,
+            OptimizeWanBandwidth='no',
+            arpFlood='no',
+            epClear='no',
+            hostBasedRouting='yes',
+            intersiteBumTrafficAllow='no',
+            intersiteL2Stretch='no',
+            ipLearning='yes',
+            limitIpLearnToSubnets='yes',
+            llAddr='::',
+            mac='00:22:BD:F8:19:FF',
+            mcastAllow='no',
+            multiDstPktAct='encap-flood',
+            type='regular',
+            unicastRoute='yes',
+            unkMacUcastAct='proxy',
+            unkMcastAct='opt-flood',
+            v6unkMcastAct='flood',
+            vmac='not-applicable'
+        )
+      else:
+        fvBD = aciFv.BD(
+          fvTenant, name=vlanName,
+            OptimizeWanBandwidth='no',
+            arpFlood='yes',
+            epClear='no',
+            hostBasedRouting='no',
+            intersiteBumTrafficAllow='no',
+            intersiteL2Stretch='no',
+            ipLearning='yes',
+            limitIpLearnToSubnets='yes',
+            llAddr='::',
+            mac='00:22:BD:F8:19:FF',
+            mcastAllow='no',
+            multiDstPktAct='bd-flood',
+            type='regular',
+            unicastRoute='yes',
+            unkMacUcastAct='flood',
+            unkMcastAct='flood',
+            v6unkMcastAct='flood',
+            vmac='not-applicable'
+        )
+
+      aciFv.Subnet(
+        fvBD, ip=vlan['subnet'],
+        preferred='no', scope='private', virtual='no'
+      )
+
+      aciFv.RsCtx(fvBD, tnFvCtxName='{0}_VRF'.format(name))
 
   return mo
 
