@@ -285,8 +285,14 @@ state = {
   ],
   'physical_domain': [
     {
-      'name': 'customer_name',
+      'name': 'customer_name_physDom',
       'vlan_pool': 'dCloud_VLAN_Pool'
+    }
+  ],
+  'aaep_policies': [
+    {
+      'name': 'customer_name_aaep',
+      'domain': 'customer_name_physDom'
     }
   ]
 }

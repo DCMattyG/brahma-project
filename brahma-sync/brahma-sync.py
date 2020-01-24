@@ -691,6 +691,20 @@ def create_physical_domain(apic, policies):
   
   return mo
 
+def create_attachable_aep(apic, policies):
+  infraInfra = aciInfra.Infra(aciPol.Uni(''))
+
+  physDomP = apic.lookupByClass('physDomP')
+  doms = dict([d.name, str(d.dn)] for d in physDomP)
+
+  for policy in policies:
+    infraAttEntityP = aciInfra.AttEntityP(infraInfra, name=policy['name'])
+
+    tDN = doms[policy['domain']]
+    aciInfra.RsDomP(infraAttEntityP, tDn=tDN)
+
+  return infraInfra
+
 def create_oob_mgmt_policies(apic=None, policy=None, nodes=None):
   """
   OOB Mgmt configuration
@@ -929,6 +943,13 @@ def apply_desired_state(apic1, desired):
 
   # Create Physical Domain
   mo_changes = create_physical_domain(apic1, desired['physical_domain'])
+  if mo_changes is not None:
+    print(toXMLStr(mo_changes))
+    cfgRequest.addMo(mo_changes)
+    apic1.commit(cfgRequest)
+
+  # Create the Attachable AEP
+  mo_changes = create_attachable_aep(apic1, desired['aaep_policies'])
   if mo_changes is not None:
     print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
