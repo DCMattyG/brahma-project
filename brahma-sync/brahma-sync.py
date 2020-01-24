@@ -25,6 +25,7 @@ import cobra.model.file as aciFile
 import cobra.model.fv as aciFv
 import cobra.model.fvns as aciFvns
 import cobra.model.mgmt as aciMgmt
+import cobra.model.vz as aciVz
 from cobra.model import cdp
 from cobra.model import mcp
 from cobra.model import lldp
@@ -729,6 +730,70 @@ def create_oob_mgmt_policies(apic=None, policy=None, nodes=None):
 
   return fvTenant
 
+def create_inb_mgmt_policies(apic=None, policy=None, nodes=None):
+  # First create the inband bridge domain, bind to inb context/VRF
+  fvTenant = aciFv.Tenant(aciPol.Uni(''), name='mgmt')
+  fvBD = aciFv.BD(
+    fvTenant, name='inb'
+  )
+  aciFv.RsCtx(fvBD, tnFvCtxName='inb')
+
+  # Second create INB management contract to permit SSH
+  vzBrCp = aciVz.BrCP(
+    fvTenant, name=policy['inb_contract_name'], scope='context',
+    prio='unspecified', targetDscp='unspecified'
+  )
+
+  vzSubj = aciVz.Subj(
+    vzBrCp, name=policy['inb_subject_name'],
+    provMatchT='AtleastOne', consMatchT='AtleastOne',
+    prio='unspecified', targetDscp='unspecified', revFltPorts='yes'
+  )
+
+  # Simply replicate this line for other filtername
+  aciVz.RsSubjFiltAtt(
+    vzSubj, action='permit', tnVzFilterName='tcp_src_port_any_to_dst_port_22'
+  )
+
+  # Third, create inb mgmt EPG
+  mgmtMgmtP = aciMgmt.MgmtP(fvTenant, name='default')
+  mgmtInB = aciMgmt.InB(
+    mgmtMgmtP, name=policy['inb_epg_name'], encap=policy['vlan'],
+    floodOnEncap='disabled', matchT='AtleastOne', prefGrMemb='exclude',
+    prio='unspecified'
+  )
+
+  # Bind to BD
+  aciMgmt.RsMgmtBD(mgmtInB, tnFvBDName='inb')
+
+  # Add the subnet/gateway
+  # aciFv.Subnet(
+  #   mgmtInB, ip=policy['subnet'],
+  #   ctrl='nd', preferred='no', virtual='no', scope='private'
+  # )
+
+  # Add consumer/provider
+  aciFv.RsProv(
+    mgmtInB, tnVzBrCPName=policy['inb_contract_name'],
+    prio='unspecified', matchT='AtleastOne'
+  )
+  aciFv.RsCons(
+    mgmtInB, tnVzBrCPName=policy['inb_contract_name'],
+    prio='unspecified'
+  )
+
+  # FINALLY, create the maps of the nodes/IP/GW to the EPG
+  nodeNames = dict([n.name, n.id] for n in nodes)
+  podId = policy['podId']
+
+  for entry in policy['nodes']:
+    nodeId = nodeNames[entry['name']]
+    tDN = 'topology/pod-{}/node-{}'.format(podId, nodeId)
+
+    aciMgmt.RsInBStNode(mgmtInB, tDn=tDN, addr=entry['ipv4'], gw=policy['gw'])
+
+  return fvTenant
+
 def create_leaf_intf_profile(apic, fabricNodes):
   """
   "Core out of the box" setup method. No user input required.
@@ -958,6 +1023,15 @@ def apply_desired_state(apic1, desired):
   # Create OOB Management
   mo_changes = create_oob_mgmt_policies(
     apic=apic1, policy=desired['oob_mgmt_policies'], nodes=fabricNodes
+  )
+  if mo_changes is not None:
+    print(toXMLStr(mo_changes))
+    cfgRequest.addMo(mo_changes)
+    apic1.commit(cfgRequest)
+
+  # Create INB Management
+  mo_changes = create_inb_mgmt_policies(
+    apic=apic1, policy=desired['inb_mgmt_policies'], nodes=fabricNodes
   )
   if mo_changes is not None:
     print(toXMLStr(mo_changes))

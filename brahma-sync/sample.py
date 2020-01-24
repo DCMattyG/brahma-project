@@ -274,6 +274,53 @@ state = {
       },
     ]
   },
+  # Note: ipv6 stubbed out but no support in sync today
+  'inb_mgmt_policies': {
+    'podId': '1',
+    'gw': '172.17.0.1',
+    'subnet': '172.17.0.1/24',
+    'vlan': 'vlan-1000',
+    'inb_epg_name': 'inb_mgmt_EPG',
+    'inb_contract_name': 'inb_mgmt_Contract',
+    'inb_subject_name': 'inb_mgmt_Subject',
+    'nodes': [
+      {
+        'name': 'Leaf1',
+        'ipv4': '172.17.0.21/24',
+        'ipv6': '::',
+      },
+      {
+        'name': 'Leaf2',
+        'ipv4': '172.17.0.22/24',
+        'ipv6': '::',
+      },
+      {
+        'name': 'Spine1',
+        'ipv4': '172.17.0.11/24',
+        'ipv6': '::',
+      },
+      {
+        'name': 'Spine2',
+        'ipv4': '172.17.0.12/24',
+        'ipv6': '::',
+      },
+      {
+        'name': 'apic1',
+        'ipv4': '172.17.0.9/24',
+        'ipv6': '::',
+      },
+      {
+        'name': 'apic2',
+        'ipv4': '172.17.0.8/24',
+        'ipv6': '::',
+      },
+      {
+        'name': 'apic3',
+        'ipv4': '172.17.0.7/24',
+        'ipv6': '::',
+      },
+    ]
+  },
   'vlan_pools': [
     {
       'name': 'dCloud_VLAN_Pool',
