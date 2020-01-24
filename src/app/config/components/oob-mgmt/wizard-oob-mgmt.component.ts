@@ -65,7 +65,7 @@ export class WizardOOBMgmtComponent implements OnInit {
   }
 
   ngOnInit() {
-    var fabricSwitches = this.fabricBuilder.getSwitches();
+    var fabricSwitches = this.fabricBuilder.getNodes();
 
     fabricSwitches.sort(this.compareID).forEach(sw => {
       if(sw.role != 'controller') {

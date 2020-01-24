@@ -65,7 +65,7 @@ export class WizardIBMgmtComponent implements OnInit {
   }
 
   ngOnInit() {
-    var fabricSwitches = this.fabricBuilder.getSwitches();
+    var fabricSwitches = this.fabricBuilder.getNodes();
 
     fabricSwitches.sort(this.compareID).forEach(sw => {
       this.newMgmtArray(sw.name);
