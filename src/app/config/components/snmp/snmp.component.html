@@ -41,7 +41,7 @@
               <span>SNMP Users</span>
             </div>
             <div class="ntp-controls-item">
-              <a href="javascript:;"><span class="icon-add icon-small"></span></a>
+              <span (click)="toggleModal();" class="icon-add icon-small"></span>
             </div>
             <div class="ntp-controls-item">
               <a href="javascript:;"><span class="icon-pencil icon-small"></span></a>
@@ -160,4 +160,83 @@
     </div>
   </div>
 
+</div>
+
+<div class="modal modal--small" [ngClass]="{'hide': !modalOpen }">
+  <div class="modal__dialog">
+    <div class="modal__content" style="border: #dfdfdf 1px solid;">
+      <a class="modal__close" (click)="toggleModal();"><span class="icon-close icon-medium"></span></a>
+
+      <form autocomplete="off" [formGroup]="snmpForm" (ngSubmit)="onSubmit()">
+        <div class="modal__header">
+          <h1 class="modal__title" style="font-size: 40px;">SNMP User Config</h1>
+        </div>
+        <div class="modal__body">
+
+          <div class="snmp-form">
+            <div class="row">
+
+              <div class="col-2"></div>
+              <div class="col-8">
+                <label class="switch" style="justify-content: center;">
+                  <input formControlName="v3" type="checkbox">
+                  <span class="switch__label">V2</span>
+                  <span class="switch__input"></span>
+                  <span class="switch__label">V3</span>
+                </label>
+                <div class="divider"></div>
+              </div>
+              <div class="col-2"></div>
+
+              <div class="col-3"></div>
+              <div class="col-6" style="display: flex; flex-direction: column; justify-content: center;">
+                <div class="form-group input--compressed">
+                  <div class="form-group__text">
+                    <input formControlName="name" id="input-size-compressed" type="text">
+                    <label for="input-size-compressed">Name</label>
+                  </div>
+                </div>
+
+                <label style="padding-top: 20px;">Privacy Type</label>
+                <div class="btn-group" style="padding-top: 20px;">
+                  <button type="button" (click)="setPrivacy('aes');" class="btn btn--small btn--primary-ghost" [ngClass]="{'selected': snmpForm.get('privType').value == 'aes' }">AES-128</button>
+                  <button type="button" (click)="setPrivacy('des');" class="btn btn--small btn--primary-ghost" [ngClass]="{'selected': snmpForm.get('privType').value == 'des' }">DES</button>
+                  <button type="button" (click)="setPrivacy('none');" class="btn btn--small btn--primary-ghost" [ngClass]="{'selected': snmpForm.get('privType').value == 'none' }">None</button>
+                </div>
+
+                <div class="form-group input--compressed" style="padding-top: 20px;" *ngIf="snmpForm.get('privType').value != 'none'">
+                  <div class="form-group__text">
+                    <input formControlName="privKey" id="input-size-compressed" type="text">
+                    <label for="input-size-compressed">Privacy Key</label>
+                  </div>
+                </div>
+
+                <label style="padding-top: 20px;">Authorization Type</label>
+                <div class="btn-group" style="padding-top: 20px;">
+                  <button type="button" (click)="setAuth('md5');" class="btn btn--small btn--primary-ghost" [ngClass]="{'selected': snmpForm.get('authType').value == 'md5' }">MD5</button>
+                  <button type="button" (click)="setAuth('sha1');" class="btn btn--small btn--primary-ghost" [ngClass]="{'selected': snmpForm.get('authType').value == 'sha1' }">SHA1</button>
+                </div>
+
+                <div class="form-group input--compressed" style="padding-top: 20px;">
+                  <div class="form-group__text">
+                    <input formControlName="authKey" id="input-size-compressed" type="text">
+                    <label for="input-size-compressed">Authorization Key</label>
+                  </div>
+                </div>
+
+              </div>
+              <div class="col-3"></div>
+
+            </div>
+          </div>
+
+        </div>
+        <div class="modal__footer">
+          <button type="submit" class="btn btn--success" (click)="onSubmit();">Apply</button>
+          <button type="button" class="btn btn--negative" (click)="toggleModal();">Cancel</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
 </div>

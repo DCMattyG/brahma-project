@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-snmp',
@@ -6,10 +7,22 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./snmp.component.scss']
 })
 export class SnmpComponent implements OnInit {
+  snmpForm: FormGroup;
 
   modalOpen = false;
   epgMenuOpen = false;
   epgValue = '';
+
+  constructor(public formBuilder: FormBuilder) {
+    this.snmpForm = this.formBuilder.group({
+      v3: new FormControl(false),
+      name: new FormControl(''),
+      privType: new FormControl('none'),
+      privKey: new FormControl(''),
+      authType: new FormControl('md5'),
+      authKey: new FormControl('')
+    });
+  }
 
   fakeSNMPs = {
     users: [
@@ -169,8 +182,21 @@ export class SnmpComponent implements OnInit {
     this.epgValue = value;
   }
 
+  setPrivacy(type) {
+    this.snmpForm.patchValue({  
+      privType: type
+    });
+  }
+
+  setAuth(type) {
+    this.snmpForm.patchValue({  
+      authType: type
+    });
+  }
+
   onSubmit() {
     console.log("Submitting SNMP...");
+    console.log(this.snmpForm.value);
   }
 
   ngOnInit() {
