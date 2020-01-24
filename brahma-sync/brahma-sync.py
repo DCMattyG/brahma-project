@@ -965,6 +965,16 @@ def create_overlay_policy(apic=None, policy=None):
 
       aciFv.RsCtx(fvBD, tnFvCtxName='{0}_VRF'.format(name))
 
+      fvAp = aciFv.Ap(
+        fvTenant, name='{0}_AppProf'.format(vlanName)
+      )
+      aciFv.RsApMonPol(fvAp, tnMonEPGPolName='default')
+
+      # REMAINING TASKS
+      # Create EPGs
+      # aciFv.EPg(fvAp, name, matchT, etc...)
+      # Contracts
+
   return mo
 
 def apply_nested_policy(
