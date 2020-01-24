@@ -273,5 +273,14 @@ state = {
         'ipv6': '::',
       },
     ]
-  }
+  },
+  'vlan_pools': [
+    {
+      'name': 'dCloud_VLAN_Pool',
+      'start': '1001',
+      'end': '1500',
+      'allocMode': 'dynamic',
+      'role': 'external'
+    },
+  ]
 }

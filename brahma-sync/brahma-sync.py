@@ -23,6 +23,7 @@ import cobra.model.datetime as aciNtp
 import cobra.model.syslog as aciSyslog
 import cobra.model.file as aciFile
 import cobra.model.fv as aciFv
+import cobra.model.fvns as aciFvns
 import cobra.model.mgmt as aciMgmt
 from cobra.model import cdp
 from cobra.model import mcp
@@ -656,6 +657,22 @@ def reconcile_snmp_group_policy(apic, mo, policy, mo_changes):
 
   return create_snmp_group_policy(mo_changes, policy)
 
+def create_vlan_pool_policies(policies):
+  infraInfra = aciInfra.Infra(aciPol.Uni(''))
+
+  for policy in policies:
+    fvnsVlanInstP = aciFvns.VlanInstP(
+      infraInfra, name="{}_vlans".format(policy['name']),
+      allocMode=policy['allocMode'])
+
+    aciFvns.EncapBlk(
+      fvnsVlanInstP, name='encap', role=policy['role'],
+      from_="vlan-{}".format(policy['start']),
+      to="vlan-{}".format(policy['end'])
+    )
+
+  return fvnsVlanInstP
+
 def create_oob_mgmt_policies(apic=None, policy=None, nodes=None):
   """
   OOB Mgmt configuration
@@ -884,6 +901,13 @@ def apply_desired_state(apic1, desired):
 
   # Get commonly used data now
   fabricNodes = apic1.lookupByClass('fabricNode')
+
+  # Create VLAN Pools
+  mo_changes = create_vlan_pool_policies(desired['vlan_pools'])
+  if mo_changes is not None:
+    print(toXMLStr(mo_changes))
+    cfgRequest.addMo(mo_changes)
+    apic1.commit(cfgRequest)
 
   # Create OOB Management
   mo_changes = create_oob_mgmt_policies(
