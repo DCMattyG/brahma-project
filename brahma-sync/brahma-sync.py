@@ -23,6 +23,7 @@ import cobra.model.datetime as aciNtp
 import cobra.model.syslog as aciSyslog
 import cobra.model.file as aciFile
 import cobra.model.fv as aciFv
+import cobra.model.mgmt as aciMgmt
 from cobra.model import cdp
 from cobra.model import mcp
 from cobra.model import lldp
@@ -655,7 +656,31 @@ def reconcile_snmp_group_policy(apic, mo, policy, mo_changes):
 
   return create_snmp_group_policy(mo_changes, policy)
 
-def create_leaf_intf_profile(apic):
+def create_oob_mgmt_policies(apic=None, policy=None, nodes=None):
+  """
+  OOB Mgmt configuration
+  """
+
+  # Build OOB Management Object
+  fvTenant = aciFv.Tenant(aciPol.Uni(''), name='mgmt')
+  mgmtMgmtP = aciMgmt.MgmtP(fvTenant, name='default')
+  mgmtOoB = aciMgmt.OoB(mgmtMgmtP, prio='unspecified', name='default')
+
+  nodeNames = dict([n.name, n.id] for n in nodes)
+  podId = policy['podId']
+
+  for entry in policy['nodes']:
+    nodeId = nodeNames[entry['name']]
+    tDN = 'topology/pod-{}/node-{}'.format(podId, nodeId)
+
+    aciMgmt.RsOoBStNode(
+      mgmtOoB, gw=policy['gw'], v6Gw=policy['v6Gw'], tDn=tDN,
+      addr=entry['ipv4'], v6Addr=entry['ipv6']
+    )
+
+  return fvTenant
+
+def create_leaf_intf_profile(apic, fabricNodes):
   """
   "Core out of the box" setup method. No user input required.
   """
@@ -664,7 +689,6 @@ def create_leaf_intf_profile(apic):
   mo = aciInfra.Infra(aciPol.Uni(''))
 
   # Query APIC for leaf switches
-  fabricNodes = apic.lookupByClass('fabricNode')
   leafs = dict([n.name, n] for n in fabricNodes if n.role == 'leaf')
 
   # Loop over each leaf
@@ -690,7 +714,7 @@ def create_leaf_intf_profile(apic):
 
   return mo
 
-def create_leaf_switch_profile(apic):
+def create_leaf_switch_profile(fabricNodes):
   """
   "Core out of the box" setup method. No user input required.
   """
@@ -699,7 +723,6 @@ def create_leaf_switch_profile(apic):
   mo = aciInfra.Infra(aciPol.Uni(''))
 
   # Query APIC for leaf switches
-  fabricNodes = apic.lookupByClass('fabricNode')
   leafs = dict([n.name, n] for n in fabricNodes if n.role == 'leaf')
 
   for name, node in leafs.items():
@@ -720,33 +743,33 @@ def create_leaf_switch_profile(apic):
 
   return mo
 
-def create_vpc_protection_groups(apic, mo, policy):
+def create_vpc_protection_groups(policies, fabricNodes):
   mo = aciFabric.Inst(aciPol.Uni(''))
 
-  # Create the VPC Protection Policy
-  fabricProtPol = aciFabric.ProtPol(
-    mo, name=policy['name'], pairT=policy['pairT']
-  )
-
-  # Information passed are node names, we need node IDs
-  fabricNodes = apic.lookupByClass('fabricNode')
-  leafs = dict([n.name, n.id] for n in fabricNodes if n.role == 'leaf')
-
-  # Create the specific pairing
-  for vpc_id, members in policy['vpc_pairs'].items():
-    vpc_name = 'VPC-EPG-{0}'.format('-'.join(members))
-    vpcEpg = aciFabric.ExplicitGEp(
-      fabricProtPol, name=vpc_name, id=vpc_id
+  for policy in policies:
+    # Create the VPC Protection Policy
+    fabricProtPol = aciFabric.ProtPol(
+      mo, name=policy['name'], pairT=policy['pairT']
     )
 
-    # Bind the domain policy to it
-    aciFabric.RsVpcInstPol(
-      vpcEpg, tnVpcInstPolName=policy['vpc_domain_policy']
-    )
+    # Information passed are node names, we need node IDs
+    leafs = dict([n.name, n.id] for n in fabricNodes if n.role == 'leaf')
 
-    # Add the node members to it
-    for node in members:
-      aciFabric.NodePEp(vpcEpg, id=leafs[node], podId=policy['podId'])
+    # Create the specific pairing
+    for vpc_id, members in policy['vpc_pairs'].items():
+      vpc_name = 'VPC-EPG-{0}'.format('-'.join(members))
+      vpcEpg = aciFabric.ExplicitGEp(
+        fabricProtPol, name=vpc_name, id=vpc_id
+      )
+
+      # Bind the domain policy to it
+      aciFabric.RsVpcInstPol(
+        vpcEpg, tnVpcInstPolName=policy['vpc_domain_policy']
+      )
+
+      # Add the node members to it
+      for node in members:
+        aciFabric.NodePEp(vpcEpg, id=leafs[node], podId=policy['podId'])
 
   return mo
 
@@ -858,6 +881,40 @@ def apply_policy(
 def apply_desired_state(apic1, desired):
 
   cfgRequest = aciRequest.ConfigRequest()
+
+  # Get commonly used data now
+  fabricNodes = apic1.lookupByClass('fabricNode')
+
+  # Create OOB Management
+  mo_changes = create_oob_mgmt_policies(
+    apic=apic1, policy=desired['oob_mgmt_policies'], nodes=fabricNodes
+  )
+  if mo_changes is not None:
+    print(toXMLStr(mo_changes))
+    cfgRequest.addMo(mo_changes)
+    apic1.commit(cfgRequest)
+
+  # Create Leaf Interface Profiles
+  mo_changes = create_leaf_intf_profile(apic1, fabricNodes)
+  if mo_changes is not None:
+    cfgRequest.addMo(mo_changes)
+    apic1.commit(cfgRequest)
+
+  # Create Leaf Switch Profile
+  mo_changes = create_leaf_switch_profile(fabricNodes)
+  if mo_changes is not None:
+    cfgRequest.addMo(mo_changes)
+    apic1.commit(cfgRequest)
+
+  # VPC Explicit Protection Group
+  mo_changes = create_vpc_protection_groups(
+    desired['vpc_protection_group'], fabricNodes
+  )
+
+  if mo_changes is not None:
+    print(toXMLStr(mo_changes))
+    cfgRequest.addMo(mo_changes)
+    apic1.commit(cfgRequest)
 
   # CDP
   mo_changes = apply_policy(
@@ -1026,31 +1083,6 @@ def apply_desired_state(apic1, desired):
     cfgRequest.addMo(mo_changes)
 
   if cfgRequest.configMos:
-    apic1.commit(cfgRequest)
-
-  # Create Leaf Interface Profiles
-  mo_changes = create_leaf_intf_profile(apic1)
-  if mo_changes is not None:
-    cfgRequest.addMo(mo_changes)
-    apic1.commit(cfgRequest)
-
-  # Create Leaf Switch Profile
-  mo_changes = create_leaf_switch_profile(apic1)
-  if mo_changes is not None:
-    cfgRequest.addMo(mo_changes)
-    apic1.commit(cfgRequest)
-
-  # VPC Explicit Protection Group
-  mo_changes = apply_nested_policy(
-    apic=apic1, policies=desired['vpc_protection_group'],
-    exactDN='uni/fabric/protpol', className='fabricProtPol',
-    create=create_vpc_protection_groups,
-    reconcile=reconcile_vpc_protection_groups
-  )
-
-  if mo_changes is not None:
-    print(toXMLStr(mo_changes))
-    cfgRequest.addMo(mo_changes)
     apic1.commit(cfgRequest)
 
   # Overlay setup (tenant, vrf, bridge domain, subnet, epg, contracts)
