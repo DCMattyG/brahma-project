@@ -170,12 +170,27 @@ thead th {
 
 // SWITCH RENDERING //
 
+.select-message {
+  font-weight: bold;
+  font-size: 16px;
+}
+
 .switch-wrapper {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
+}
+
+.switch-vpc-outline {
+  overflow: visible;
+  display: flex;
+  flex-direction: row;
+  border-radius: 5px;
+  border: 2px solid darkgray;
+  padding: 10px 5px; 
+  min-width: 20px;
 }
 
 .switch-container {
@@ -183,7 +198,7 @@ thead th {
   flex-direction: column;
   overflow: visible;
   text-align: center;
-  padding: 0px 10px;
+  padding: 0px 5px;
 }
 
 .switch-outline {

@@ -58,7 +58,7 @@ export class AuthService {
             localStorage.setItem('fabricToken', token);
             this.authenticated = true;
             this.currentUser = fabric['token'];
-            this.fabricBuilder.create(fabric.nodes);
+            this.fabricBuilder.create(fabric);
         }
 
         return fabric;

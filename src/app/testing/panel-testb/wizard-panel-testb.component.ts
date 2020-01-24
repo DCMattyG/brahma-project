@@ -20,9 +20,12 @@ export class WizardPanelTestBComponent implements OnInit {
     title: "VPC Configuration"
   };
 
-  fakeLeaves = this.fb.getLeavesDetail();
-
-  fakeVPCs = [];
+  tempLeaves = [];
+  tempVPCs = [];
+  renderLeaves = {
+    id: -1,
+    nodes: []
+  };
 
   compareName(a, b) {
     const nameA = a.name.toUpperCase();
@@ -83,9 +86,75 @@ export class WizardPanelTestBComponent implements OnInit {
     element.active = element.active == true ? false : true;
   }
 
+  toggleSwitch(leaf) {
+    if(leaf.active == false) {
+      var activeCount = this.tempLeaves.filter(leaf => leaf.active == true)
+
+      if(activeCount.length <= 1) {
+        leaf.active = true;
+
+        if(activeCount.length == 0) {
+          this.renderLeaves = {
+            id: -1,
+            nodes: [leaf]
+          };
+        } else {
+          this.renderLeaves = {
+            id: -1,
+            nodes: []
+          }
+        }
+      }
+    } else {
+      leaf.active = false;
+
+      var activeCount = this.tempLeaves.filter(leaf => leaf.active == true)
+
+      if(activeCount.length == 1) {
+        this.renderLeaves = {
+          id: -1,
+          nodes: activeCount
+        };
+      } else if(activeCount.length == 0) {
+        this.renderLeaves = {
+          id: -1,
+          nodes: []
+        };
+      }
+    }
+  }
+
+  toggleVPC(vpc) {
+    if(vpc.active == false) {
+      var activeCount = this.tempVPCs.filter(vpc => vpc.active == true)
+
+      if(activeCount.length == 0) {
+        vpc.active = true;
+      } else {
+        this.tempVPCs.forEach(vpc => {
+          vpc.active = false;
+        });
+
+        vpc.active = true;
+      }
+
+      this.renderLeaves = {
+        id: vpc.id,
+        nodes: [vpc.a, vpc.b]
+      };
+    } else {
+      vpc.active = false;
+
+      this.renderLeaves = {
+        id: -1,
+        nodes: []
+      };
+    }
+  }
+
   sortByName() {
     // console.log("Sort by name...");
-    this.fakeLeaves.sort(this.compareName);
+    this.tempLeaves.sort(this.compareName);
   }
 
   toggleModal() {
@@ -104,45 +173,65 @@ export class WizardPanelTestBComponent implements OnInit {
     console.log("Submit Child...")
   }
 
-  createVPC() {
-    var vpcLeaves = this.fakeLeaves.filter(leaf => leaf.active == true)
-    var leafCount = vpcLeaves.length;
-    var newVPC = {};
+  refreshVPC() {
+    this.tempVPCs = this.fb.getVPC();
+    this.tempLeaves = this.fb.getNonVPC();
 
-    console.log("COUNT: " + leafCount);
-    console.log(vpcLeaves);
+    this.tempVPCs.forEach(vpc => {
+      vpc.active = false;
+    });
+
+    this.tempLeaves.forEach(leaf => {
+      leaf.active = false;
+    });
+
+    this.tempLeaves.sort(this.compareID);
+    this.tempVPCs.sort(this.compareID);
+  }
+
+  createVPC() {
+    var vpcLeaves = this.tempLeaves.filter(leaf => leaf.active == true)
+    var leafCount = vpcLeaves.length;
 
     if(leafCount == 2) {
-      newVPC['a'] = vpcLeaves[0];
-      newVPC['b'] = vpcLeaves[1];
-      newVPC['id'] = vpcLeaves[0].id;
+      var nodeA = vpcLeaves[0].id;
+      var nodeB = vpcLeaves[1].id;
 
-      var indexA = this.fakeLeaves.indexOf(vpcLeaves[0]);
-      var indexB = this.fakeLeaves.indexOf(vpcLeaves[1]);
+      this.tempLeaves.forEach(leaf => {
+        leaf.active = false;
+      });
 
-      this.fakeLeaves.splice(indexB, 1);
-      this.fakeLeaves.splice(indexA, 1);
-
-      this.fakeVPCs.push(newVPC);
+      this.fb.createVPC(nodeA, nodeB);
+      this.refreshVPC();
+      
+      this.renderLeaves = {
+        id: -1,
+        nodes: []
+      }
     }
   }
 
   deleteVPC() {
-    var activeVPC = this.fakeVPCs.filter(vpc => vpc.active == true);
+    var activeVPC = this.tempVPCs.filter(vpc => vpc.active == true);
     var activeCount = activeVPC.length;
 
     if(activeCount == 1) {
-      var activeIndex = this.fakeVPCs.indexOf(activeVPC);
+      this.fb.deleteVPC(activeVPC['id']);
 
-      this.fakeVPCs.splice(activeIndex, 1);
+      this.refreshVPC();
+    }
 
-      this.fakeLeaves.push(activeVPC[0].a);
-      this.fakeLeaves.push(activeVPC[0].b);
+    this.renderLeaves = {
+      id: -1,
+      nodes: []
     }
   }
 
+  portClick(switchID, intName) {
+    console.log("Clicked port " + intName + " on Node " + switchID);
+  }
+
   ngOnInit() {
-    console.log(this.fb.getLeavesDetail());
-    this.fakeLeaves.sort(this.compareID);
+    this.refreshVPC();
   }
 }

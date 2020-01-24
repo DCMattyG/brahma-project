@@ -13,8 +13,8 @@ export class TopologyComponent implements OnInit, AfterViewInit {
 
   constructor(private fabricBuilder: FabricBuilderService) { }
 
-  spineSwitches = this.fabricBuilder.getSpinesDetail();
-  leafSwitches = this.fabricBuilder.getLeavesDetail();
+  spineSwitches = this.fabricBuilder.getSpines();
+  leafSwitches = this.fabricBuilder.getLeaves();
 
   spines = [];
   leaves = [];
