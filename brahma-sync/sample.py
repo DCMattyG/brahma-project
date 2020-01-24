@@ -282,5 +282,11 @@ state = {
       'allocMode': 'dynamic',
       'role': 'external'
     },
+  ],
+  'physical_domain': [
+    {
+      'name': 'customer_name',
+      'vlan_pool': 'dCloud_VLAN_Pool'
+    }
   ]
 }

@@ -29,6 +29,7 @@ from cobra.model import cdp
 from cobra.model import mcp
 from cobra.model import lldp
 from cobra.model import snmp
+from cobra.model import phys
 
 
 # Connection information
@@ -673,6 +674,23 @@ def create_vlan_pool_policies(policies):
 
   return fvnsVlanInstP
 
+def create_physical_domain(apic, policies):
+  mo = aciPol.Uni('')
+
+  vlanPools = apic.lookupByClass('fvnsVlanInstP')
+  pools = dict([v.name, v.allocMode] for v in vlanPools)
+
+  for policy in policies:
+    physDomP = phys.DomP(mo, name=policy['name'])
+
+    pool = policy['vlan_pool']
+    mode = pools[pool]
+    vlan_pool_name = 'uni/infra/vlanns-[{0}]-{1}'.format(pool, mode)
+
+    aciInfra.RsVlanNs(physDomP, tDn=vlan_pool_name)
+  
+  return mo
+
 def create_oob_mgmt_policies(apic=None, policy=None, nodes=None):
   """
   OOB Mgmt configuration
@@ -904,6 +922,13 @@ def apply_desired_state(apic1, desired):
 
   # Create VLAN Pools
   mo_changes = create_vlan_pool_policies(desired['vlan_pools'])
+  if mo_changes is not None:
+    print(toXMLStr(mo_changes))
+    cfgRequest.addMo(mo_changes)
+    apic1.commit(cfgRequest)
+
+  # Create Physical Domain
+  mo_changes = create_physical_domain(apic1, desired['physical_domain'])
   if mo_changes is not None:
     print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
