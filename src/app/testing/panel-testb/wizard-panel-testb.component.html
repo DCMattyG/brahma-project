@@ -95,9 +95,8 @@
                 <span>Leaf Switches</span>
               </div>
               <div class="ntp-controls-item">
-                  <!-- <button class="btn btn--icon btn--small btn--negative"><span class="icon-remove"></span></button> -->
-                  <span (click)="createVPC()" class="icon-link icon-small"></span>
-                </div>
+                <span (click)="createVPC()" class="icon-link icon-small"></span>
+              </div>
             </div>
           
             <div class="table-wrapper">
@@ -131,9 +130,8 @@
                 <span>VPCs</span>
               </div>
               <div class="ntp-controls-item">
-                  <!-- <button class="btn btn--icon btn--small btn--negative"><span class="icon-remove"></span></button> -->
-                  <span (click)="deleteVPC()" class="icon-link-broken icon-small"></span>
-                </div>
+                <span (click)="deleteVPC()" class="icon-link-broken icon-small"></span>
+              </div>
             </div>
           
             <div class="table-wrapper">
@@ -182,19 +180,51 @@
   </div>
 </div>
 
-<div class="modal modal--small" [ngClass]="{'hide': !modalOpen }">
+<div class="modal modal--small" [ngClass]="{'hide': !infoModal }">
   <div class="modal__dialog">
     <div class="modal__content" style="transform: translateY(60%); border: #dfdfdf 1px solid;">
-      <a class="modal__close" (click)="toggleModal()"><span class="icon-close icon-medium"></span></a>
-      <div class="modal__header">
-        <h1 class="modal__title">NTP Configuration</h1>
-      </div>
-      <div class="modal__body">
-        <p class="subtitle">Important details about the settings in this wizard step.</p>
-      </div>
-      <div class="modal__footer">
-        <button class="btn" (click)="toggleModal()">Ok</button>
-      </div>
+      <a class="modal__close" (click)="toggleModal();"><span class="icon-close icon-medium"></span></a>
+        <div class="modal__header">
+          <h1 class="modal__title">VPC Configuration</h1>
+        </div>
+        <div class="modal__body">
+          <p class="subtitle">Important details about the settings in this wizard step.</p>
+        </div>
+        <div class="modal__footer">
+          <button class="btn" (click)="toggleModal();">Cancel</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal modal--small" [ngClass]="{'hide': !vlanModal }">
+  <div class="modal__dialog">
+    <div class="modal__content" style="transform: translateY(60%); border: #dfdfdf 1px solid;">
+      <a class="modal__close" (click)="cancelVlan();"><span class="icon-close icon-medium"></span></a>
+
+      <form [formGroup]="vlanForm" (ngSubmit)="onSubmit()">
+        <div class="modal__header">
+          <h1 class="modal__title" style="font-size: 40px;">VLAN Configuration</h1>
+        </div>
+        <div class="modal__body">
+          <div class="form-group dropdown input--compressed" style="width: 40%; margin: auto;" [ngClass]="{'active': vlanDrop }">
+            <div class="form-group__text select" (click)="toggleVlan();">
+              <input id="select-size-compressed" style="border-top: unset; border-left: unset; border-right: unset; text-align: center;" value="{{ vlanForm.get('vlan').value }}">
+              <label for="select-size-compressed" style="text-align: center;">VLAN</label>
+            </div>
+            <div class="dropdown__menu">
+              <a (click)="setVlan(1);">VLAN 1</a>
+              <a (click)="setVlan(2);">VLAN 2</a>
+              <a (click)="setVlan(3);">VLAN 3</a>
+            </div>
+          </div>
+        </div>
+        <div class="modal__footer">
+          <button type="submit" class="btn btn--success" (click)="onSubmit();">Apply</button>
+          <button type="button" class="btn btn--negative" (click)="cancelVlan();">Cancel</button>
+        </div>
+      </form>
+
     </div>
   </div>
 </div>

@@ -29,6 +29,8 @@ import { ThreePanelComponent } from './testing/three-panel/three-panel.component
 import { FourPanelComponent } from './testing/four-panel/four-panel.component';
 import { TwoPanelHComponent } from './testing/two-panel-h/two-panel-h.component';
 import { TwoPanelVComponent } from './testing/two-panel-v/two-panel-v.component';
+import { SnmpComponent } from './config/components/snmp/snmp.component';
+import { VpcComponent } from './config/components/vpc/vpc.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +58,9 @@ import { TwoPanelVComponent } from './testing/two-panel-v/two-panel-v.component'
     ThreePanelComponent,
     FourPanelComponent,
     TwoPanelHComponent,
-    TwoPanelVComponent
+    TwoPanelVComponent,
+    SnmpComponent,
+    VpcComponent
   ],
   entryComponents: [
     GlobalConfigComponent,
@@ -68,7 +72,9 @@ import { TwoPanelVComponent } from './testing/two-panel-v/two-panel-v.component'
     ThreePanelComponent,
     FourPanelComponent,
     TwoPanelHComponent,
-    TwoPanelVComponent
+    TwoPanelVComponent,
+    SnmpComponent,
+    VpcComponent
   ],
   imports: [
     BrowserModule,

@@ -4,11 +4,11 @@ import { FabricBuilderService } from 'src/app/services/fabric-builder.service';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 
 @Component({
-  selector: 'app-wizard-panel-testb',
-  templateUrl: './wizard-panel-testb.component.html',
-  styleUrls: ['./wizard-panel-testb.component.scss']
+  selector: 'app-vpc',
+  templateUrl: './vpc.component.html',
+  styleUrls: ['./vpc.component.scss']
 })
-export class WizardPanelTestBComponent implements OnInit {
+export class VpcComponent implements OnInit {
   vlanForm: FormGroup;
 
   constructor(public http: HttpClient,
@@ -21,18 +21,12 @@ export class WizardPanelTestBComponent implements OnInit {
     });
   }
 
-  percentComplete = 50;
-
   infoModal = false;
   vlanModal = false;
   vlanDrop = false;
 
   totalActive = 0;
   activeSwitch = {};
-
-  currentStep = {
-    title: "VPC Configuration"
-  };
 
   tempLeaves = [];
   tempVPCs = [];
@@ -167,7 +161,6 @@ export class WizardPanelTestBComponent implements OnInit {
   }
 
   sortByName() {
-    // console.log("Sort by name...");
     this.tempLeaves.sort(this.compareName);
   }
 
@@ -175,22 +168,10 @@ export class WizardPanelTestBComponent implements OnInit {
     this.infoModal = this.infoModal == true ? false : true;
   }
 
-  prevStep() {
-    console.log("Previous Step...")
-  }
-
-  nextStep() {
-    console.log("Next Step...")
-  }
-
   onSubmit() {
     console.log(this.vlanForm.value);
     this.vlanModal = false;
     this.vlanForm.reset();
-  }
-
-  submitChild() {
-    console.log("Submit Child...")
   }
 
   refreshVPC() {

@@ -6,6 +6,8 @@ import { WizardIBMgmtComponent } from '../config/components/ib-mgmt/wizard-ib-mg
 import { VlanManageComponent } from '../config/components/vlans/vlan-manage/vlan-manage.component';
 import { WizardNTPConfigComponent } from '../config/components/ntp-config/wizard-ntp-config.component';
 import { GlobalConfigComponent } from '../config/components/global/global-config.component';
+import { SnmpComponent } from '../config/components/snmp/snmp.component';
+import { VpcComponent } from '../config/components/vpc/vpc.component';
 
 @Injectable({
   providedIn: 'root'
@@ -48,6 +50,20 @@ export class WizardRunnerService {
       title: "VLAN Management",
       help: "Important details about the settings in VLAN Management wizard step.",
       component: VlanManageComponent,
+      required: false
+    },
+    {
+      name: "snmp",
+      title: "SNMP Configuration",
+      help: "Important details about the settings in SNMP Configuration wizard step.",
+      component: SnmpComponent,
+      required: false
+    },
+    {
+      name: "vpc",
+      title: "VPC Configuration",
+      help: "Important details about the settings in VPC Configuration wizard step.",
+      component: VpcComponent,
       required: false
     }
   ];

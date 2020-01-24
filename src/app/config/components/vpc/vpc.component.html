@@ -1,0 +1,143 @@
+<div class="component-wrapper">
+  <div class="full-panel h-40">
+    <div class="panel panel--raised-small">
+
+      <div class="switch-wrapper">
+
+        <ng-container>
+          <div class="select-message" *ngIf="renderLeaves.id == -1 && renderLeaves['nodes'].length == 0">
+            Please Select a Single Switch/VPC to Configure
+          </div>
+        </ng-container>
+  
+        <ng-container *ngIf="renderLeaves.id != -1">
+          <div>VPC Domain {{ renderLeaves.id }}</div>
+          <div class="switch-vpc-outline">
+            <ng-container *ngFor="let leaf of renderLeaves.nodes; let i = index">
+              <div class="switch-container">
+                {{ leaf.name }} ({{ leaf.serial }})
+                <br>
+                <div class="switch-outline">
+                  <ng-container *ngFor="let slot of fb.getSlots(leaf.id); let lastSlot = last; let j = index">
+                    <ng-container *ngFor="let row of fb.getRows(leaf.id, slot); let firstRow = first; let lastRow = last; let k = index">
+                      <div class="switch-row">
+                        <ng-container *ngFor="let interface of fb.getRow(leaf.id, slot, row)">
+                          <div class="svg-{{ interface.type }}" dataBalloon dataBalloonProperty="{{ interface.name }}" dataBalloonPos="{{ interface.dir }}">
+                            <img (click)="portClick(leaf.id, interface.name);" src="../../assets/svg/{{ interface.type }}.svg" />
+                          </div>
+                        </ng-container>
+                      </div>
+                    </ng-container>
+                    <div class="slot-divider" *ngIf="!firstSlot && !lastSlot">
+                      <hr>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+  
+        <ng-container *ngIf="renderLeaves.id == -1">
+          <ng-container *ngFor="let leaf of renderLeaves.nodes; let i = index">
+            <div class="switch-container">
+              {{ leaf.name }} ({{ leaf.serial }})
+              <br>
+              <div class="switch-outline">
+                <ng-container *ngFor="let slot of fb.getSlots(leaf.id); let lastSlot = last; let j = index">
+                  <ng-container *ngFor="let row of fb.getRows(leaf.id, slot); let firstRow = first; let lastRow = last; let k = index">
+                    <div class="switch-row">
+                      <ng-container *ngFor="let interface of fb.getRow(leaf.id, slot, row)">
+                        <div class="svg-{{ interface.type }}" dataBalloon dataBalloonProperty="{{ interface.name }}" dataBalloonPos="{{ interface.dir }}">
+                          <img (click)="portClick(leaf.id, interface.name);" src="../../assets/svg/{{ interface.type }}.svg" />
+                        </div>
+                      </ng-container>
+                    </div>
+                  </ng-container>
+                  <div class="slot-divider" *ngIf="!firstSlot && !lastSlot">
+                    <hr>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+  
+      </div>
+
+    </div>
+  </div>
+
+  <div class="dual-panel h-60">
+    <div class="half-panel panel-left h-100">
+      <div class="panel panel--raised-small">
+
+        <div class="ntp-wrapper">
+          <div class="ntp-controls">
+            <div class="ntp-controls-title">
+              <span>Leaf Switches</span>
+            </div>
+            <div class="ntp-controls-item">
+              <span (click)="createVPC()" class="icon-link icon-small"></span>
+            </div>
+          </div>
+        
+          <div class="table-wrapper">
+            <div class="responsive-table">
+              <table class="table table--fixed table--selectable">
+                <thead>
+                  <tr>
+                    <th class="sortable" (click)="sortByName()">Name <span class="sort-indicator icon-chevron-down"></span></th>
+                    <th>Serial</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr (click)="toggleSwitch(leaf)" *ngFor="let leaf of tempLeaves" [ngClass]="{'active': leaf.active }">
+                    <td>{{ leaf.name }}</td>
+                    <td>{{ leaf.serial }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="half-panel panel-right h-100">
+      <div class="panel panel--raised-small">
+
+        <div class="ntp-wrapper">
+          <div class="ntp-controls">
+            <div class="ntp-controls-title">
+              <span>VPCs</span>
+            </div>
+            <div class="ntp-controls-item">
+              <span (click)="deleteVPC()" class="icon-link-broken icon-small"></span>
+            </div>
+          </div>
+        
+          <div class="table-wrapper">
+            <div class="responsive-table">
+              <table class="table table--fixed table--selectable">
+                <thead>
+                  <tr>
+                    <th class="sortable" (click)="sortByIP()">Switch Pair <span class="sort-indicator icon-chevron-down"></span></th>
+                    <th>VPC ID</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr (click)="toggleVPC(vpc)" *ngFor="let vpc of tempVPCs" [ngClass]="{'active': vpc.active }">
+                    <td>{{ vpc.a.id }}/{{ vpc.b.id }}</td>
+                    <td>{{ vpc.id }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
