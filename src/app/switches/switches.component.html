@@ -3,7 +3,7 @@
 <br>
 
 <div class="switch-container">
-  <ng-container *ngFor="let switch of fabricBuilder.getLeavesDetail(); let firstSwitch = first; let lastSwitch = last; let i = index">
+  <ng-container *ngFor="let switch of fabricBuilder.getLeaves(); let firstSwitch = first; let lastSwitch = last; let i = index">
     {{ switch.name }} ({{ switch.serial }})
     <br>
     <div class="switch-outline">

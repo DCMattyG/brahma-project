@@ -160,6 +160,10 @@ export class VpcComponent implements OnInit {
     }
   }
 
+  sortDummy() {
+    console.log("Dummy sort...");
+  }
+
   sortByName() {
     this.tempLeaves.sort(this.compareName);
   }

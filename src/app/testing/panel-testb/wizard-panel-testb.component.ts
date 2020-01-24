@@ -166,6 +166,10 @@ export class WizardPanelTestBComponent implements OnInit {
     }
   }
 
+  sortDummy() {
+    console.log("Dummy sort...");
+  }
+
   sortByName() {
     // console.log("Sort by name...");
     this.tempLeaves.sort(this.compareName);
