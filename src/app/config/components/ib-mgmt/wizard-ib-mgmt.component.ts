@@ -11,9 +11,11 @@ export class WizardIBMgmtComponent implements OnInit {
   ibMgmtForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder,
-              private fabricBuilder: FabricBuilderService) {
+              private fb: FabricBuilderService) {
     this.ibMgmtForm = this.formBuilder.group({
-      config: new FormControl(false),
+      ipv4_gw: new FormControl(''),
+      ipv4_mask: new FormControl(''),
+      ipv6_gw: new FormControl(''),
       v6: new FormControl(false),
       nodes: new FormArray([])
     });
@@ -33,9 +35,7 @@ export class WizardIBMgmtComponent implements OnInit {
     var newArray = this.formBuilder.group({
       id: [nodeID],
       ipv4Addr: [''],
-      ipv4Gw: [''],
-      ipv6Addr: [''],
-      ipv6Gw: ['']
+      ipv6Addr: ['']
     });
 
     ibNodes.push(newArray);
@@ -62,13 +62,19 @@ export class WizardIBMgmtComponent implements OnInit {
 
   onSubmit() {
     console.log(this.ibMgmtForm.value);
+    this.fb.updateIbMgmt(this.ibMgmtForm.value);
   }
 
   ngOnInit() {
-    var fabricSwitches = this.fabricBuilder.getNodes();
+    var fabricSwitches = this.fb.getNodes();
+    var existingConfig = this.fb.getIbMgmt();
 
     fabricSwitches.sort(this.compareID).forEach(sw => {
       this.newMgmtArray(sw.name);
     });
+
+    if(existingConfig.length != 0) {
+      this.ibMgmtForm.patchValue(existingConfig);
+    }
   }
 }

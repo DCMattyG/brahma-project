@@ -53,10 +53,30 @@
   margin: auto;
 }
 
+// Non-Test Input Styling
+
 input {
   text-align: center;
 }
 
 input:focus {
   outline: none;
+}
+
+// Text Input Styling
+
+input[type=text] {
+  background-color: unset !important;
+  border-top: none !important;
+  border-right: none !important;
+  border-left: none !important;
+  text-align: center !important;
+}
+
+input[type=text]:hover {
+  box-shadow: unset !important;
+}
+
+input[type=text]:focus {
+  box-shadow: unset !important;
 }

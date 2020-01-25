@@ -14,6 +14,9 @@ export class FabricBuilderService {
   create(config) {
     this.config = config;
 
+    this.config['global'] = [];
+    this.config['ib'] = [];
+    this.config['oob'] = [];
     this.config['vpcs'] = [];
     this.config['vlans'] = [];
     this.config['ntp'] = [];
@@ -229,5 +232,35 @@ export class FabricBuilderService {
 
   deleteNtp(index) {
     this.config['ntp'].splice(index, 1);
+  }
+
+  // In-Band Management
+
+  getIbMgmt() {
+    return this.config['ib'];
+  }
+
+  updateIbMgmt(ibData) {
+    this.config['ib'] = ibData;
+  }
+
+  // Out-of-Band Management
+
+  getOobMgmt() {
+    return this.config['oob'];
+  }
+
+  updateOobMgmt(oobData) {
+    this.config['oob'] = oobData;
+  }
+
+  // Global Settings
+
+  getGlobal() {
+    return this.config['global'];
+  }
+
+  updateGlobal(globalData) {
+    this.config['global'] = globalData;
   }
 }

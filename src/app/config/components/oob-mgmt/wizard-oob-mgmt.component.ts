@@ -11,9 +11,11 @@ export class WizardOOBMgmtComponent implements OnInit {
   oobMgmtForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder,
-              private fabricBuilder: FabricBuilderService) {
+              private fb: FabricBuilderService) {
     this.oobMgmtForm = this.formBuilder.group({
-      config: new FormControl(false),
+      ipv4_gw: new FormControl(''),
+      ipv4_mask: new FormControl(''),
+      ipv6_gw: new FormControl(''),
       v6: new FormControl(false),
       nodes: new FormArray([])
     });
@@ -33,9 +35,7 @@ export class WizardOOBMgmtComponent implements OnInit {
     var newArray = this.formBuilder.group({
       id: [nodeID],
       ipv4Addr: [''],
-      ipv4Gw: [''],
-      ipv6Addr: [''],
-      ipv6Gw: ['']
+      ipv6Addr: ['']
     });
 
     oobNodes.push(newArray);
@@ -62,15 +62,21 @@ export class WizardOOBMgmtComponent implements OnInit {
 
   onSubmit() {
     console.log(this.oobMgmtForm.value);
+    this.fb.updateOobMgmt(this.oobMgmtForm.value);
   }
 
   ngOnInit() {
-    var fabricSwitches = this.fabricBuilder.getNodes();
+    var fabricSwitches = this.fb.getNodes();
+    var existingConfig = this.fb.getOobMgmt();
 
     fabricSwitches.sort(this.compareID).forEach(sw => {
       if(sw.role != 'controller') {
         this.newMgmtArray(sw.name);
       }
     });
+
+    if(existingConfig.length != 0) {
+      this.oobMgmtForm.patchValue(existingConfig);
+    }
   }
 }

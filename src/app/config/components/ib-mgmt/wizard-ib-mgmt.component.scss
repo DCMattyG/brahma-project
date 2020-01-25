@@ -56,10 +56,50 @@
   margin: auto;
 }
 
+// Table Styling
+
+.table-wrapper {
+  display: flex;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.responsive-table {
+  overflow: unset;
+  display: flex;
+}
+
+thead th {
+  top: 0;
+  position: sticky;
+  background-color: white;
+  z-index: 999;
+}
+
+// Non-Text Input Styling
+
 input {
   text-align: center;
 }
 
 input:focus {
   outline: none;
+}
+
+// Text Input Styling
+
+input[type=text] {
+  background-color: unset !important;
+  border-top: none !important;
+  border-right: none !important;
+  border-left: none !important;
+  text-align: center !important;
+}
+
+input[type=text]:hover {
+  box-shadow: unset !important;
+}
+
+input[type=text]:focus {
+  box-shadow: unset !important;
 }
