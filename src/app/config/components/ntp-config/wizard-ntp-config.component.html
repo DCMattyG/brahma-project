@@ -54,7 +54,7 @@
     <div class="modal__content" style="border: #dfdfdf 1px solid;">
       <a class="modal__close" (click)="cancelNtp();"><span class="icon-close icon-medium"></span></a>
 
-      <form autocomplete="off" [formGroup]="ntpForm" (ngSubmit)="onSubmit()">
+      <form autocomplete="off" [formGroup]="ntpForm">
         <div class="modal__header">
           <h1 class="modal__title" style="font-size: 40px;" *ngIf="ntpEdit == null">Add NTP Server</h1>
           <h1 class="modal__title" style="font-size: 40px;" *ngIf="ntpEdit != null">Update NTP Server</h1>
