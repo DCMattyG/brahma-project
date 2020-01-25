@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FabricBuilderService } from 'src/app/services/fabric-builder.service';
 
 @Component({
   selector: 'app-vlan-manage',
@@ -6,131 +8,21 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./vlan-manage.component.scss']
 })
 export class VlanManageComponent implements OnInit {
+  vlanForm: FormGroup;
 
-  constructor() { }
+  constructor(public formBuilder: FormBuilder,
+              public fb: FabricBuilderService) {
+    this.vlanForm = this.formBuilder.group({
+      name: new FormControl(''),
+      id: new FormControl(''),
+      svi: new FormControl('')
+    });
+  }
 
-  fakeVlans = [
-    {
-      "name": "production",
-      "id": 109,
-      "svi": "10.10.9.1",
-      "active": false
-    },
-    {
-      "name": "development",
-      "id": 204,
-      "svi": "10.20.4.1",
-      "active": false
-    },
-    {
-      "name": "vmware",
-      "id": 17,
-      "svi": "10.1.7.1",
-      "active": false
-    },
-    {
-      "name": "marketing",
-      "id": 400,
-      "svi": "10.40.0.1",
-      "active": false
-    },
-    {
-      "name": "hyper-v",
-      "id": 299,
-      "svi": "10.29.9.1",
-      "active": false
-    },
-    {
-      "name": "test",
-      "id": 249,
-      "svi": "10.24.9.1",
-      "active": false
-    },
-    {
-      "name": "cmdb",
-      "id": 867,
-      "svi": "10.86.7.1",
-      "active": false
-    },
-    {
-      "name": "oob",
-      "id": 1,
-      "svi": "10.0.1.1",
-      "active": false
-    },
-    {
-      "name": "sql",
-      "id": 344,
-      "svi": "10.3.44.1",
-      "active": false
-    },
-    {
-      "name": "oracle",
-      "id": 912,
-      "svi": "10.91.2.1",
-      "active": false
-    },
-    {
-      "name": "citrix",
-      "id": 111,
-      "svi": "10.11.1.1",
-      "active": false
-    },
-    {
-      "name": "horizon",
-      "id": 1033,
-      "svi": "10.10.33.1",
-      "active": false
-    },
-    {
-      "name": "web",
-      "id": 80,
-      "svi": "10.0.80.1",
-      "active": false
-    },
-    {
-      "name": "sap",
-      "id": 599,
-      "svi": "10.5.99.1",
-      "active": false
-    },
-    {
-      "name": "manufacturing",
-      "id": 222,
-      "svi": "10.22.2.1",
-      "active": false
-    },
-    {
-      "name": "reception",
-      "id": 1910,
-      "svi": "10.19.10.1",
-      "active": false
-    },
-    {
-      "name": "facilities",
-      "id": 707,
-      "svi": "10.70.7.1",
-      "active": false
-    },
-    {
-      "name": "security",
-      "id": 911,
-      "svi": "10.9.11.1",
-      "active": false
-    },
-    {
-      "name": "telecom",
-      "id": 487,
-      "svi": "10.48.7.1",
-      "active": false
-    },
-    {
-      "name": "ucsd",
-      "id": 668,
-      "svi": "10.66.8.1",
-      "active": false
-    }
-  ];
+  vlanData = [];
+
+  vlanModal = false;
+  vlanEdit = null;
 
   compareID(a, b) {
     const vlanA = a.id
@@ -167,13 +59,75 @@ export class VlanManageComponent implements OnInit {
   }
 
   sortByID() {
-    this.fakeVlans.sort(this.compareID);
+    this.vlanData.sort(this.compareID);
   }
 
   sortByName() {
-    this.fakeVlans.sort(this.compareName);
+    this.vlanData.sort(this.compareName);
+  }
+
+  refreshData() {
+    this.vlanData = this.fb.getVlan();
+  }
+
+  toggleVlan() {
+    this.vlanModal = this.vlanModal == true ? false : true;
+  }
+
+  resetVlan() {
+    this.vlanForm.reset();
+  }
+
+  cancelVlan() {
+    this.vlanModal = false;
+    this.vlanEdit = null;
+    this.resetVlan();
+  }
+
+  deleteVlan() {
+    for(var i = (this.vlanData.length - 1); i >= 0; i--) {
+      if (this.vlanData[i].active === true) {
+        this.fb.deleteVlan(i);
+      }
+    }
+
+    this.refreshData();
+  }
+
+  editVlan() {
+    var activeCount = this.vlanData.filter(vlan => vlan.active == true);
+
+    if(activeCount.length == 1) {
+      var activeIndex = this.vlanData.findIndex(vlan => vlan.active == true);
+      
+      this.vlanForm.patchValue({
+        name: this.vlanData[activeIndex].name,
+        id: this.vlanData[activeIndex].id,
+        svi: this.vlanData[activeIndex].svi
+      });
+
+      this.vlanEdit = activeIndex;
+      this.vlanModal = true;
+    }
+  }
+
+  saveVlan() {
+    var newVlan = this.vlanForm.value;
+
+    if(this.vlanEdit != null) {
+      this.fb.updateVlan(newVlan, this.vlanEdit);
+    } else {
+      this.fb.createVlan(newVlan);
+    }
+
+    this.vlanModal = false;
+    this.vlanEdit = null;
+
+    this.resetVlan();
+    this.refreshData()
   }
 
   ngOnInit() {
+    this.refreshData();
   }
 }

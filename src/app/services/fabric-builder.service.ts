@@ -16,6 +16,15 @@ export class FabricBuilderService {
 
     this.config['vpcs'] = [];
     this.config['vlans'] = [];
+    this.config['ntp'] = [];
+    this.config['snmp'] = {
+      contact: null,
+      location: null,
+      epg: null,
+      users: [],
+      traps: [],
+      subnets: []
+    };
 
     this.loadSwitches();
   }
@@ -124,5 +133,101 @@ export class FabricBuilderService {
     var vpcIndex = this.config['vpcs'].indexOf(vpc => vpc.id == vpcID);
 
     this.config['vpcs'].splice(vpcIndex, 1);
+  }
+
+  // SNMP General
+
+  getSnmp() {
+    return this.config['snmp'];
+  }
+
+  updateSnmpContact(contactData) {
+    this.config['snmp'].contact = contactData;
+  }
+
+  updateSnmpLocation(locationData) {
+    this.config['snmp'].location = locationData;
+  }
+
+  updateSnmpEpg(epgData) {
+    this.config['snmp'].epg = epgData;
+  }
+
+  // SNMP Users
+
+  createSnmpUser(newUser) {
+    this.config['snmp'].users.push(newUser);
+  }
+
+  updateSnmpUser(userData, index) {
+    this.config['snmp'].users[index] = userData;
+  }
+
+  deleteSnmpUser(index) {
+    this.config['snmp'].users.splice(index, 1);
+  }
+
+  // SNMP Traps
+
+  createSnmpTrap(newTrap) {
+    this.config['snmp'].traps.push(newTrap);
+  }
+
+  updateSnmpTrap(trapData, index) {
+    this.config['snmp'].traps[index] = trapData;
+  }
+
+  deleteSnmpTrap(index) {
+    this.config['snmp'].traps.splice(index, 1);
+  }
+
+  // SNMP Subnets
+
+  createSnmpSubnet(newSubnet) {
+    this.config['snmp'].subnets.push(newSubnet);
+  }
+
+  updateSnmpSubnet(subnetData, index) {
+    this.config['snmp'].subnets[index] = subnetData;
+  }
+
+  deleteSnmpSubnet(index) {
+    this.config['snmp'].subnets.splice(index, 1);
+  }
+
+  // VLAN General
+
+  getVlan() {
+    return this.config['vlans'];
+  }
+
+  createVlan(newVlan) {
+    this.config['vlans'].push(newVlan);
+  }
+
+  updateVlan(vlanData, index) {
+    this.config['vlans'][index] = vlanData;
+  }
+
+  deleteVlan(index) {
+    this.config['vlans'].splice(index, 1);
+  }
+
+  // NTP General
+
+  getNtp() {
+    return this.config['ntp'];
+  }
+
+  createNtp(newNtp) {
+    this.config['ntp'].push(newNtp);
+  }
+
+  updateNtp(ntpData, index) {
+    this.config['ntp'][index] = ntpData;
+  }
+
+  deleteNtp(index) {
+    this.config['ntp'].splice(index, 1);
   }
 }

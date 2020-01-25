@@ -9,14 +9,14 @@
             <span>NTP Servers</span>
           </div>
           <div class="ntp-controls-item">
-            <a href="javascript:;"><span class="icon-add icon-small"></span></a>
+            <span (click)="toggleNtp()" class="icon-add icon-small"></span>
           </div>
           <div class="ntp-controls-item">
-            <a href="javascript:;"><span class="icon-pencil icon-small"></span></a>
+            <span (click)="editNtp()" class="icon-pencil icon-small"></span>
           </div>
           <div class="ntp-controls-item">
-              <a href="javascript:;"><span class="icon-remove icon-small"></span></a>
-            </div>
+            <span (click)="deleteNtp()" class="icon-remove icon-small"></span>
+          </div>
         </div>
       
         <div class="table-wrapper">
@@ -30,13 +30,13 @@
                 </tr>
               </thead>
               <tbody>
-                <tr (click)="toggleActive(ntp)" *ngFor="let ntp of fakeNTPs" [ngClass]="{'active': ntp.active }">
-                  <td>{{ ntp.name }}</td>
+                <tr (click)="toggleActive(ntp)" *ngFor="let ntp of ntpData" [ngClass]="{'active': ntp.active }">
+                  <td>{{ ntp.addr }}</td>
                   <td>
                     <span class="icon-check icon-small icon-green" *ngIf="ntp.pref"></span>
                     <span class="icon-close icon-small icon-red" *ngIf="!ntp.pref"></span>
                   </td>
-                  <td>{{ ntp.epg }}</td>
+                  <td>{{ epgMap[ntp.epg] }}</td>
                 </tr>
               </tbody>
             </table>
@@ -47,4 +47,65 @@
     </div>
   </div>
 
+</div>
+
+<div class="modal modal--small" [ngClass]="{'hide': !ntpModal }">
+  <div class="modal__dialog">
+    <div class="modal__content" style="border: #dfdfdf 1px solid;">
+      <a class="modal__close" (click)="cancelNtp();"><span class="icon-close icon-medium"></span></a>
+
+      <form autocomplete="off" [formGroup]="ntpForm" (ngSubmit)="onSubmit()">
+        <div class="modal__header">
+          <h1 class="modal__title" style="font-size: 40px;" *ngIf="ntpEdit == null">Add NTP Server</h1>
+          <h1 class="modal__title" style="font-size: 40px;" *ngIf="ntpEdit != null">Update NTP Server</h1>
+        </div>
+        <div class="modal__body">
+
+          <div class="snmp-form">
+            <div class="row">
+
+              <div class="col-3"></div>
+              <div class="col-6" style="display: flex; flex-direction: column; justify-content: center;">
+                <div class="form-group input--compressed">
+                  <div class="form-group__text">
+                    <input formControlName="addr" id="input-size-compressed" type="text">
+                    <label for="input-size-compressed">Hostname/IP</label>
+                  </div>
+                </div>
+
+                <div (click)="toggleEPGMenu()" class="form-group dropdown input--compressed" [ngClass]="{'active': epgMenuOpen }">
+                  <div class="form-group__text select">
+                    <input id="select-epg" value="{{ epgMap[ntpForm.get('epg').value] }}">
+                    <label for="select-epg">Management EPG</label>
+                  </div>
+                  <div class="dropdown__menu">
+                    <a (click)="setEPGValue('ib')">In-Band</a>
+                    <a (click)="setEPGValue('oob')">Out-of-Band</a>
+                  </div>
+                </div>
+
+                <div class="form-group" style="padding-top: 5px; align-items: center;">
+                  <label class="switch">
+                    <input formControlName="pref" type="checkbox" checked>
+                    <span class="switch__label" style="padding-right: 5px;">Preferred</span>
+                    <span class="switch__input"></span>
+                  </label>
+                </div>
+
+              </div>
+              <div class="col-3"></div>
+
+            </div>
+          </div>
+
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="btn btn--success" (click)="saveNtp();" *ngIf="ntpEdit == null">Save</button>
+          <button type="button" class="btn btn--success" (click)="saveNtp();" *ngIf="ntpEdit != null">Update</button>
+          <button type="button" class="btn btn--negative" (click)="cancelNtp();">Cancel</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
 </div>

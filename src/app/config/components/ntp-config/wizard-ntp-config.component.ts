@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { FabricBuilderService } from 'src/app/services/fabric-builder.service';
 
 @Component({
   selector: 'app-wizard-ntp-config',
@@ -6,95 +8,32 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./wizard-ntp-config.component.scss']
 })
 export class WizardNTPConfigComponent implements OnInit {
+  ntpForm: FormGroup;
 
-  constructor() { }
+  constructor(public formBuilder: FormBuilder,
+              public fb: FabricBuilderService) {
+    this.ntpForm = this.formBuilder.group({
+      addr: new FormControl(''),
+      pref: new FormControl(''),
+      epg: new FormControl('')
+    });
+  }
 
-  modalOpen = false;
+  // Modal Helpers
+  epgMenuOpen = false;
+  epgMap = {
+    ib: 'In-Band',
+    oob: 'Out-of-Band'
+  };
 
-  fakeNTPs = [
-    {
-      "name": "ntp03.esl.cisco.com",
-      "pref": true,
-      "epg": "oob",
-      "active": false
-    },
-    {
-      "name": "ntp01.esl.cisco.com",
-      "pref": false,
-      "epg": "oob",
-      "active": false
-    },
-    {
-      "name": "ntp02.esl.cisco.com",
-      "pref": false,
-      "epg": "oob",
-      "active": false
-    },
-    {
-      "name": "ntp11.esl.cisco.com",
-      "pref": false,
-      "epg": "oob",
-      "active": false
-    },
-    {
-      "name": "ntp04.esl.cisco.com",
-      "pref": false,
-      "epg": "oob",
-      "active": false
-    },
-    {
-      "name": "ntp10.esl.cisco.com",
-      "pref": true,
-      "epg": "oob",
-      "active": false
-    },
-    {
-      "name": "ntp09.esl.cisco.com",
-      "pref": false,
-      "epg": "oob",
-      "active": false
-    },
-    {
-      "name": "ntp13.esl.cisco.com",
-      "pref": false,
-      "epg": "oob",
-      "active": false
-    },
-    {
-      "name": "ntp08.esl.cisco.com",
-      "pref": false,
-      "epg": "oob",
-      "active": false
-    },
-    {
-      "name": "ntp07.esl.cisco.com",
-      "pref": false,
-      "epg": "oob",
-      "active": false
-    },
-    {
-      "name": "ntp05.esl.cisco.com",
-      "pref": false,
-      "epg": "oob",
-      "active": false
-    },
-    {
-      "name": "ntp06.esl.cisco.com",
-      "pref": false,
-      "epg": "oob",
-      "active": false
-    },
-    {
-      "name": "ntp12.esl.cisco.com",
-      "pref": false,
-      "epg": "oob",
-      "active": false
-    }
-  ];
-  
+  ntpData = [];
+
+  ntpModal = false;
+  ntpEdit = null;
+
   compareName(a, b) {
-    const ntpA = a.name.toUpperCase();
-    const ntpB = b.name.toUpperCase();
+    const ntpA = a.addr.toUpperCase();
+    const ntpB = b.addr.toUpperCase();
   
     let comparison = 0;
 
@@ -112,25 +51,89 @@ export class WizardNTPConfigComponent implements OnInit {
   }
 
   sortByName() {
-    this.fakeNTPs.sort(this.compareName);
+    this.ntpData.sort(this.compareName);
   }
 
-  toggleModal() {
-    this.modalOpen = this.modalOpen == true ? false : true;
+  // Modal Functions
+
+  toggleEPGMenu() {
+    this.epgMenuOpen = this.epgMenuOpen == true ? false : true;
   }
 
-  prevStep() {
-    console.log("Previous Step...")
+  setEPGValue(epgValue) {
+    this.ntpForm.patchValue({
+      epg: epgValue
+    });
   }
 
-  nextStep() {
-    console.log("Next Step...")
+  // NTP Functions
+
+  refreshData() {
+    this.ntpData = this.fb.getNtp();
+
+    this.ntpData.forEach(ntp => {
+      ntp['active'] = false;
+    });
   }
 
-  onSubmit() {
-    console.log('Submitting NTP...');
+  toggleNtp() {
+    this.ntpModal = this.ntpModal == true ? false : true;
+  }
+
+  resetNtp() {
+    this.ntpForm.reset();
+  }
+
+  cancelNtp() {
+    this.ntpModal = false;
+    this.ntpEdit = null;
+    this.resetNtp();
+  }
+
+  deleteNtp() {
+    for(var i = (this.ntpData.length - 1); i >= 0; i--) {
+      if (this.ntpData[i].active === true) {
+        this.fb.deleteNtp(i);
+      }
+    }
+
+    this.refreshData();
+  }
+
+  editNtp() {
+    var activeCount = this.ntpData.filter(ntp => ntp.active == true);
+
+    if(activeCount.length == 1) {
+      var activeIndex = this.ntpData.findIndex(ntp => ntp.active == true);
+      
+      this.ntpForm.patchValue({
+        addr: this.ntpData[activeIndex].addr,
+        pref: this.ntpData[activeIndex].pref,
+        epg: this.ntpData[activeIndex].epg
+      });
+
+      this.ntpEdit = activeIndex;
+      this.ntpModal = true;
+    }
+  }
+
+  saveNtp() {
+    var newNtp = this.ntpForm.value;
+
+    if(this.ntpEdit != null) {
+      this.fb.updateNtp(newNtp, this.ntpEdit);
+    } else {
+      this.fb.createNtp(newNtp);
+    }
+
+    this.ntpModal = false;
+    this.ntpEdit = null;
+
+    this.resetNtp();
+    this.refreshData();
   }
 
   ngOnInit() {
+    this.refreshData();
   }
 }

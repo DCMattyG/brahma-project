@@ -78,3 +78,40 @@ thead th {
 .icon-green {
   color: #6ebe4a;
 }
+
+// Text Input Styling
+
+input[type=text] {
+  border-top: unset !important;
+  border-right: unset !important;
+  border-left: unset !important;
+  text-align: center;
+}
+
+input[type=text]:hover {
+  box-shadow: unset !important;
+}
+
+input[type=text]:focus {
+  box-shadow: unset !important;
+}
+
+// Label Styling
+
+label {
+  color: #017CAD;
+  text-align: center !important;
+}
+
+// Other
+
+.clickable {
+  cursor: pointer;
+}
+
+#select-epg {
+  text-align: center;
+  border-top: none !important;
+  border-right: none !important;
+  border-left: none !important;
+}

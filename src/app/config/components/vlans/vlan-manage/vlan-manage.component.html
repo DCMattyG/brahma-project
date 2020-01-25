@@ -9,14 +9,14 @@
             <span>VLANs</span>
           </div>
           <div class="vlan-controls-item">
-            <a href="javascript:;"><span class="icon-add icon-small"></span></a>
+            <span (click)="toggleVlan()" class="icon-add icon-small"></span>
           </div>
           <div class="vlan-controls-item">
-            <a href="javascript:;"><span class="icon-pencil icon-small"></span></a>
+            <span (click)="editVlan()" class="icon-pencil icon-small"></span>
           </div>
           <div class="vlan-controls-item">
-              <a href="javascript:;"><span class="icon-remove icon-small"></span></a>
-            </div>
+            <span (click)="deleteVlan()" class="icon-remove icon-small"></span>
+          </div>
         </div>
       
         <div class="table-wrapper">
@@ -30,7 +30,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr (click)="toggleActive(vlan)" *ngFor="let vlan of fakeVlans" [ngClass]="{'active': vlan.active }">
+                <tr (click)="toggleActive(vlan)" *ngFor="let vlan of vlanData" [ngClass]="{'active': vlan.active }">
                   <td>{{ vlan.name }}</td>
                   <td>{{ vlan.id }}</td>
                   <td>{{ vlan.svi }}</td>
@@ -44,4 +44,59 @@
     </div>
   </div>
 
+</div>
+
+<div class="modal modal--small" [ngClass]="{'hide': !vlanModal }">
+  <div class="modal__dialog">
+    <div class="modal__content" style="border: #dfdfdf 1px solid;">
+      <a class="modal__close" (click)="cancelVlan();"><span class="icon-close icon-medium"></span></a>
+
+      <form autocomplete="off" [formGroup]="vlanForm" (ngSubmit)="onSubmit()">
+        <div class="modal__header">
+          <h1 class="modal__title" style="font-size: 40px;" *ngIf="vlanEdit == null">Add VLAN</h1>
+          <h1 class="modal__title" style="font-size: 40px;" *ngIf="vlanEdit != null">Update VLAN</h1>
+        </div>
+        <div class="modal__body">
+
+          <div class="snmp-form">
+            <div class="row">
+
+              <div class="col-3"></div>
+              <div class="col-6" style="display: flex; flex-direction: column; justify-content: center;">
+                <div class="form-group input--compressed">
+                  <div class="form-group__text">
+                    <input formControlName="name" id="input-size-compressed" type="text">
+                    <label for="input-size-compressed">Name</label>
+                  </div>
+                </div>
+
+                <div class="form-group input--compressed">
+                  <div class="form-group__text">
+                    <input formControlName="id" id="input-size-compressed" type="text">
+                    <label for="input-size-compressed">ID</label>
+                  </div>
+                </div>
+
+                <div class="form-group input--compressed">
+                  <div class="form-group__text">
+                    <input formControlName="svi" id="input-size-compressed" type="text">
+                    <label for="input-size-compressed">SVI</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-3"></div>
+
+            </div>
+          </div>
+
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="btn btn--success" (click)="saveVlan();" *ngIf="vlanEdit == null">Save</button>
+          <button type="button" class="btn btn--success" (click)="saveVlan();" *ngIf="vlanEdit != null">Update</button>
+          <button type="button" class="btn btn--negative" (click)="cancelVlan();">Cancel</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
 </div>
