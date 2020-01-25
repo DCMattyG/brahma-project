@@ -96,13 +96,15 @@ state = {
           'name': 'user1',
           'privType': 'aes-128',
           'authType': 'hmac-sha1-96',
-          'authKey': 'abcde12345'
+          'authKey': 'abcde12345',
+          'privKey': 'nevertooeasy'
         },
         {
           'name': 'user2',
           'privType': 'des',
           'authType': 'hmac-md5-96',
-          'authKey': 'fghij67890'
+          'authKey': 'fghij67890',
+          'privKey': 'wannabeeasy'
         }
       ],
       'snmpTrapFwdServerP': [

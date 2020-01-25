@@ -47,7 +47,7 @@ snmp_attributes = {
     'adminSt': None,
     'contact': None,
     'loc': None,
-    'snmpUserP': ['name', 'privType', 'authType', 'authKey'],
+    'snmpUserP': ['name', 'privType', 'privKey', 'authType', 'authKey'],
     'snmpTrapFwdServerP': ['addr', 'port'],
     'snmpCommunityP': ['name'],
     'snmpClientGrpP': {
@@ -249,7 +249,8 @@ def create_snmp_policy(mo, policy):
   for user in policy['snmpUserP']:
     snmp.UserP(
       snmpPol, name=user['name'], authType=user['authType'],
-      privType=user['privType'], authKey=user['authKey']
+      privType=user['privType'], authKey=user['authKey'],
+      privkey=user['privKey']
     )
 
   for trap in policy['snmpTrapFwdServerP']:
