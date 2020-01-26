@@ -10,7 +10,8 @@ For MVP, these are hardcoded into a config file (config.py)
 
 # Library support
 from cobra.internal.codec.xmlcodec import toXMLStr
-from brahma.functions import getMoDirectoryFromApic as aciLogin
+import cobra.mit.session as aciSession
+import cobra.mit.access as aciAccess
 import cobra.model.fabric as aciFabric
 import cobra.mit.request as aciRequest
 import cobra.model.infra as aciInfra
@@ -32,6 +33,10 @@ from cobra.model import lldp
 from cobra.model import snmp
 from cobra.model import phys
 
+# Disable Insecure Warnings
+import requests
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 # Connection information
 import config
@@ -129,6 +134,13 @@ def required_attributes(attributes, keys):
   for a in attributes:
     if a not in keys:
       raise Exception('Missing required {0}'.format(a))
+
+def aciLogin(apic):
+    "Login to APIC, get a Mo Directory then login and return the mo object."
+    ls = aciSession.LoginSession(apic['url'], apic['user'], apic['password'])
+    md = aciAccess.MoDirectory(ls)
+    md.login()
+    return md
 
 def create_cdp_policy(mo, policy):
   # Validate input
@@ -725,7 +737,7 @@ def create_oob_mgmt_policies(apic=None, policy=None, nodes=None):
     nodeId = nodeNames[entry['name']]
     tDN = 'topology/pod-{}/node-{}'.format(podId, nodeId)
 
-    if v6Gw == '::' or v6Addr == '::':
+    if policy['v6Gw'] == '::' or policy['v6Addr'] == '::':
       aciMgmt.RsOoBStNode(
         mgmtOoB, gw=policy['gw'], tDn=tDN,
         addr=entry['ipv4']
