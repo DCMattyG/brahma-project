@@ -36,11 +36,19 @@
 
             <ng-container *ngIf="oobMgmtForm.get('v6').value">
               <div style="display: flex; flex-direction: row; align-items: center; justify-content: center; margin-top: 15px;">
-                <div style="display: flex; font-weight: bold; padding-left: 25px;">IPv6 Gateway</div>
+                <div style="display: flex; font-weight: bold;">IPv6 Gateway</div>
 
                 <div class="form-group input--compressed">
                   <div class="form-group__text">
                     <input formControlName="ipv6_gw" id="input-size-compressed" type="text" placeholder="::" style="width: 150px !important;">
+                  </div>
+                </div>
+
+                <div style="display: flex; font-weight: bold; padding-left: 10px;">IPv6 Mask</div>
+
+                <div class="form-group input--compressed">
+                  <div class="form-group__text">
+                    <input formControlName="ipv6_mask" id="input-size-compressed" type="text" placeholder="x" style="width: 50px !important;">
                   </div>
                 </div>
               </div>
@@ -67,7 +75,7 @@
                           <td style="text-align: center;">{{ item.get('id').value }}</td>
                           <td><input class="oob-input" formControlName="ipv4Addr" placeholder="x.x.x.x"></td>
                           <ng-container *ngIf="oobMgmtForm.get('v6').value">
-                            <td><input class="oob-input" formControlName="ipv6Addr" placeholder="x.x.x.x"></td>
+                            <td><input class="oob-input" formControlName="ipv6Addr" placeholder="::"></td>
                           </ng-container>
                         </ng-container>
                       </tr>

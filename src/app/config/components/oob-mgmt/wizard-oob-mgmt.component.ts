@@ -16,6 +16,7 @@ export class WizardOOBMgmtComponent implements OnInit {
       ipv4_gw: new FormControl(''),
       ipv4_mask: new FormControl(''),
       ipv6_gw: new FormControl(''),
+      ipv6_mask: new FormControl(''),
       v6: new FormControl(false),
       nodes: new FormArray([])
     });

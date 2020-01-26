@@ -28,9 +28,10 @@ export class StateBuilderService {
     this.state['overlay'] = this.buildBridgeDomains(stateData['global'], stateData['vlans']);
     this.state['oob_mgmt_policies'] = this.buildOobManagement(stateData['oob']);
     this.state['inb_mgmt_policies'] = this.buildIbManagement(stateData['ib']);
-    this.state['vlan_pools'] = this.buildVlanPools(stateData['vlan']);
+    this.state['vlan_pools'] = this.buildVlanPools(stateData['vlans']);
     this.state['physical_domain'] = this.buildPhysDomain(stateData['global']);
     this.state['aaep_policies'] = this.buildAaepPolicies(stateData['global']);
+
     console.log("STATE:");
     console.log(this.state);
   }
@@ -370,12 +371,13 @@ export class StateBuilderService {
   }
   buildIbManagement(ib) {
     var ibMgmtv4Subnet = ib['ipv4_gw'] + '/' + ib['ipv4_mask'];
+    var ibMgmtVlan = 'vlan-' + ib['ib_vlan'];
 
     var newIbMgmt = {
       podId: '1',
       gw: ib['ipv4_gw'],
       subnet: ibMgmtv4Subnet,
-      vlan: 'vlan-1000',
+      vlan: ibMgmtVlan,
       inb_epg_name: 'inb_mgmt_EPG',
       inb_contract_name: 'inb_mgmt_Contract',
       inb_subject_name: 'inb_mgmt_Subject',
@@ -384,7 +386,7 @@ export class StateBuilderService {
 
     ib['nodes'].forEach(node => {
       var newV4Subnet = node['ipv4Addr'] + '/' + ib['ipv4_mask'];
-      var newV6Subnet = node['ipv6Addr']; // + '/' + ib['ipv6_mask'];
+      var newV6Subnet = node['ipv6Addr'] + '/' + ib['ipv6_mask'];
 
       var newNode = {
         name: node['id'],

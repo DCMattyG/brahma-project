@@ -13,9 +13,11 @@ export class WizardIBMgmtComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private fb: FabricBuilderService) {
     this.ibMgmtForm = this.formBuilder.group({
+      ib_vlan: new FormControl(''),
       ipv4_gw: new FormControl(''),
       ipv4_mask: new FormControl(''),
       ipv6_gw: new FormControl(''),
+      ipv6_mask: new FormControl(''),
       v6: new FormControl(false),
       nodes: new FormArray([])
     });

@@ -9,14 +9,14 @@
           <div class="ntp-wrapper" style="min-width: 300px;">
             <div class="form-group input--compressed">
               <div class="form-group__text">
-                <input formControlName="contact" id="input-layout-inline" type="text">
-                <label for="input-layout-inline">Contact</label>
+                <input formControlName="contact" id="contact-input" type="text">
+                <label for="contact-input">Contact</label>
               </div>
             </div>
             <div class="form-group input--compressed">
               <div class="form-group__text">
-                <input formControlName="location" id="input-layout-inline" type="text">
-                <label for="input-layout-inline">Location</label>
+                <input formControlName="location" id="location-input" type="text">
+                <label for="locarion-input">Location</label>
               </div>
             </div>
             <div (click)="toggleEPGMenu()" class="form-group dropdown input--compressed" [ngClass]="{'active': epgMenuOpen }">
@@ -197,9 +197,9 @@
               <div class="col-6" style="display: flex; flex-direction: column; justify-content: center;">
                 <div class="form-group input--compressed">
                   <div class="form-group__text">
-                    <input formControlName="name" id="input-size-compressed" type="text">
-                    <label for="input-size-compressed" *ngIf="snmpForm.get('v3').value == false">Community</label>
-                    <label for="input-size-compressed" *ngIf="snmpForm.get('v3').value == true">Name</label>
+                    <input formControlName="name" id="name-input" type="text">
+                    <label for="name-input" *ngIf="snmpForm.get('v3').value == false">Community</label>
+                    <label for="name-input" *ngIf="snmpForm.get('v3').value == true">Name</label>
                   </div>
                 </div>
 
@@ -213,8 +213,8 @@
 
                   <div class="form-group input--compressed" style="padding-top: 20px;" *ngIf="snmpForm.get('privType').value != 'none'">
                     <div class="form-group__text">
-                      <input formControlName="privKey" id="input-size-compressed" type="text">
-                      <label for="input-size-compressed">Privacy Key</label>
+                      <input formControlName="privKey" id="privkey-input" type="text">
+                      <label for="privkey-input">Privacy Key</label>
                     </div>
                   </div>
 
@@ -226,8 +226,8 @@
 
                   <div class="form-group input--compressed" style="padding-top: 20px;">
                     <div class="form-group__text">
-                      <input formControlName="authKey" id="input-size-compressed" type="text">
-                      <label for="input-size-compressed">Authorization Key</label>
+                      <input formControlName="authKey" id="authkey-input" type="password">
+                      <label for="authkey-input">Authorization Key</label>
                     </div>
                   </div>
                 </ng-container>
@@ -269,15 +269,15 @@
               <div class="col-6" style="display: flex; flex-direction: column; justify-content: center;">
                 <div class="form-group input--compressed">
                   <div class="form-group__text">
-                    <input formControlName="addr" id="input-size-compressed" type="text">
-                    <label for="input-size-compressed">Hostname/IP</label>
+                    <input formControlName="addr" id="addr-input" type="text">
+                    <label for="addr-input">Hostname/IP</label>
                   </div>
                 </div>
 
                 <div class="form-group input--compressed">
                   <div class="form-group__text">
-                    <input formControlName="port" id="input-size-compressed" type="text">
-                    <label for="input-size-compressed">Port</label>
+                    <input formControlName="port" id="port-input" type="text">
+                    <label for="port-input">Port</label>
                   </div>
                 </div>
               </div>
@@ -317,15 +317,15 @@
               <div class="col-6" style="display: flex; flex-direction: column; justify-content: center;">
                 <div class="form-group input--compressed">
                   <div class="form-group__text">
-                    <input formControlName="subnet" id="input-size-compressed" type="text">
-                    <label for="input-size-compressed">Subnet</label>
+                    <input formControlName="subnet" id="subnet-input" type="text">
+                    <label for="subnet-input">Subnet</label>
                   </div>
                 </div>
 
                 <div class="form-group input--compressed">
                   <div class="form-group__text">
-                    <input formControlName="mask" id="input-size-compressed" type="text">
-                    <label for="input-size-compressed">Mask</label>
+                    <input formControlName="mask" id="mask-input" type="text">
+                    <label for="mask-input">Mask</label>
                   </div>
                 </div>
               </div>
