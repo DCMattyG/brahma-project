@@ -350,18 +350,33 @@ export class StateBuilderService {
   }
 
   buildOobManagement(oob) {
+    var newV6gw;
+    var newV6addr;
+
+    if(oob['ipv6_gw'] = '') {
+      newV6gw = '::';
+    } else {
+      newV6gw = oob['ipv6_gw'];
+    }
+
     var newOobMgmt = {
       podId: '1',
       gw: oob['ipv4_gw'],
-      v6Gw: oob['ipv6_gw'],
+      v6Gw: newV6gw,
       nodes: []
     };
 
     oob['nodes'].forEach(node => {
+      if(oob['ipv6Addr'] = '') {
+        newV6addr = '::';
+      } else {
+        newV6addr = oob['ipv6Addr'];
+      }
+
       var newNode = {
         name: node['id'],
         ipv4: node['ipv4Addr'],
-        ipv6: node['ipv6Addr'],
+        ipv6: newV6addr,
       };
 
       newOobMgmt['nodes'].push(newNode);
