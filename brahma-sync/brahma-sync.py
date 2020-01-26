@@ -84,7 +84,7 @@ dns_attributes = {
   },
 }
 ntp_provider_attributes = ['name', 'minPoll', 'maxPoll', 'preferred']
-ntp_auth_key_attributes = ['key', 'keyType', 'trusted']
+# ntp_auth_key_attributes = ['key', 'keyType', 'trusted']
 ntp_attributes = {
   'datetimePol': {
     'name': None,
@@ -92,7 +92,8 @@ ntp_attributes = {
     'authSt': None,
     'serverState': None,
     'masterMode': None,
-    'datetimeNtpProv': ntp_provider_attributes + ntp_auth_key_attributes
+#    'datetimeNtpProv': ntp_provider_attributes + ntp_auth_key_attributes
+    'datetimeNtpProv': ntp_provider_attributes
   }
 }
 syslog_attributes = {
@@ -485,17 +486,17 @@ def create_ntp_policy(mo, policy):
   )
 
   for id, prov in enumerate(policy['datetimeNtpProv']):
-    aciNtp.NtpAuthKey(
-      datetimePol, id=str(id+1),
-      key=prov['key'], keyType=prov['keyType'], trusted=prov['trusted']
-    )
+    # aciNtp.NtpAuthKey(
+    #   datetimePol, id=str(id+1),
+    #   key=prov['key'], keyType=prov['keyType'], trusted=prov['trusted']
+    # )
 
     prov = aciNtp.NtpProv(
       datetimePol, name=prov['name'], preferred=prov['preferred'],
       minPoll=prov['minPoll'], maxPoll=prov['maxPoll'], keyId=str(id+1)
     )
 
-    aciNtp.RsNtpProvToNtpAuthKey(prov, tnDatetimeNtpAuthKeyId=str(id+1))
+    # aciNtp.RsNtpProvToNtpAuthKey(prov, tnDatetimeNtpAuthKeyId=str(id+1))
     aciNtp.RsNtpProvToEpg(prov, tDn='uni/tn-mgmt/mgmtp-default/oob-default')
 
   return mo
@@ -527,18 +528,18 @@ def reconcile_ntp_policy(apic, mo, policy, mo_changes):
   # Check auth key attributes
   keyIdMap = {}
   ntpProvAndKeys = policy['datetimeNtpProv']
-  for desired in ntpProvAndKeys:
-    if desired['key'] not in authKeys:
-      mo_changes = create_ntp_policy(mo_changes, policy)
-      return mo_changes
+  # for desired in ntpProvAndKeys:
+  #   if desired['key'] not in authKeys:
+  #     mo_changes = create_ntp_policy(mo_changes, policy)
+  #     return mo_changes
 
-    current = authKeys[desired['key']]
-    if not reconcile(current, desired, ntp_auth_key_attributes):
-      mo_changes = create_ntp_policy(mo_changes, policy)
-      return mo_changes
+  #   current = authKeys[desired['key']]
+  #   if not reconcile(current, desired, ntp_auth_key_attributes):
+  #     mo_changes = create_ntp_policy(mo_changes, policy)
+  #     return mo_changes
 
-    # The current MO and the desired match, so let's record key id
-    keyIdMap[desired['key']] = current.id
+  #   # The current MO and the desired match, so let's record key id
+  #   keyIdMap[desired['key']] = current.id
 
   # Auth Keys in Sync, Validate Providers
 
@@ -568,21 +569,21 @@ def reconcile_ntp_policy(apic, mo, policy, mo_changes):
       return mo_changes
 
     # Fetch all mapped keys to providers
-    currDn = str(current.dn)
-    keyMap = apic.lookupByClass('datetimeRsNtpProvToNtpAuthKey')
-    currKeys = [
-      k.tnDatetimeNtpAuthKeyId for k in keyMap if str(k._parentDn()) == currDn
-    ]
+    # currDn = str(current.dn)
+    # keyMap = apic.lookupByClass('datetimeRsNtpProvToNtpAuthKey')
+    # currKeys = [
+    #   k.tnDatetimeNtpAuthKeyId for k in keyMap if str(k._parentDn()) == currDn
+    # ]
 
     # If current provider has no mapped keys, create policy
-    if not currKeys:
-      mo_changes = create_ntp_policy(mo_changes, policy)
-      return mo_changes
+    # if not currKeys:
+    #   mo_changes = create_ntp_policy(mo_changes, policy)
+    #   return mo_changes
 
-    desiredKeyId = keyIdMap[desired['key']]
-    if desiredKeyId not in currKeys:
-      mo_changes = create_ntp_policy(mo_changes, policy)
-      return mo_changes
+    # desiredKeyId = keyIdMap[desired['key']]
+    # if desiredKeyId not in currKeys:
+    #   mo_changes = create_ntp_policy(mo_changes, policy)
+    #   return mo_changes
 
   return None
 
@@ -1064,21 +1065,21 @@ def apply_desired_state(apic1, desired):
   # Create VLAN Pools
   mo_changes = create_vlan_pool_policies(desired['vlan_pools'])
   if mo_changes is not None:
-    print(toXMLStr(mo_changes))
+    # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
     apic1.commit(cfgRequest)
 
   # Create Physical Domain
   mo_changes = create_physical_domain(apic1, desired['physical_domain'])
   if mo_changes is not None:
-    print(toXMLStr(mo_changes))
+    # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
     apic1.commit(cfgRequest)
 
   # Create the Attachable AEP
   mo_changes = create_attachable_aep(apic1, desired['aaep_policies'])
   if mo_changes is not None:
-    print(toXMLStr(mo_changes))
+    # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
     apic1.commit(cfgRequest)
 
@@ -1087,7 +1088,7 @@ def apply_desired_state(apic1, desired):
     apic=apic1, policy=desired['oob_mgmt_policies'], nodes=fabricNodes
   )
   if mo_changes is not None:
-    print(toXMLStr(mo_changes))
+    # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
     apic1.commit(cfgRequest)
 
@@ -1096,7 +1097,7 @@ def apply_desired_state(apic1, desired):
     apic=apic1, policy=desired['inb_mgmt_policies'], nodes=fabricNodes
   )
   if mo_changes is not None:
-    print(toXMLStr(mo_changes))
+    # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
     apic1.commit(cfgRequest)
 
@@ -1118,7 +1119,7 @@ def apply_desired_state(apic1, desired):
   )
 
   if mo_changes is not None:
-    print(toXMLStr(mo_changes))
+    # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
     apic1.commit(cfgRequest)
 
@@ -1130,7 +1131,7 @@ def apply_desired_state(apic1, desired):
   )
 
   if mo_changes is not None:
-    print(toXMLStr(mo_changes))
+    # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
 
   # LLDP
@@ -1141,7 +1142,7 @@ def apply_desired_state(apic1, desired):
   )
 
   if mo_changes is not None:
-    print(toXMLStr(mo_changes))
+    # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
 
   # Link Level Policies
@@ -1160,7 +1161,7 @@ def apply_desired_state(apic1, desired):
   )
 
   if mo_changes is not None:
-    print(toXMLStr(mo_changes))
+    # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
 
   # MCP Policies
@@ -1171,7 +1172,7 @@ def apply_desired_state(apic1, desired):
   )
 
   if mo_changes is not None:
-    print(toXMLStr(mo_changes))
+    # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
 
   # COOP Policies
@@ -1182,7 +1183,7 @@ def apply_desired_state(apic1, desired):
   )
 
   if mo_changes is not None:
-    print(toXMLStr(mo_changes))
+    # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
 
   # Rogue Endpoint Policies
@@ -1193,7 +1194,7 @@ def apply_desired_state(apic1, desired):
   )
 
   if mo_changes is not None:
-    print(toXMLStr(mo_changes))
+    # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
 
   # IP Aging Policies
@@ -1204,7 +1205,7 @@ def apply_desired_state(apic1, desired):
   )
 
   if mo_changes is not None:
-    print(toXMLStr(mo_changes))
+    # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
 
   # Fabric Wide System Settings
@@ -1215,7 +1216,7 @@ def apply_desired_state(apic1, desired):
   )
 
   if mo_changes is not None:
-    print(toXMLStr(mo_changes))
+    # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
 
   ### Hierarchy of objects
@@ -1254,7 +1255,7 @@ def apply_desired_state(apic1, desired):
   )
 
   if mo_changes is not None:
-    print(toXMLStr(mo_changes))
+    # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
 
   # DNS Policies
@@ -1265,7 +1266,7 @@ def apply_desired_state(apic1, desired):
   )
 
   if mo_changes is not None:
-    print(toXMLStr(mo_changes))
+    # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
 
   # NTP Policies
@@ -1297,7 +1298,7 @@ def apply_desired_state(apic1, desired):
   )
 
   if mo_changes is not None:
-    print(toXMLStr(mo_changes))
+    # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
     apic1.commit(cfgRequest)
 

@@ -180,18 +180,18 @@ state = {
           'minPoll': '4',
           'maxPoll': '6',
           'preferred': 'yes',
-          'key': '23456',
-          'keyType': 'sha1',
-          'trusted': 'yes'
+          # 'key': '23456',
+          # 'keyType': 'sha1',
+          # 'trusted': 'yes'
         },
         {
           'name': '2.2.2.2',
           'minPoll': '4',
           'maxPoll': '6',
           'preferred': 'no',
-          'key': '12345',
-          'keyType': 'md5',
-          'trusted': 'no'
+          # 'key': '12345',
+          # 'keyType': 'md5',
+          # 'trusted': 'no'
         },
       ]
     }
@@ -243,20 +243,16 @@ state = {
     'customer_name': {
       'vlans': [
         { 
-          'id': '101', 'prefix': '192.168.1.0/24', 'gateway': '192.168.1.1',
-          'subnet': '192.168.1.1/24', 'optimized': True
+          'id': '101', 'subnet': '192.168.1.1/24', 'optimized': True
         },
         { 
-          'id': '102', 'prefix': '192.168.2.0/24', 'gateway': '192.168.2.1',
-          'subnet': '192.168.2.1/24', 'optimized': False
+          'id': '102', 'subnet': '192.168.2.1/24', 'optimized': False
         },
         {
-          'id': '103', 'prefix': '192.168.3.0/24', 'gateway': '192.168.3.1',
-          'subnet': '192.168.3.1/24', 'optimized': False
+          'id': '103', 'subnet': '192.168.3.1/24', 'optimized': False
         },
         {
-          'id': '104', 'prefix': '192.168.4.0/24', 'gateway': '192.168.4.1',
-          'subnet': '192.168.4.1/24', 'optimized': False
+          'id': '104', 'subnet': '192.168.4.1/24', 'optimized': False
         },
       ],
     },
