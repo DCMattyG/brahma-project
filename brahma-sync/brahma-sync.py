@@ -725,10 +725,16 @@ def create_oob_mgmt_policies(apic=None, policy=None, nodes=None):
     nodeId = nodeNames[entry['name']]
     tDN = 'topology/pod-{}/node-{}'.format(podId, nodeId)
 
-    aciMgmt.RsOoBStNode(
-      mgmtOoB, gw=policy['gw'], v6Gw=policy['v6Gw'], tDn=tDN,
-      addr=entry['ipv4'], v6Addr=entry['ipv6']
-    )
+    if v6Gw == '::' or v6Addr == '::':
+      aciMgmt.RsOoBStNode(
+        mgmtOoB, gw=policy['gw'], tDn=tDN,
+        addr=entry['ipv4']
+      )
+    else:
+      aciMgmt.RsOoBStNode(
+        mgmtOoB, gw=policy['gw'], v6Gw=policy['v6Gw'], tDn=tDN,
+        addr=entry['ipv4'], v6Addr=entry['ipv6']
+      )
 
   return fvTenant
 
