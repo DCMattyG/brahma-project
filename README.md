@@ -6,19 +6,22 @@ Cisco ACI deployment...SIMPLIFIED!
 ## Business/Technical Challenge
 
 
-One of the most challenging hurdles for customers to adopting ACI as a technology is the initial setup / configuration of ACI. Implementing networking with a GUI when the customer has used CLI based configurations for many times decades.
+One of the most challenging hurdles for customers to adopting ACI as a technology, is the initial setup/configuration of ACI...implementing networking with a GUI when the customer has used CLI based configurations for many times decades.  
 
-This project is being developed to provide a more seamless transition for customers making the initial setup of ACI much simpler by taking the vast majority of the most common implementation requirements of customers and making the transition to ACI much more simple for customers
+This project is being developed to provide a more seamless transition to ACI for customers by simplifying the initial setup, taking the vast majority of the most common implementation requirements of customers and making all of that complexity disappear.  
+
+You want ACI for your software-define networking? You don't care about every little setting and just want it up and running quickly, without clicking between dozens of different tabs and windows? Brahma is for YOU!  
+
 
 ## Proposed Solution
 
 
-**TODO:** 1-3 paragraphs of the solution in written format
+Brahma provide an EXTREMELY easy to use CLI and SaaS interface that takes the unfamiliar feeling of ACI away, and replaces it with a sense of satisfaction knowing that you have the best SDN in the world up and running is mere minutes!  
+
+Just create a token with CLI, login to the SaaS dashboard, configure, and apply!  
 
 
 ### Cisco Products Technologies/ Services
-
-**TODO:** List out major technologies included in the solution (ACI, DNAC, third party, etc) e.g
 
 Our solution will levegerage the following Cisco technologies
 
@@ -53,10 +56,11 @@ All data is stored in a MongoDB database that is also running in Docker via Dock
 
 ## Usage
 
-<!-- This does not need to be completed during the initial submission phase  
-
-Provide a brief overview of how to use the solution  -->
-
+1) Run 'brahma-cli -n' (create a new Brahma token)
+2) Navigate to http://brahma.cisco.com and paste in your token
+3) Throw your config settings into the wizard and save
+4) Run 'brahma-cli -a' to apply the settings to ACI
+5) Done!
 
 
 ## Prerequisites
