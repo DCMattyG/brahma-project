@@ -133,6 +133,10 @@ export class WizardNTPConfigComponent implements OnInit {
     this.refreshData();
   }
 
+  onSubmit() {
+    console.log(this.ntpForm.value);
+  }
+
   ngOnInit() {
     this.refreshData();
   }

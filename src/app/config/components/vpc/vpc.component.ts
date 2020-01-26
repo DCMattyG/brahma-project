@@ -174,8 +174,6 @@ export class VpcComponent implements OnInit {
 
   onSubmit() {
     console.log(this.vlanForm.value);
-    this.vlanModal = false;
-    this.vlanForm.reset();
   }
 
   refreshVPC() {

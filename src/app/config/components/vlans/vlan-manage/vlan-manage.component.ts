@@ -129,6 +129,10 @@ export class VlanManageComponent implements OnInit {
     this.refreshData()
   }
 
+  onSubmit() {
+    console.log(this.vlanForm.value);
+  }
+
   ngOnInit() {
     this.refreshData();
   }
