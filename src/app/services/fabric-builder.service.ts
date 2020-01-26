@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { StateBuilderService } from './state-builder.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FabricBuilderService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private sb: StateBuilderService) { }
 
   config = {};
 
@@ -89,9 +91,9 @@ export class FabricBuilderService {
     return rowData;
   }
 
-  createVPC(nodeA, nodeB) {
+  createVPC(id, nodeA, nodeB) {
     var newVPC = {
-      id: nodeA,
+      id: id,
       a: nodeA,
       b: nodeB
     };
@@ -103,8 +105,8 @@ export class FabricBuilderService {
     var vpcNodes = [];
 
     this.config['vpcs'].forEach(vpc => {
-      var nodeA = this.getLeaves().find(leaf => leaf.id == vpc.a);
-      var nodeB = this.getLeaves().find(leaf => leaf.id == vpc.b);
+      var nodeA = this.getLeaves().find(leaf => leaf.name == vpc.a);
+      var nodeB = this.getLeaves().find(leaf => leaf.name == vpc.b);
 
       var vpcObject = {
         id: vpc.id,
@@ -262,5 +264,15 @@ export class FabricBuilderService {
 
   updateGlobal(globalData) {
     this.config['global'] = globalData;
+  }
+
+  // Save & Load Configuration
+
+  saveData() {
+    this.sb.buildState(this.config);
+  }
+
+  loadData() {
+    console.log("Loading Data...");
   }
 }

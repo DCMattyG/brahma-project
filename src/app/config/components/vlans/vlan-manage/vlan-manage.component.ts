@@ -15,7 +15,8 @@ export class VlanManageComponent implements OnInit {
     this.vlanForm = this.formBuilder.group({
       name: new FormControl(''),
       id: new FormControl(''),
-      svi: new FormControl('')
+      svi: new FormControl(''),
+      mask: new FormControl('')
     });
   }
 
@@ -103,7 +104,8 @@ export class VlanManageComponent implements OnInit {
       this.vlanForm.patchValue({
         name: this.vlanData[activeIndex].name,
         id: this.vlanData[activeIndex].id,
-        svi: this.vlanData[activeIndex].svi
+        svi: this.vlanData[activeIndex].svi,
+        mask: this.vlanData[activeIndex].mask
       });
 
       this.vlanEdit = activeIndex;

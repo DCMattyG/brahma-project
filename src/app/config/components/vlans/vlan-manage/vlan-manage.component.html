@@ -27,6 +27,7 @@
                   <th class="sortable" (click)="sortByName()">Name <span class="sort-indicator icon-chevron-down"></span></th>
                   <th class="sortable" (click)="sortByID()">ID <span class="sort-indicator icon-chevron-down"></span></th>
                   <th>SVI</th>
+                  <th>Mask</th>
                 </tr>
               </thead>
               <tbody>
@@ -34,6 +35,7 @@
                   <td>{{ vlan.name }}</td>
                   <td>{{ vlan.id }}</td>
                   <td>{{ vlan.svi }}</td>
+                  <td>{{ vlan.mask }}</td>
                 </tr>
               </tbody>
             </table>
@@ -81,6 +83,13 @@
                   <div class="form-group__text">
                     <input formControlName="svi" id="input-size-compressed" type="text">
                     <label for="input-size-compressed">SVI</label>
+                  </div>
+                </div>
+
+                <div class="form-group input--compressed">
+                  <div class="form-group__text">
+                    <input formControlName="mask" id="input-size-compressed" type="text">
+                    <label for="input-size-compressed">Mask</label>
                   </div>
                 </div>
               </div>

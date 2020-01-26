@@ -84,16 +84,16 @@
             </div>
           </div>
           <div class="header-toolbar">
-            <a href="javascript:;" style="margin-top: 12px; margin-right: 14px;">
+            <!-- <a href="javascript:;" style="margin-top: 12px; margin-right: 14px;">
               <span class="badge-wrapper">
                 <span class="icon-alert icon-medium"></span>
                 <span class="badge badge--medium badge--bordered-white">{{ numAlerts }}</span>
               </span>
+            </a> -->
+            <a (click)="saveConfig()" class="btn btn--small btn--icon btn--success">
+              <span class="icon-download"></span>
             </a>
-            <a href="javascript:;" class="btn btn--small btn--icon">
-              <span class="icon-tools"></span>
-            </a>
-            <a (click)="logout()" style="margin-top: 4px; margin-left: 10px; color: red;">
+            <a (click)="logout()" style="margin-top: 3px; margin-left: 10px; color: red;">
               <span class="icon-sign-out icon-medium"></span>
             </a>
           </div>

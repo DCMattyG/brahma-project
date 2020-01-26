@@ -18,7 +18,7 @@ export class GlobalConfigComponent implements OnInit {
       subnet_check: new FormControl(true),
       domain_validation: new FormControl(true),
       ip_aging: new FormControl(true),
-      rouge_ep: new FormControl(true),
+      rogue_ep: new FormControl(true),
       coop_group: new FormControl(true)
     });
   }

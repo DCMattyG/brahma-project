@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './auth/auth.service';
 import { Router } from '@angular/router';
+import { FabricBuilderService } from './services/fabric-builder.service';
 
 @Component({
   selector: 'app-root',
@@ -10,9 +11,9 @@ import { Router } from '@angular/router';
 
 export class AppComponent implements OnInit {
 
-  constructor(
-    public authService: AuthService,
-    private router: Router) { }
+  constructor(public authService: AuthService,
+              private router: Router,
+              private fb: FabricBuilderService) { }
 
   title = 'brahma';
   vlanOpen = false;
@@ -36,6 +37,11 @@ export class AppComponent implements OnInit {
   showProfile() {
     // this.toggleMenu()
     this.router.navigate(['/profile']);
+  }
+
+  saveConfig() {
+    console.log("Saving Config...");
+    this.fb.saveData();
   }
 
   logout() {

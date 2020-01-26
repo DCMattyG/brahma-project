@@ -199,14 +199,15 @@ export class VpcComponent implements OnInit {
     var leafCount = vpcLeaves.length;
 
     if(leafCount == 2) {
-      var nodeA = vpcLeaves[0].id;
-      var nodeB = vpcLeaves[1].id;
+      var id = vpcLeaves[0].id;
+      var nodeA = vpcLeaves[0].name;
+      var nodeB = vpcLeaves[1].name;
 
       this.tempLeaves.forEach(leaf => {
         leaf.active = false;
       });
 
-      this.fb.createVPC(nodeA, nodeB);
+      this.fb.createVPC(id, nodeA, nodeB);
       this.refreshVPC();
       
       this.renderLeaves = {
