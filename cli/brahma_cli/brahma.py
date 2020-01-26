@@ -18,6 +18,9 @@ import argparse
 import shortuuid
 import getpass
 
+from configparser import ConfigParser
+from sync import apply_desired_state
+
 BRAHMA_FQDN = os.getenv('BRAHMA_URL', 'brahma.cisco.com')
 BRAHMA_PORT = os.getenv('BRAHMA_PORT', None)
 
@@ -66,6 +69,7 @@ class FabricTopology():
   def __init__(self):
     self.token = shortuuid.uuid()
     self.nodes = []
+    self.state = {}
 
   def add_node(self, switchName, switchRn, switchRole, switchSerial, switchModel, switchID):
     new_node = FabricNode(switchName, switchRn, switchRole, switchSerial, switchModel, switchID)
@@ -90,16 +94,20 @@ def main():
   if(args.new):
     newFabric()
 
+  if(args.apply):
+    applyConfig()
+
 def parseArgs():
   arg_parser = argparse.ArgumentParser(prog='brahma', description='Brahma CLI Utility')
   arg_parser.version = '1.0'
-  arg_parser.add_argument('-n', dest='new', action='store_true', help='New Fabric', required=True)
+  arg_parser.add_argument('-n', dest='new', action='store_true', help='New Fabric', required=False)
+  arg_parser.add_argument('-a', dest='apply', action='store_true', help='Apply Config', required=False)
   arg_parser.add_argument('-v', action='version', help='Show Version')
   args = arg_parser.parse_args()
 
   return args
 
-def newFabric():
+def aciLogin():
   print('')
 
   apic_addr = six.moves.input("APIC IP Address/FQDN: ")
@@ -141,6 +149,30 @@ def newFabric():
   except requests.exceptions.RequestException:
     print("Cannot connect to APIC!")
     sys.exit()
+
+  return moDir
+
+def applyConfig():
+  moDir = aciLogin()
+
+  fabric_token = six.moves.input("Fabric Token: ")
+
+  apply_url = SERVER_URL + '/' + fabric_token
+
+  print(apply_url)
+
+  req = requests.get(url = apply_url)
+  req_json = json.loads(req.content)
+
+  state = req_json['state']
+
+  # req_json = req.json()
+  # parsed_json = (json.load(req_json['state']))
+  # print(req)
+  apply_desired_state(moDir, state)
+
+def newFabric():
+  moDir = aciLogin()
 
   cq = ClassQuery('fabricNode')
 

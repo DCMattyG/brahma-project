@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StateBuilderService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   state = {};
 
@@ -34,6 +36,20 @@ export class StateBuilderService {
 
     console.log("STATE:");
     console.log(this.state);
+
+    this.saveState(this.state)
+    .subscribe(resp => {
+        console.log(resp);
+    });
+  }
+
+  saveState(state) {
+    var token = localStorage.getItem('fabricToken')
+    var saveUrl = environment.baseUrl + '/api/fabric/' + token;
+
+    console.log("Saving State...");
+    console.log(saveUrl);
+    return this.http.patch<any>(saveUrl, state);
   }
 
   buildBgp(nodes, global) {
@@ -382,7 +398,7 @@ export class StateBuilderService {
       newOobMgmt['nodes'].push(newNode);
     });
 
-    return [newOobMgmt];
+    return newOobMgmt;
   }
   buildIbManagement(ib) {
     var ibMgmtv4Subnet = ib['ipv4_gw'] + '/' + ib['ipv4_mask'];

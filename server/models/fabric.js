@@ -19,7 +19,8 @@ var FabricSchema = new Schema({
       destPort: String,
       destSwitch: String
     }]
-  }]
+  }],
+  state: Schema.Types.Mixed
 });
 
 module.exports = mongoose.model('Fabric', FabricSchema);

@@ -31,6 +31,16 @@ router.route('/fabric/:fabric_token')
     else
       res.json(fabric);
   });
+})
+.patch(function(req, res) {
+  var newState = req.body;
+
+  Fabric.findOneAndUpdate({token: req.params.fabric_token}, {$set:{state:newState}}, {new: true, strict: false}, function(err, fabric) {
+    if (err || fabric == null)
+      res.status(404).send(err);
+    else
+      res.json(fabric);
+  });
 });
 
 module.exports = router;
