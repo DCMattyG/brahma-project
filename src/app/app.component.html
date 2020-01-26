@@ -122,3 +122,21 @@
     </main>
   </div>
 </ng-container>
+
+<div class="modal modal--small" [ngClass]="{'hide': !modalOpen }">
+  <div class="modal__dialog">
+    <div class="modal__content" style="transform: translateY(60%); border: #dfdfdf 1px solid;">
+      <a class="modal__close" (click)="toggleModal()"><span class="icon-close icon-medium"></span></a>
+      <div class="modal__header">
+        <h1 class="modal__title">Cofiguration Saved</h1>
+      </div>
+      <div class="modal__body">
+        <p class="subtitle">Your configuration has been saved. Please type the below command to apply the configuration to your ACI environment.</p>
+        <p>brahma-cli -a</p>
+      </div>
+      <div class="modal__footer">
+        <button class="btn" (click)="toggleModal()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>

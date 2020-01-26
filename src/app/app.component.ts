@@ -18,6 +18,7 @@ export class AppComponent implements OnInit {
   title = 'brahma';
   vlanOpen = false;
   testOpen = false;
+  modalOpen = false;
   numAlerts = 3;
 
   ngOnInit() {
@@ -34,6 +35,10 @@ export class AppComponent implements OnInit {
     this.testOpen = this.testOpen == true ? false : true;
   }
 
+  toggleModal() {
+    this.modalOpen = this.modalOpen == true ? false : true;
+  }
+
   showProfile() {
     // this.toggleMenu()
     this.router.navigate(['/profile']);
@@ -41,6 +46,7 @@ export class AppComponent implements OnInit {
 
   saveConfig() {
     console.log("Saving Config...");
+    this.toggleModal();
     this.fb.saveData();
   }
 
