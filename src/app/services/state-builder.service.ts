@@ -13,7 +13,7 @@ export class StateBuilderService {
 
   buildState(stateData) {
     this.state['bgp_policies'] = this.buildBgp(stateData['nodes'], stateData['global']);
-    this.state['dns_policies'] = [];
+    this.state['dns_policies'] = this.buildDns();
     this.state['coop_group_policies'] = this.buildCoop(stateData['global']);
     this.state['rogue_endpoint_policies'] = this.buildRogue(stateData['global']);
     this.state['ip_aging_policies'] = this.buildIpAging(stateData['global']);
@@ -63,81 +63,75 @@ export class StateBuilderService {
       spines.push(spine.name);
     })
 
-    var bgpPolicies = [
-      {
-        name: 'default',
-        bgpAsP: {
-          asn: global['bgp_asn']
-        },
-        bgpRRP: {
-          podId: '1',
-          bgpRRNodePEp: spines
-        }
+    var bgpPolicy = {
+      name: 'default',
+      bgpAsP: {
+        asn: global['bgp_asn']
+      },
+      bgpRRP: {
+        podId: '1',
+        bgpRRNodePEp: spines
       }
-    ];
+    };
 
-    return bgpPolicies;
+    return [bgpPolicy];
+  }
+
+  buildDns() {
+    return [];
   }
 
   buildCoop(global) {
-    var coopEnabled = [
-      {
-        name: 'default',
-        type: 'strict'
-      }
-    ];
+    var coopEnabled = {
+      name: 'default',
+      type: 'strict'
+    };
 
     if(global['coop_group']) {
-      return coopEnabled;
+      return [coopEnabled];
     } else {
       return [];
     }
   }
 
   buildRogue(global) {
-    var rogueEnabled = [
-      {
-        name: 'default',
-        adminSt: 'enabled',
-        holdIntvl: '1800',
-        rogueEpDetectIntvl: '60',
-        rogueEpDetectMult: '4'
-      }
-    ];
+    var rogueEnabled = {
+      name: 'default',
+      adminSt: 'enabled',
+      holdIntvl: '1800',
+      rogueEpDetectIntvl: '60',
+      rogueEpDetectMult: '4'
+    };
 
     if(global['rogue_ep']) {
-      return rogueEnabled;
+      return [rogueEnabled];
     } else {
       return [];
     }
   }
 
   buildIpAging(global) {
-    var ipAgingEnabled = [
-      {
-        name: 'default',
-        adminSt: 'enabled'
-      }
-    ];
+    var ipAgingEnabled = {
+      name: 'default',
+      adminSt: 'enabled'
+    }
 
     if(global['ip_aging']) {
-      return ipAgingEnabled;
+      return [ipAgingEnabled];
     } else {
       return [];
     }
   }
 
   buildSubnetCheck(global) {
-    var subnetCheckEnabled = [
-      {
-        name: 'default',
-        domainValidation: 'yes',
-        enforceSubnetCheck: 'yes'
-      }
-    ];
+    var subnetCheckEnabled = {
+      name: 'default',
+      domainValidation: 'yes',
+      enforceSubnetCheck: 'yes'
+    };
 
     if(global['subnet_check']) {
-      return subnetCheckEnabled;
+      return [subnetCheckEnabled];
     } else {
       return [];
     }
@@ -297,7 +291,7 @@ export class StateBuilderService {
       if(ntp['pref']) {
         newNtp['preferred'] = 'yes';
       } else {
-        newNtp['preffered'] = 'no';
+        newNtp['preferred'] = 'no';
       }
 
       ntpPolicy['datetimeNtpProv'].push(newNtp);
@@ -362,7 +356,7 @@ export class StateBuilderService {
       newBridgeDom[global['company_name']].vlans.push(newVlan);
     });
 
-    return [newBridgeDom];
+    return newBridgeDom;
   }
 
   buildOobManagement(oob) {
@@ -383,15 +377,17 @@ export class StateBuilderService {
     };
 
     oob['nodes'].forEach(node => {
-      if(oob['ipv6Addr'] = '') {
+      var newV4Addr = node['ipv4Addr'] + '/' +  oob['ipv4_mask'];
+
+      if(node['ipv6Addr'] = '') {
         newV6addr = '::';
       } else {
-        newV6addr = oob['ipv6Addr'];
+        newV6addr = node['ipv6Addr'] + '/' + oob['ipv6_mask'];
       }
 
       var newNode = {
         name: node['id'],
-        ipv4: node['ipv4Addr'],
+        ipv4: newV4Addr,
         ipv6: newV6addr,
       };
 
@@ -428,7 +424,7 @@ export class StateBuilderService {
       newIbMgmt['nodes'].push(newNode);
     });
 
-    return [newIbMgmt];
+    return newIbMgmt;
   }
 
   buildVlanPools(vlans) {

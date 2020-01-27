@@ -737,7 +737,7 @@ def create_oob_mgmt_policies(apic=None, policy=None, nodes=None):
     nodeId = nodeNames[entry['name']]
     tDN = 'topology/pod-{}/node-{}'.format(podId, nodeId)
 
-    if policy['v6Gw'] == '::' or policy['v6Addr'] == '::':
+    if policy['v6Gw'] == '::':
       aciMgmt.RsOoBStNode(
         mgmtOoB, gw=policy['gw'], tDn=tDN,
         addr=entry['ipv4']

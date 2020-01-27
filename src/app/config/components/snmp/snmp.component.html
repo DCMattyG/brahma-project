@@ -206,22 +206,22 @@
                 <ng-container *ngIf="snmpForm.get('v3').value == true">
                   <label style="padding-top: 20px;">Privacy Type</label>
                   <div class="btn-group" style="padding-top: 20px;">
-                    <button type="button" (click)="setPrivacy('aes');" class="btn btn--small btn--primary-ghost" [ngClass]="{'selected': snmpForm.get('privType').value == 'aes' }">AES-128</button>
+                    <button type="button" (click)="setPrivacy('aes-128');" class="btn btn--small btn--primary-ghost" [ngClass]="{'selected': snmpForm.get('privType').value == 'aes-128' }">AES-128</button>
                     <button type="button" (click)="setPrivacy('des');" class="btn btn--small btn--primary-ghost" [ngClass]="{'selected': snmpForm.get('privType').value == 'des' }">DES</button>
                     <button type="button" (click)="setPrivacy('none');" class="btn btn--small btn--primary-ghost" [ngClass]="{'selected': snmpForm.get('privType').value == 'none' }">None</button>
                   </div>
 
                   <div class="form-group input--compressed" style="padding-top: 20px;" *ngIf="snmpForm.get('privType').value != 'none'">
                     <div class="form-group__text">
-                      <input formControlName="privKey" id="privkey-input" type="text">
+                      <input formControlName="privKey" id="privkey-input" type="password">
                       <label for="privkey-input">Privacy Key</label>
                     </div>
                   </div>
 
                   <label style="padding-top: 20px;">Authorization Type</label>
                   <div class="btn-group" style="padding-top: 20px;">
-                    <button type="button" (click)="setAuth('md5');" class="btn btn--small btn--primary-ghost" [ngClass]="{'selected': snmpForm.get('authType').value == 'md5' }">MD5</button>
-                    <button type="button" (click)="setAuth('sha1');" class="btn btn--small btn--primary-ghost" [ngClass]="{'selected': snmpForm.get('authType').value == 'sha1' }">SHA1</button>
+                    <button type="button" (click)="setAuth('hmac-md5-96');" class="btn btn--small btn--primary-ghost" [ngClass]="{'selected': snmpForm.get('authType').value == 'hmac-md5-96' }">MD5</button>
+                    <button type="button" (click)="setAuth('hmac-sha1-96');" class="btn btn--small btn--primary-ghost" [ngClass]="{'selected': snmpForm.get('authType').value == 'hmac-sha1-96' }">SHA1</button>
                   </div>
 
                   <div class="form-group input--compressed" style="padding-top: 20px;">

@@ -14,7 +14,7 @@ export class WizardNTPConfigComponent implements OnInit {
               public fb: FabricBuilderService) {
     this.ntpForm = this.formBuilder.group({
       addr: new FormControl(''),
-      pref: new FormControl(''),
+      pref: new FormControl(false),
       epg: new FormControl('')
     });
   }

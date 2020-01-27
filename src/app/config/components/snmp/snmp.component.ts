@@ -45,7 +45,7 @@ export class SnmpComponent implements OnInit {
       name: new FormControl(''),
       privType: new FormControl('none'),
       privKey: new FormControl(''),
-      authType: new FormControl('md5'),
+      authType: new FormControl('hmac-md5-96'),
       authKey: new FormControl('')
     });
 
@@ -183,7 +183,7 @@ export class SnmpComponent implements OnInit {
     this.snmpForm.reset({
       v3: false,
       privType: 'none',
-      authType: 'md5'
+      authType: 'hmac-md5-96'
     });
   }
 
