@@ -1151,6 +1151,7 @@ def apply_desired_state(apic1, desired):
   if mo_changes is not None:
     # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
+    apic1.commit(cfgRequest)
 
   # LLDP
   mo_changes = apply_policy(
@@ -1162,6 +1163,7 @@ def apply_desired_state(apic1, desired):
   if mo_changes is not None:
     # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
+    apic1.commit(cfgRequest)
 
   # Link Level Policies
 
@@ -1181,6 +1183,7 @@ def apply_desired_state(apic1, desired):
   if mo_changes is not None:
     # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
+    apic1.commit(cfgRequest)
 
   # MCP Policies
   mo_changes = apply_policy(
@@ -1192,6 +1195,7 @@ def apply_desired_state(apic1, desired):
   if mo_changes is not None:
     # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
+    apic1.commit(cfgRequest)
 
   # COOP Policies
   mo_changes = apply_policy(
@@ -1203,6 +1207,7 @@ def apply_desired_state(apic1, desired):
   if mo_changes is not None:
     # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
+    apic1.commit(cfgRequest)
 
   # Rogue Endpoint Policies
   mo_changes = apply_policy(
@@ -1214,6 +1219,7 @@ def apply_desired_state(apic1, desired):
   if mo_changes is not None:
     # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
+    apic1.commit(cfgRequest)
 
   # IP Aging Policies
   mo_changes = apply_policy(
@@ -1225,6 +1231,7 @@ def apply_desired_state(apic1, desired):
   if mo_changes is not None:
     # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
+    apic1.commit(cfgRequest)
 
   # Fabric Wide System Settings
   mo_changes = apply_policy(
@@ -1236,6 +1243,7 @@ def apply_desired_state(apic1, desired):
   if mo_changes is not None:
     # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
+    apic1.commit(cfgRequest)
 
   ### Hierarchy of objects
 
@@ -1275,6 +1283,7 @@ def apply_desired_state(apic1, desired):
   if mo_changes is not None:
     # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
+    apic1.commit(cfgRequest)
 
   # DNS Policies
   mo_changes = apply_nested_policy(
@@ -1286,6 +1295,7 @@ def apply_desired_state(apic1, desired):
   if mo_changes is not None:
     # print(toXMLStr(mo_changes))
     cfgRequest.addMo(mo_changes)
+    apic1.commit(cfgRequest)
 
   # NTP Policies
   mo_changes = apply_nested_policy(
@@ -1296,6 +1306,7 @@ def apply_desired_state(apic1, desired):
 
   if mo_changes is not None:
     cfgRequest.addMo(mo_changes)
+    apic1.commit(cfgRequest)
 
   # Syslog Policies
   mo_changes = apply_nested_policy(

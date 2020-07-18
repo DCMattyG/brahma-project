@@ -1,0 +1,240 @@
+--- sync.py	2020-03-08 14:22:30.656120040 -0400
++++ ../../brahma-sync/brahma-sync.py	2020-07-16 13:52:18.311074445 -0400
+@@ -35,12 +35,12 @@
+ 
+ # Disable Insecure Warnings
+ import requests
+-# from requests.packages.urllib3.exceptions import InsecureRequestWarning
+-# requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
++from requests.packages.urllib3.exceptions import InsecureRequestWarning
++requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+ 
+ # Connection information
+-# import config
+-# import sample
++import config
++import sample
+ 
+ cdp_attributes = ['name', 'adminSt']
+ lldp_attributes = ['name', 'adminRxSt', 'adminTxSt']
+@@ -737,7 +737,7 @@
+     nodeId = nodeNames[entry['name']]
+     tDN = 'topology/pod-{}/node-{}'.format(podId, nodeId)
+ 
+-    if policy['v6Gw'] == '::':
++    if policy['v6Gw'] == '::' or policy['v6Addr'] == '::':
+       aciMgmt.RsOoBStNode(
+         mgmtOoB, gw=policy['gw'], tDn=tDN,
+         addr=entry['ipv4']
+@@ -1076,6 +1076,7 @@
+ def apply_desired_state(apic1, desired):
+ 
+   cfgRequest = aciRequest.ConfigRequest()
++  applied = []
+ 
+   # Get commonly used data now
+   fabricNodes = apic1.lookupByClass('fabricNode')
+@@ -1086,6 +1087,7 @@
+     # print(toXMLStr(mo_changes))
+     cfgRequest.addMo(mo_changes)
+     apic1.commit(cfgRequest)
++    applied.append('vlan_pools')
+ 
+   # Create Physical Domain
+   mo_changes = create_physical_domain(apic1, desired['physical_domain'])
+@@ -1093,6 +1095,7 @@
+     # print(toXMLStr(mo_changes))
+     cfgRequest.addMo(mo_changes)
+     apic1.commit(cfgRequest)
++    applied.append('physical_domain')
+ 
+   # Create the Attachable AEP
+   mo_changes = create_attachable_aep(apic1, desired['aaep_policies'])
+@@ -1100,6 +1103,7 @@
+     # print(toXMLStr(mo_changes))
+     cfgRequest.addMo(mo_changes)
+     apic1.commit(cfgRequest)
++    applied.append('AAEP')
+ 
+   # Create OOB Management
+   mo_changes = create_oob_mgmt_policies(
+@@ -1109,6 +1113,7 @@
+     # print(toXMLStr(mo_changes))
+     cfgRequest.addMo(mo_changes)
+     apic1.commit(cfgRequest)
++    applied.append('OOB')
+ 
+   # Create INB Management
+   mo_changes = create_inb_mgmt_policies(
+@@ -1118,18 +1123,21 @@
+     # print(toXMLStr(mo_changes))
+     cfgRequest.addMo(mo_changes)
+     apic1.commit(cfgRequest)
++    applied.append('INB')
+ 
+   # Create Leaf Interface Profiles
+   mo_changes = create_leaf_intf_profile(apic1, fabricNodes)
+   if mo_changes is not None:
+     cfgRequest.addMo(mo_changes)
+     apic1.commit(cfgRequest)
++    applied.append('Leaf Intf')
+ 
+   # Create Leaf Switch Profile
+   mo_changes = create_leaf_switch_profile(fabricNodes)
+   if mo_changes is not None:
+     cfgRequest.addMo(mo_changes)
+     apic1.commit(cfgRequest)
++    applied.append('Leaf switch')
+ 
+   # VPC Explicit Protection Group
+   mo_changes = create_vpc_protection_groups(
+@@ -1140,6 +1148,7 @@
+     # print(toXMLStr(mo_changes))
+     cfgRequest.addMo(mo_changes)
+     apic1.commit(cfgRequest)
++    applied.append('VPC')
+ 
+   # CDP
+   mo_changes = apply_policy(
+@@ -1151,6 +1160,8 @@
+   if mo_changes is not None:
+     # print(toXMLStr(mo_changes))
+     cfgRequest.addMo(mo_changes)
++    apic1.commit(cfgRequest)
++    applied.append('CDP')
+ 
+   # LLDP
+   mo_changes = apply_policy(
+@@ -1162,6 +1173,8 @@
+   if mo_changes is not None:
+     # print(toXMLStr(mo_changes))
+     cfgRequest.addMo(mo_changes)
++    apic1.commit(cfgRequest)
++    applied.append('LLDP')
+ 
+   # Link Level Policies
+ 
+@@ -1181,6 +1194,8 @@
+   if mo_changes is not None:
+     # print(toXMLStr(mo_changes))
+     cfgRequest.addMo(mo_changes)
++    apic1.commit(cfgRequest)
++    applied.append('Link Level')
+ 
+   # MCP Policies
+   mo_changes = apply_policy(
+@@ -1192,6 +1207,8 @@
+   if mo_changes is not None:
+     # print(toXMLStr(mo_changes))
+     cfgRequest.addMo(mo_changes)
++    apic1.commit(cfgRequest)
++    applied.append('MCP')
+ 
+   # COOP Policies
+   mo_changes = apply_policy(
+@@ -1203,6 +1220,8 @@
+   if mo_changes is not None:
+     # print(toXMLStr(mo_changes))
+     cfgRequest.addMo(mo_changes)
++    apic1.commit(cfgRequest)
++    applied.append('COOP')
+ 
+   # Rogue Endpoint Policies
+   mo_changes = apply_policy(
+@@ -1214,6 +1233,8 @@
+   if mo_changes is not None:
+     # print(toXMLStr(mo_changes))
+     cfgRequest.addMo(mo_changes)
++    apic1.commit(cfgRequest)
++    applied.append('Rogue EndPts')
+ 
+   # IP Aging Policies
+   mo_changes = apply_policy(
+@@ -1225,6 +1246,8 @@
+   if mo_changes is not None:
+     # print(toXMLStr(mo_changes))
+     cfgRequest.addMo(mo_changes)
++    apic1.commit(cfgRequest)
++    applied.append('IP Aging')
+ 
+   # Fabric Wide System Settings
+   mo_changes = apply_policy(
+@@ -1236,6 +1259,8 @@
+   if mo_changes is not None:
+     # print(toXMLStr(mo_changes))
+     cfgRequest.addMo(mo_changes)
++    apic1.commit(cfgRequest)
++    applied.append('Fabric Wide')
+ 
+   ### Hierarchy of objects
+ 
+@@ -1251,6 +1276,7 @@
+ 
+   if cfgRequest.configMos:
+     apic1.commit(cfgRequest)
++    applied.append('SNMP Policies')
+ 
+   # SNMP Policies
+   mo_changes = apply_nested_policy(
+@@ -1264,6 +1290,7 @@
+ 
+   if cfgRequest.configMos:
+     apic1.commit(cfgRequest)
++    applied.append('SNMP Group')
+ 
+   # BGP RR Policies (custom method for nested)
+   mo_changes = apply_nested_policy(
+@@ -1275,6 +1302,8 @@
+   if mo_changes is not None:
+     # print(toXMLStr(mo_changes))
+     cfgRequest.addMo(mo_changes)
++    apic1.commit(cfgRequest)
++    applied.append('BGP')
+ 
+   # DNS Policies
+   mo_changes = apply_nested_policy(
+@@ -1286,6 +1315,8 @@
+   if mo_changes is not None:
+     # print(toXMLStr(mo_changes))
+     cfgRequest.addMo(mo_changes)
++    apic1.commit(cfgRequest)
++    applied.append('DNS')
+ 
+   # NTP Policies
+   mo_changes = apply_nested_policy(
+@@ -1296,6 +1327,8 @@
+ 
+   if mo_changes is not None:
+     cfgRequest.addMo(mo_changes)
++    apic1.commit(cfgRequest)
++    applied.append('NTP')
+ 
+   # Syslog Policies
+   mo_changes = apply_nested_policy(
+@@ -1309,6 +1342,7 @@
+ 
+   if cfgRequest.configMos:
+     apic1.commit(cfgRequest)
++    applied.append('Syslog')
+ 
+   # Overlay setup (tenant, vrf, bridge domain, subnet, epg, contracts)
+   mo_changes = create_overlay_policy(
+@@ -1319,9 +1353,17 @@
+     # print(toXMLStr(mo_changes))
+     cfgRequest.addMo(mo_changes)
+     apic1.commit(cfgRequest)
++    applied.append('Overlay')
++
++  return applied
+ 
+ if __name__ == '__main__':
+ 
+   # Create connection to APIC
+   apic1 = aciLogin(config.apic)
+-  apply_desired_state(apic1, sample.state)
++  print('Logged in')
++  
++  applied = apply_desired_state(apic1, sample.state)
++
++  for a in applied:
++    print(a)
