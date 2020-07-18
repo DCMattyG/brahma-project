@@ -7,7 +7,8 @@ setup(
   install_requires=[
     'requests',
     'argparse',
-    'shortuuid'
+    'shortuuid',
+    'six',
   ],
   entry_points={
     'console_scripts': ['brahma-cli=brahma_cli.brahma:main']
