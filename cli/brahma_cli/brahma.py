@@ -19,7 +19,7 @@ import shortuuid
 import getpass
 
 from configparser import ConfigParser
-from sync import apply_desired_state
+from .sync import apply_desired_state
 
 BRAHMA_FQDN = os.getenv('BRAHMA_URL', 'brahma.cisco.com')
 BRAHMA_PORT = os.getenv('BRAHMA_PORT', None)
