@@ -2,9 +2,7 @@
 
 Cisco ACI deployment...SIMPLIFIED!
 
-
 ## Business/Technical Challenge
-
 
 One of the most challenging hurdles for customers to adopting ACI as a technology, is the initial setup/configuration of ACI...implementing networking with a GUI when the customer has used CLI based configurations for many times decades.  
 
@@ -12,14 +10,11 @@ This project is being developed to provide a more seamless transition to ACI for
 
 You want ACI for your software-define networking? You don't care about every little setting and just want it up and running quickly, without clicking between dozens of different tabs and windows? Brahma is for YOU!  
 
-
 ## Proposed Solution
-
 
 Brahma provide an EXTREMELY easy to use CLI and SaaS interface that takes the unfamiliar feeling of ACI away, and replaces it with a sense of satisfaction knowing that you have the best SDN in the world up and running is mere minutes!  
 
 Just create a token with CLI, login to the SaaS dashboard, configure, and apply!  
-
 
 ### Cisco Products Technologies/ Services
 
@@ -30,18 +25,11 @@ Our solution will levegerage the following Cisco technologies
 
 ## Team Members
 
-
-**TODO:** ASIC projects must consist of a minimum of 2 SE’s
-representing a minimum of 2 segments. List names here
-
-* Matthew Garrett <matgarre@cisco.com> - USC (West)
 * Tim Miller <timmil@cisco.com> - GVE (US)
 * Tyson Scott <tyscott@cisco.com> - GES (MWA)
 * Mike Finch <micfinch@cisco.com> - GES (South)
 
-
 ## Solution Components
-
 
 Brahma is comprised of two major componest; a CLI front-end, and a SaaS back-end.  
 
@@ -53,15 +41,13 @@ All of these components can be nicely containerized allowing extreme ease in dis
 
 All data is stored in a MongoDB database that is also running in Docker via Docker-Compose. Since Brahma is dealing with JSON formats and API calls, a document DB such as MongoDB was the ideal choice. Not to mention the phenomenal support & integration with NodeJS.
 
-
 ## Usage
 
 1) Run 'brahma-cli -n' (create a new Brahma token)
-2) Navigate to http://brahma.cisco.com and paste in your token
+2) Navigate to local running SaaS service and paste in your token
 3) Throw your config settings into the wizard and save
 4) Run 'brahma-cli -a' to apply the settings to ACI
 5) Done!
-
 
 ## Prerequisites
 
@@ -86,11 +72,11 @@ Environment Variables for Testing:
 export BRAHMA_URL=&lt;url&gt; (e.g. localhost)  
 export BRAHMA_PORT=&lt;port&gt; (e.g. 3000)  
 
-
 ## Documentation
 
-Brahma Documentation/Wiki is current in developent. Stay tuned!  
-
+- [ACI Cobra SDK](https://github.com/datacenter/cobra) and [Documentation](https://cobra.readthedocs.io/en/latest/)
+- ACI Policy Model (https://www.cisco.com/c/en/us/td/docs/switches/datacenter/aci/apic/sw/policy-model-guide/b-Cisco-ACI-Policy-Model-Guide.html)
+- ACI Management Information Model 4.2 (https://developer.cisco.com/site/apic-mim-ref-api/?version=4.2(1))
 
 ## License
 
