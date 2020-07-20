@@ -25,7 +25,7 @@ Our solution will levegerage the following Cisco technologies
 
 ## Team Members
 
-* Tim Miller <timmil@cisco.com> - GVE (US)
+* Tim Miller <timmil@cisco.com> - GVE (Americas/US Comm South)
 * Tyson Scott <tyscott@cisco.com> - GES (MWA)
 * Mike Finch <micfinch@cisco.com> - GES (South)
 
