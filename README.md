@@ -15,7 +15,6 @@ You want ACI for your software-define networking? You don't care about every lit
 Brahma provide an EXTREMELY easy to use CLI and SaaS interface that takes the unfamiliar feeling of ACI away, and replaces it with a sense of satisfaction knowing that you have the best SDN in the world up and running is mere minutes!  
 
 Just create a token with CLI, login to the SaaS dashboard, configure, and apply!  
-
 ### Cisco Products Technologies/ Services
 
 Our solution will levegerage the following Cisco technologies
@@ -41,7 +40,7 @@ All of these components can be nicely containerized allowing extreme ease in dis
 
 All data is stored in a MongoDB database that is also running in Docker via Docker-Compose. Since Brahma is dealing with JSON formats and API calls, a document DB such as MongoDB was the ideal choice. Not to mention the phenomenal support & integration with NodeJS.
 
-## Usage
+## CLI Usage (after server below is operational)
 
 1) Run 'brahma-cli -n' (create a new Brahma token)
 2) Navigate to local running SaaS service and paste in your token
@@ -63,10 +62,28 @@ All data is stored in a MongoDB database that is also running in Docker via Dock
 For Server:  
 git clone https://github.com/DCMattyG/brahma-project.git  
 cd brahma-project  
+
+npm install -g @angular/cli
+npm install -g @angular-devkit/schematics
+npm update
+
+pushd server
+npm update
+popd
+
+sudo docker volume create mongo_data
+sudo docker volume create mongo_config
 ./brahma-server.sh -compose -up  
   
 For CLI:  
-pip install brahma-cli  
+virtualenv -p python3 venv
+source venv/bin/activate 
+pushd brahma-project/cli
+python3 setup.py install
+popd
+
+For Cobra SDK and ACI Models (downloaded from APIC):
+pip install acicobra-4.2... acimodel-4.2...
 
 Environment Variables for Testing:  
 export BRAHMA_URL=&lt;url&gt; (e.g. localhost)  
