@@ -5,17 +5,35 @@ echo ""
 if [ "$1" == "-dev" ] || [ "$1" == "-d" ]; then
   echo "Starting Brahma in DEV Mode..."
   trap 'kill $BGPID; exit' INT
-  trap 'docker stop brahma-mongo; exit' INT
+  trap 'sudo docker stop brahma-mongo; exit' INT
   echo ""
   echo "Setting up Brahma ENV Variables..."
   export BRAHMA_URL=localhost
   export BRAHMA_PORT=3000
   echo ""
   echo "Creating MongoDB Container..."
-  docker run --name brahma-mongo -d -p 27017:27017 -v /tmp/data:/data/db --rm mongo
+  sudo docker run --name brahma-mongo -d -p 27017:27017 -v /tmp/data:/data/db --rm mongo
   echo ""
   echo "Building Angular DIST in WATCH Mode (Background)..."
   ng serve &
+  BGPID=$!
+  echo ""
+  echo "Starting Express Server (Foreground)..."
+  node ./server/bin/www
+if [ "$1" == "-vbox" ] || [ "$1" == "-vb" ]; then
+  echo "Starting Brahma in DEV Mode (assuming inside Virtual Box)..."
+  trap 'kill $BGPID; exit' INT
+  trap 'sudo docker stop brahma-mongo; exit' INT
+  echo ""
+  echo "Setting up Brahma ENV Variables..."
+  export BRAHMA_URL=localhost
+  export BRAHMA_PORT=3000
+  echo ""
+  echo "Creating MongoDB Container..."
+  sudo docker run --name brahma-mongo -d -p 27017:27017 -v /tmp/data:/data/db --rm mongo
+  echo ""
+  echo "Building Angular DIST in WATCH Mode (Background)..."
+  ng serve --host 0.0.0.0 &
   BGPID=$!
   echo ""
   echo "Starting Express Server (Foreground)..."
