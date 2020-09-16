@@ -44,10 +44,10 @@ elif [ "$1" == "-compose" ] || [ "$1" == "-c" ]; then
     ng build --prod
     echo ""
     echo "Starting Brahma Services..."
-    docker-compose up --build &
+    sudo docker-compose up --build &
   elif [ "$2" == "-down" ] || [ "$2" == "-d" ]; then
     echo "Stopping Brahma Services..."
-    docker-compose down
+    sudo docker-compose down
   else
     echo "Missing arguments, please specify -up or -down."
     echo ""
