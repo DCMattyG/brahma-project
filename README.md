@@ -64,11 +64,10 @@ git clone https://github.com/DCMattyG/brahma-project.git
 cd brahma-project  
 
 npm install -g @angular/cli
-npm install -g @angular-devkit/schematics
-npm update
+npm install
 
 pushd server
-npm update
+npm install
 popd
 
 sudo docker volume create mongo_data
