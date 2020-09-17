@@ -20,7 +20,7 @@ if [ "$1" == "-dev" ] || [ "$1" == "-d" ]; then
   echo ""
   echo "Starting Express Server (Foreground)..."
   node ./server/bin/www
-if [ "$1" == "-vbox" ] || [ "$1" == "-vb" ]; then
+elif [ "$1" == "-vbox" ] || [ "$1" == "-vb" ]; then
   echo "Starting Brahma in DEV Mode (assuming inside Virtual Box)..."
   trap 'kill $BGPID; exit' INT
   trap 'sudo docker stop brahma-mongo; exit' INT
